@@ -42,6 +42,6 @@
 }
 
 /* Price styles */
-.price--regular {
+.price-regular-cart-drawer {
   text-decoration: line-through;
 }
