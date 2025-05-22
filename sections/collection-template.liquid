@@ -86,28 +86,30 @@
 
 {% paginate collection.products by offset %}   
 
-<section class="">
+<section class="collection-section" id="collection-template">
   <div class="container container--full">
     <div class="row cards products">
       {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}            
       {% if products.size > 0 %}
         {% for product in products %}
           {% include 'product-card', class: 'col col-3 col-md-4 col-sm-6 card product', product: product, show_vendor: section.settings.show_vendor %}
-        {% endfor %}　
+        {% endfor %}
       {% else %}
         <div class="no-match col col-12 card">
           <p>{{ 'collections.general.no_matches' | t }}</p>
         </div>
       {% endif %}                                               
     </div>
-    
   </div>
 </section>
+
 {% include 'pagination', base_url:collection.url %}
+
 {% assign sp_paginate_by = paginate.page_size %}{% endpaginate %}
 
+<script src="{{ 'infinite-scroll.js' | asset_url }}" defer></script>
 
-{% if sp_paginate_by %}{% render 'spurit_po2_collection_template_snippet', paginate_by: sp_paginate_by %}{% endif %}{% schema %}
+{% schema %}
   {
     "name": "Collection pages",
     "class": "collection-template",
