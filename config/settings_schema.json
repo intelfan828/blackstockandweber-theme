@@ -113,6 +113,15 @@
           "en": "Klaviyo Key",
           "ja": "Kalviyo キー"
         }
+      },
+      {
+        "type": "checkbox",
+        "id": "show_compare_at_price",
+        "label": {
+          "en": "Show Compare-at Price",
+          "ja": "比較価格を表示する"
+        },
+        "default": true
       }
     ]
   },

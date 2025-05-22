@@ -109,27 +109,26 @@
 
                  
                   <form action="/cart/add" method="post" enctype="multipart/form-data" @submit.prevent="addToCart">
-
-                      <p class="product__price" v-bind:class="{ 'product__price--sale': is_sale }" v-if="regular_price">
-                        <span class="price--regular money" v-text="regular_price"></span>
-                        <span class="price--sale money" v-if="sale_price" v-text="sale_price" style="color: #BB5D4C; font-weight: bold;"></span>
-                        {% comment %}
-                        <span class="price--tax-note">                         
-                          {%- if cart.taxes_included -%}
-                            ({{ 'products.product.include_taxes' | t }})
-                          {%- endif -%}
-                        </span>      
-                        {% endcomment %}  
+                      {%- if settings.show_compare_at_price and product.compare_at_price > product.price -%}
+                        <p class="product__price" v-bind:class="{ 'product__price--sale': is_sale }" v-if="regular_price">
+                          <span class="price--regular money" v-text="regular_price"></span>
+                          <span class="price--sale money" v-if="sale_price" v-text="sale_price" style="color: #BB5D4C; font-weight: bold;"></span>
+                        </p>
+                      {%- else -%}
+                        <p class="product__price" v-if="regular_price">
+                          <span class="price--regular money" v-text="sale_price" v-if="regular_price && sale_price"></span>
+                          <span class="price--regular money" v-text="regular_price" v-if="regular_price && !sale_price"></span>
+                        </p>
+                      {%- endif -%}
           
-                      </p>
-
                       {%- assign is_sale = false -%}
+                      {%- assign show_compare_at_price = settings.show_compare_at_price -%}
 
                       {% for variant in product.variants %}
                         {%- assign compare_at_price = variant.compare_at_price -%}
                         {%- assign price = variant.price -%}
                         {%- assign available = variant.available -%}
-                        {% if available and compare_at_price > price %}
+                        {% if available and compare_at_price > price and show_compare_at_price %}
                           {%- assign is_sale = true -%}
                           {% break %}
                         {% endif %}
