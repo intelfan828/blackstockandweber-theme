@@ -53,8 +53,10 @@
                                 <template v-if="variantPrices[item.variant_id] && variantPrices[item.variant_id].compare_at_price">
                                   {%- if settings.show_compare_at_price -%}
                                   <span class="price-regular-cart-drawer money">${ variantPrices[item.variant_id].compare_at_price * item.quantity | format_currency }</span><br>
-                                  {%- endif -%}
                                   <span class="price--sale money" style="color: #BB5D4C; font-weight: bold;">${ item.line_price | format_currency }</span>
+                                  {%- else -%}
+                                  <span class="price--sale money">${ item.line_price | format_currency }</span>
+                                  {%- endif -%}
                                 </template>
                                 <template v-else>
                                   <span class="price--sale money">${ item.line_price | format_currency }</span>
