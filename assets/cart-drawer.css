@@ -40,3 +40,8 @@
   border-bottom: 1px solid #ead7c1;
   text-align:center;
 }
+
+/* Price styles */
+.price--regular {
+  text-decoration: line-through;
+}

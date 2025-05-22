@@ -50,19 +50,17 @@
                             </div>
                             <div class="col cart-drawer__item__price">
                               <p>
-                                {% comment %}
-                                {% if item.original_line_price != item.line_price %}<span class="money"><div class="pn-total-line-item" data-id="{{ item.key }}">{{ item.original_line_price | money }}</div></span>{% endif %}     
-                                {% endcomment %}               
-                                ${ item.line_price | format_currency }
-                                {% comment %}
-                                {%- if shop.taxes_included -%}
-                                  <span class="tax-txt">&nbsp;({{ 'products.product.include_taxes' | t }})</span>
-                                {%- endif -%}
-                                {% endcomment %}
+                                <template v-if="variantPrices[item.variant_id] && variantPrices[item.variant_id].compare_at_price">
+                                  <span class="price--regular money">${ variantPrices[item.variant_id].compare_at_price * item.quantity | format_currency }</span><br>
+                                  <span class="price--sale money" style="color: #BB5D4C; font-weight: bold;">${ item.line_price | format_currency }</span>
+                                </template>
+                                <template v-else>
+                                  <span class="price--sale money">${ item.line_price | format_currency }</span>
+                                </template>
                                 {% for discount in item.discounts %}{{ discount.title }}{% endfor %}
 
                                 <button type="button" class="cart-drawer__item__remove-button" @click.prevent="deleteItem(item, $event)">{{ 'cart.general.remove' | t }}</button>
-                              </p>                                
+                              </p>
                             </div>
                             <div class="props-contianer">
                               {% comment %}
@@ -129,3 +127,52 @@
             </form>       
           </div>
         </div>  
+
+<script>
+  const variantDataCache = {};
+  const variantPrices = {};
+
+  async function loadVariantData(variantId) {
+    if (variantDataCache[variantId]) {
+      return variantDataCache[variantId];
+    }
+
+    try {
+      const response = await fetch(`/variants/${variantId}.js`);
+      const data = await response.json();
+      variantDataCache[variantId] = data;
+      variantPrices[variantId] = {
+        compare_at_price: data.compare_at_price,
+        price: data.price
+      };
+      return data;
+    } catch (e) {
+      console.error('Error fetching variant data:', e);
+      return null;
+    }
+  }
+
+  // Initialize variant data when cart drawer is mounted
+  document.addEventListener('DOMContentLoaded', function() {
+    const cartDrawer = document.querySelector('.cart-drawer');
+    if (cartDrawer && cartDrawer.__vue__) {
+      const vueInstance = cartDrawer.__vue__;
+      
+      // Watch for cart changes
+      vueInstance.$watch('cart', async function(newCart) {
+        if (newCart && newCart.items) {
+          for (const item of newCart.items) {
+            await loadVariantData(item.variant_id);
+          }
+        }
+      }, { deep: true });
+
+      // Load initial data
+      if (vueInstance.cart && vueInstance.cart.items) {
+        vueInstance.cart.items.forEach(item => {
+          loadVariantData(item.variant_id);
+        });
+      }
+    }
+  });
+</script>  
