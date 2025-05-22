@@ -1,0 +1,86 @@
+      {%- if section.settings.hide != true -%}	
+      {%- assign block_size = section.blocks.size -%}
+      <section class="quotes-section">
+        <div class="container container--full">
+          <div class="row cards quotes">
+            {% for block in section.blocks limit: section.blocks.size %}  
+              {%- assign product = all_products[block.settings.product] -%}
+              {% comment %} {% include 'product-card', class: classes, product: product %} {% endcomment %}
+              <div class="col col-6 col-sm-12 card">
+                <div class="quote-info">
+                  <div class="quote-text">
+                    {{block.settings.quote-text}}
+                  </div>
+                  <picture>
+                      <img class="quote-logo"src="{{ block.settings.image | img_url: '200x200' }}" alt="">
+                    </picture>
+                </div>                
+
+              </div><!-- /.product -->                  
+            {% endfor %}                                          
+          </div>
+        </div>
+      </section>          
+      {%- endif -%}
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Press Quotes"
+  },
+  "class": "featured-page-section",
+  "settings": [ 
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Heading",
+        "ja": "見出し"
+      },
+      "default": {
+        "en": "Press Quotes"
+      }
+    },    
+    {
+      "type": "checkbox",
+      "id": "hide",
+      "label": {
+        "en": "Hide this section",
+        "ja": "このセクションを非表示にする"
+      },
+      "default": false
+    }          
+  ],
+  "blocks": [
+    {
+      "type": "press_quotes",
+      "limit":4,
+      "name": {
+        "en": "Quote"
+      },
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote-text",
+          "label": "Quote Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "logo"
+          }
+        }          
+      ]
+    }   
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Press Quotes"
+      }
+    }
+  ]  
+}
+{% endschema %}

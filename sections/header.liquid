@@ -1,0 +1,80 @@
+<style>
+
+  header.site-header.site-header--text-darksand {
+    border-bottom: 1px solid #ead7c1;
+  }
+  
+</style>
+{% liquid
+  assign body_class = template | split: '.' | first | split: '/' | first
+  assign template_path = template | split: '.'
+  assign current_page_handle = request.path | split: '/' | last
+%}
+<header class="site-header {% if template == 'index' and section.settings.font_color_darksand != true %}site-header--transparent{% endif %} {% if template == 'index' and section.settings.font_color_darksand == true %}site-header--text-darksand{% endif %}">
+  <div class="container container--fluid">
+    <a href="{{routes.root_url }}" class="logo">{%- include 'bw_logo' -%}</a>
+    {%- include 'site_nav' nav_class: 'site-nav' -%}
+    <nav class="store-nav">
+      <ul>
+        <!--<li class="store-nav__menu-item store-nav__menu-item--academy md-hidden">
+          <a href="https://academybychrisechevarria.com/" target="_blank">ACADEMY BY CHRIS ECHEVARRIA</a>
+        </li>-->
+        <li class="store-nav__menu-item store-nav__item--search">
+          <button type="button" class="toggle-search-button">{%- include 'icon_search_01' -%}</button>
+          <div class="search-bar">
+            <div class="container container--fluid">
+              <form action="{{ routes.search_url }}" method="get" class="search__form" role="search">
+              <div class="search-field">
+                <input class="search-bar__input" type="search" name="q" placeholder="Search" aria-label="{{ 'general.search.placeholder' | t }}">
+              </div>
+              <input type="hidden" name="type" value="product">
+              </form>
+            </div>
+          </div>              
+        </li>
+        {% if shop.customer_accounts_enabled %}
+        <li class="store-nav__menu-item store-nav__item--account">
+          {% if customer %}
+            <a href="{{ routes.account_url }}">{%- include 'icon_account_01' -%}</a>
+          {% else %}
+            <a href="{{ routes.account_login_url }}">{%- include 'icon_account_01' -%}</a>
+          {% endif %}
+        </li>            
+        {% endif %}
+        <li class="store-nav__menu-item store-nav__menu-item--cart">
+          <button type="button" class="cart__item-count-wrapper toggle-drawer-cart-button toggle-drawer-cart-button--sp" @click="toggleDrawerCart">{%- include 'icon_bag_01' -%}<span class="cart__item-count" v-if="cart" v-text="cart.item_count"></button>
+        </li>
+
+      </ul>
+    </nav> 
+    
+    <button type="button" class="hamburger-button toggle-nav-button">
+      <span class="bar"></span>
+    </button>
+    {%- include 'site_nav_mobile' -%}
+    
+    {%- include 'cart_drawer' -%}    
+    
+  </div>
+</header>		
+
+
+{% schema %}
+{
+  "name": { 
+    "en": "Header",
+    "ja": "ヘッダー"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "font_color_darksand",
+      "label": {
+        "en": "Change the header's text color to dark sand on the homepage.",
+        "ja": "ホームページのヘッダーのテキストカラーをダークサンドに変更する"
+      },
+      "default": false
+    }     
+  ]
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+        
+
+        <nav class="local-nav">
+          <ul>
+            <li><a href="/account" {% if active == 'top' %}class="active"{% endif %}>{{ 'customer.account.details' | t }}</a></li>
+            <li><a href="/account?view=orders" {% if active == 'orders' %}class="active"{% endif %}>{{ 'customer.orders.title' | t }}</a></li>
+            <li><a href="/account?view=reset-password" {% if active == 'password' %}class="active"{% endif %}>{{ 'customer.navigation.change_password' | t }}</a></li>
+            <li><a href="{{ routes.account_addresses_url }}" {% if active == 'addresses' %}class="active"{% endif %}>{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></li>
+            <li>{{ 'layout.customer.log_out' | t | customer_logout_link }}</li>
+          </ul>
+        </nav>

@@ -1,0 +1,27 @@
+{% paginate blog.articles by 24 %}
+
+    <header class="page-header page-header--has-hero-banner">
+      <div class="container container--full">
+        <h1 class="section__title">{{blog.title}}</h1>
+      </div>
+    </header>
+    {% section 'blog-toolbar' %}
+    <section class="">
+      <div class="container container--full">
+        <div class="row cards posts">
+          
+          {% for article in blog.articles %}
+
+          {% include 'article-card', class: 'col col-3 col-md-4 col-sm-6 card post', article: article %}         
+
+          {% endfor %}
+                                
+        </div>
+
+        {% include 'pagination' %}
+
+      </div>
+    </section> 
+
+
+{% endpaginate %}

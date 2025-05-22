@@ -1,0 +1,121 @@
+{% include 'spurit_po2_section_snippet', product: null, products: collections[section.settings.collection].products %}
+    {%- if section.settings.hide != true -%}
+      
+      {%- assign collection = collections[section.settings.collection] -%}
+
+      <section class="collection-section">
+        <div class="container container--full">
+          {% if section.settings.hide_title != true %}
+            <h2 class="section__title">New In</h2>
+          {% endif %}
+          <div class="row cards products">
+            {% liquid
+              assign grid = section.settings.grid | plus: 0
+              assign lg_index = grid | minus: 4
+            %}
+            {% for product in collection.products limit: grid %}
+              {%- assign class = 'col col-3 col-md-6 card product' -%}
+              {%- if forloop.index0 < lg_index -%}
+                {%- assign class = 'col col-6 col-md-12 card product' -%}
+              {%- endif -%}
+              {% include 'product-card', class: class, product: product, col_num: col_num %}
+            {% endfor %}    
+          </div>
+        </div>
+      </section>
+
+    {%- endif -%}
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Featured collection",
+    "ja": "特集コレクション"
+  },
+  "class": "collection-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "da": "Overskrift",
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fi": "Otsake",
+        "fr": "En-tête",
+        "hi": "शीर्षक",
+        "it": "Heading",
+        "ja": "見出し",
+        "ko": "제목",
+        "ms": "Tajuk",
+        "nb": "Overskrift",
+        "nl": "Kop",
+        "pt-BR": "Título",
+        "pt-PT": "Título",
+        "sv": "Rubrik",
+        "th": "ส่วนหัว",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+      },
+      "default": {
+        "en": "Featured collection",
+        "ja": "特集コレクション"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_title",
+      "label": {
+        "en": "Hide section title"
+      },
+      "default": false
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": {
+        "en": "Collection",
+        "ja": "コレクション"
+      }
+    },
+    {
+      "type": "radio",
+      "id": "grid",
+      "label": {
+        "en": "Products to Display",
+        "ja": "表示する商品数"
+      },
+      "options": [
+        { "value": "4", "label": "4" },
+        { "value": "6", "label": "6" },
+        { "value": "8", "label": "8" }
+      ],
+      "default": "6"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide",
+      "label": {
+        "en": "Hide this section",
+        "ja": "このセクションを非表示にする"
+      },
+      "default": false
+    }    
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Featured collection",
+        "ja": "特集コレクション"
+      },
+      "category": {
+        "en": "Collection",
+        "ja": "コレクション"
+      }
+    }
+  ]
+}
+{% endschema %}

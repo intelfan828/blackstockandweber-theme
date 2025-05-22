@@ -1,0 +1,94 @@
+
+      
+      {%- assign featured_post_handle = '' -%}
+			
+      {% if section.settings.display_blog == true %}
+
+      <section class="projects-section bgc--off-white">
+        <div class="container container--full">
+          <h2 class="section__title"><a href="{{blogs[section.settings.blog].url}}">{{ section.settings.title}}</a></h2>
+          <div class="row cards posts">
+            
+            {% for article in blogs[section.settings.blog].articles limit:4 %}
+            <div class="col col-3 col-md-6 card post">
+              <a href="{{article.url}}">
+                <div class="card__tn">
+                  <picture>
+                    <img src="{{ article.image.src | img_url: '1000x' }}" alt="{{ article.title | strip_html }}">
+                  </picture>
+                </div>
+                <p class="card__title">{{article.title}}</p>
+              </a>
+            </div><!-- /.product -->                
+            {% endfor %}
+            
+          </div>
+        </div>
+      </section>    
+
+
+
+      {% endif %}  
+
+
+
+{% schema %}
+  {
+    "name": {
+      "en": "Blog posts",
+      "ja": "ブログ記事"
+    },
+    "class": "blog-section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "display_blog",
+        "label": {
+          "en": "Display blog posts",
+          "ja": "ブログを表示する"
+        },
+        "default": true
+      },      
+      {
+        "type": "text",
+        "id": "title",
+        "label": {
+          "en": "Heading",
+          "ja": "見出し"
+        },
+        "default": "Blog posts"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": {
+          "en": "Description",
+          "ja": "説明文"
+        }
+      },       
+      {
+        "id": "blog",
+        "type": "blog",
+        "label": {
+          "en": "Blog",
+          "ja": "ブログ"
+        }
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label": "Show 'View all' button",
+        "default": false
+      }
+    ],
+    "presets": [
+      {
+        "name": "Blog posts",
+        "category": "Blog",
+        "settings": {
+          "blog": "News"
+        }
+      }
+    ]
+  }
+{% endschema %}

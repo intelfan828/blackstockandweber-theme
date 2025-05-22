@@ -1,0 +1,42 @@
+ 
+          <header class="search-result__header">
+            <div class="container container--fluid">
+              <p class="search-result__header-text">
+                {%- assign search_terms = search.terms | escape -%}
+                {%- if search.results_count > 1 -%}
+                {{ 'general.search.results_with_count.other' | t: count: search.results_count, terms: search_terms }}
+                {%- else -%}
+                {{ 'general.search.results_with_count.one' | t: count: search.results_count, terms: search_terms }}
+                {%- endif -%}
+              </p>
+            </div>
+          </header>
+
+
+        {% paginate search.results by 14 %}
+
+
+          <section class="">
+            <div class="container container--full">
+              {% if search.performed %}
+              <div class="row cards products">
+
+                {% for item in search.results %}
+                {% if item.object_type == 'product' %}
+                {% include 'product-card', class: 'col col-4 col-sm-6 card product', product: item %}
+                {% endif %}
+              {% endfor %}
+            
+                                                    
+              </div>
+              {% endif %}
+              
+            </div>
+          </section>
+
+          {% include 'pagination' %}
+
+        {% endpaginate %}
+
+
+

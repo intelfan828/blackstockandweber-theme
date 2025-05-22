@@ -1,0 +1,160 @@
+
+        <script>
+          window.selected_tags = [];
+          {%- for tag in current_tags -%}  
+            selected_tags.push("{{ tag | handleize }}");
+          {%- endfor -%}
+          //console.log(selected_tags)
+        </script>
+           
+           
+            <div class="col col-4 col-md-12 col--filters filters filters-toolbar">
+              <div class="filters-toolbar__toggle-button-wrapper">
+                <button type="button" class="toggle-button toggle-filters-button" :class="{ 'opened': filterToolbarOpen }" @click="toggleFilterToolbar('filter')">{{ 'collections.filters.filter_title' | t }}</button>
+                <button type="button" class="toggle-button open-sort-menu-button toggle-filters-button" :class="{ 'opened': sortToolbarOpen }" @click="toggleFilterToolbar('sort')">{{ 'collections.sorting.title' | t }}</button>
+              </div>
+
+              <nav class="filter-nav" :class="{ 'opened': filterToolbarOpen }">
+                <div class="filter-nav__close-button-wrapper md-visible">
+                  <button type="button" class="filter-nav__close-button" @click="toggleFilterToolbar('filter')">
+                    <img src="{{ 'icon_close_01.svg' | asset_url }}" alt="">
+                  </button>
+                </div>
+                <div class="filter-nav__content row">
+                  <div class="col col-6 col-md-12">
+
+                  {% unless collection.all_tags.size == 0 %}
+
+                      <dl class="filter-items">
+                        <dt class="filter-item__title filters-toolbar__item-label" for="FilterTags">Color:</dt>
+                        <dd class="filter-item__content filters-toolbar__item-option filters-toolbar__item-option--color">
+                          <div class="color-swatch">
+                            <ul class="color-swatch__items">
+                              {% for tag in collection.all_tags %}                            
+                                {% if tag contains "color:" %}
+                                {%- assign color_ary = tag | replace: 'color:', '' | split: '/' -%}
+                                {%- assign color_name = color_ary[0] | strip -%}
+                                {%- assign display_color_name = color_name -%}
+                                {%- assign image_url = color_name | downcase | handleize -%}
+                                {%- assign image_url = 'color_swatch_' | append: image_url | append: '.png' -%}    
+                                
+                                {%- assign color_tag_name = 'color_' | append: color_name -%}       
+                                {%- assign color_tag = 'color_' | append: color_name | handleize -%}    
+
+                                <li class="color-swatch__item">
+                                <button type="button" class="filter-button color-swatch__select-button {% if current_tags contains color_tag_name %} selected {% endif %}" data-base-url="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/" data-variant="color" data-tag="{{color_tag}}" data-color="{{ tag | replace: "Color:", "" }}" @click="filterMenu"><span class="color-swatch__color-icon" style="background-image: url({{ image_url | file_url }})"></span><span class="color-swatch__item-color-name color-swatch__color-name">{{ display_color_name }}</span></button>                        
+                                </li>
+                                {% endif %}                            
+                              {% endfor %}
+                          </ul>
+                        </dd>
+                        <dt class="filter-item__title">Size: </dt>
+                        <dd class="filter-item__content filters-toolbar__item-option--size">
+                          <div class="size-select">
+                            <ul class="size-select__items">
+                              {% for tag in collection.all_tags %}                            
+                                {% if tag contains "size:" %}
+                                {%- assign size_name = tag | replace: 'size:', '' -%}
+                                {%- assign size_tag = 'size_' | append: size_name | handleize -%}                      
+                                <li class="size-select__item"><button type="button" class="filter-button size-select__select-button {% if current_tags contains tag %} selected {% endif %}" data-base-url="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/" data-variant="size" data-tag="{{ tag | handleize }}" data-color="{{ tag | replace: "size:", "" }}" @click="filterMenu">{{size_name}}</button></li>
+                                {% endif %}                            
+                              {% endfor %}                            
+                            </ul>
+                          </div>                        
+                        </dd>
+                        <dt class="filter-item__title">Brand: </dt>
+                        <dd class="filter-item__content filters-toolbar__item-option--brand">
+                          <div class="brand-select">
+                            <ul class="brand-select__items">
+                              {% assign brands = 'markaware,marka' | split: ',' %}
+                              {% for brand in brands %}
+                                {% for tag in collection.all_tags %}                            
+                                  {% if tag contains "brand:" %}
+                                    {%- assign brand_name = tag | replace: 'brand:', '' -%}
+                                    {%- assign brand_name_dc = brand_name | downcase -%}
+                                    {% if brand_name_dc == brand %}
+                                    <li class="brand-select__item"><button type="button" class="filter-button brand-select__select-button {% if current_tags contains tag %} selected {% endif %}" data-base-url="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/" data-variant="brand" data-tag="{{ tag | handleize }}" data-color="{{ tag | replace: "brand:", "" }}" @click="filterMenu">{{brand_name}}</button></li>
+                                    {% endif %}
+                                  {% endif %}                         
+                                {% endfor %}
+                              {% endfor %}                         
+                            </ul>                          
+                          </div>
+                        </dd>  
+
+                      </dl>
+        
+                  {% endunless %}
+
+                  </div>
+                  <div class="col col-6 col-md-12">
+                  {% unless collection.all_tags.size == 0 %}
+                    
+                      <dl class="filter-items">
+                        <dt class="filter-item__title filters-toolbar__item-label select-label" for="FilterTags">Materials: </dt>
+                        <dd class="filter-item__content filters-toolbar__input-wrapper select-group filters-toolbar__item-option filters-toolbar__item-option--material">
+                          <ul>                        
+                            {% for tag in collection.all_tags %}                        
+                              {% if tag contains "material:" %}
+                              <li>
+                              {%- assign tag_name_ary = tag | replace: "material:", '' | split: '/' -%}
+                              {%- assign tag_name = tag_name_ary[0] | strip -%}
+                              {%- if tag_name_ary.size > 1 -%}
+                                {%- assign tag_name = tag_name_ary[1] | strip -%}
+                              {%- endif -%}                                
+                              <button type="button" class="filter-button {% if current_tags contains tag %} selected {% endif %}" data-base-url="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/" data-variant="material" data-tag="{{ tag | handleize }}" data-color="{{ tag | replace: "material:", "" }}" @click="filterMenu"><span>{{ tag_name }}</span></button>                            
+                              </li>
+                              {% endif %}                            
+                            {% endfor %}
+                          </ul>
+                        </dd>
+                      </dl>
+            
+                  {% endunless %}
+                  </div>
+                </div>
+                <div class="actions">
+                  <a class="button button--primary" href="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}">絞り込みをクリアー</a>
+                </div>
+              </nav><!-- /.filter-nav -->
+              <nav class="sort-nav" :class="{ 'opened': sortToolbarOpen }">
+                <div class="filter-nav__close-button-wrapper md-visible">
+                  <button type="button" class="filter-nav__close-button" @click="toggleFilterToolbar('sort')">
+                    <img src="{{ 'icon_close_01.svg' | asset_url }}" alt="">
+                  </button>
+                </div>
+                <div class="sort-nav__content row">
+                  <div class="col col-12">
+                    {%- assign sort_str = "created-descending,price-descending,price-ascending" -%}
+                    {%- assign sort_ary = sort_str | split: ',' -%}
+                    <ul class="sort-order-options filters-toolbar__item-option" :class="{ 'visible': sortToolbarOpen }">
+                      {%- for sort in sort_ary -%}
+                        {%- for option in collection.sort_options -%}
+                          {%- if sort == option.value -%}
+                          <li class="{% if option.value == sort_by %} selected {% endif %}">
+                            <button data-value="{{ option.value }}" data-base-url="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}/" @click="filterMenu">
+                              {%- if request.locale.iso_code == 'ja' -%}
+                                {%- if option.value == 'price-descending' -%}
+                                  価格の高い順
+                                {%- elsif option.value == 'price-ascending' -%}
+                                  価格の低い順
+                                {%- else -%}
+                                {{ option.name | replace: "Alphabetically, A-Z", "A-Z" | replace: "Alphabetically, Z-A", "Z-A" | replace: "Price, low to high", "Price: Low to High" | replace: "Price, high to low", "Price: High to Low" | replace: "Date, new to old", "Newest"  | replace: "新着順", "新着" }}
+                                {%- endif -%}
+                              {%- else -%}
+                                {{ option.name | replace: "Alphabetically, A-Z", "A-Z" | replace: "Alphabetically, Z-A", "Z-A" | replace: "Price, low to high", "Price: Low to High" | replace: "Price, high to low", "Price: High to Low" | replace: "Date, new to old", "Newest" }}
+                              {%- endif -%}
+                            </button>
+                          </li>
+                          {%- break -%}
+                          {%- endif -%}
+                        {%- endfor -%}  
+                      {%- endfor -%}  
+                    </ul>                    
+                  </div>
+                </div>
+                <div class="actions">
+                  <button class="button button--primary">絞り込みをクリアー</button>
+                </div>
+              </nav><!-- /.sort-nav -->              
+            </div>      

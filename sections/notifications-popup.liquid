@@ -1,0 +1,53 @@
+{% if template.name == 'index' and section.settings.enable_notification_popup == true %}
+
+  <div class="notifications-popup" data-key="{{ section.settings.notification_popup_key}}">
+    <div class="container container--fluid">
+      
+      {{ section.settings.notification_popup_text | html }}
+
+      <button type="button" id="NotificationPopupClose" class="notifications-popup__close-button">{% include 'icon_cross_02' %}</button>
+    </div>
+  </div>
+
+  
+{% endif %}
+
+{% schema %}
+{
+  "name": {
+    "en": "Notifications popup",
+    "ja": "お知らせポップアップ"
+  },  
+  "settings": [  
+    {
+      "type": "checkbox",
+      "id": "enable_notification_popup",
+      "label": {
+        "en": "Enable notification popup?",
+        "ja": "お知らせポップアップを表示する"
+      },
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "notification_popup_text",
+      "label": {
+        "en": "Copy",
+        "ja": "コピー"
+      }
+    },
+    {
+      "type": "text",
+      "id": "notification_popup_key",
+      "label": {
+        "en": "Key",
+        "ja": "キー"
+      },
+      "info": {
+        "en": "Used as a cookie's key",
+        "ja": "クッキーのキーとして使用されます"
+      }
+    }     
+  ]
+}
+{% endschema %}

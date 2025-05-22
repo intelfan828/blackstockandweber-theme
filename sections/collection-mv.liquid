@@ -1,0 +1,101 @@
+{% for block in section.blocks %}
+    {% case block.type %}
+        {% when 'mv_image_block' %}
+        <section class="section {% if block.settings.mv_hero == true %}hero-section{% endif %}">
+          <div class="container">
+            <div class="row row--center">
+              <div class="block__image col col-{{block.settings.mv_range}} {% unless block.settings.mv_hero == true %} col-sm-8 {% endunless %}">
+                <img src="{{block.settings.mv_image | img_url: '2400x2400' }}" alt="">
+              </div>
+            </div>
+            <div class="row row--center">
+              <div class="block__text {% if block.settings.mv_text_size == 'large' %}                
+              block__text--large {% endif %} col col-7 col-sm-9">
+                {{block.settings.mv_text}}
+              </div>    
+            </div>
+          </div>   
+        </section>
+
+        {% when 'mv_collection' %}
+        <section class="section collection-section">
+          <div class="container">
+            
+            {%- assign collection = collections[block.settings.mv_collection] -%}
+
+            <div class="row">
+
+              {%- assign classes = 'col-' | append: col_num | append: ' col' -%}
+
+              {% for product in collection.products limit: section.settings.grid %}
+                {% include 'product-card', class: 'col col-6', product: product %}
+              {% endfor %}                             
+            </div>
+
+          </div>       
+        </section>        
+    {% endcase %}
+{% endfor %}
+
+
+
+{% schema %}
+{
+  "blocks": [
+    {
+      "type": "mv_image_block",
+      "name": "Image with text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "mv_image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "mv_range",
+          "label": "Image width",
+          "min": 1,
+          "max": 12,
+          "default": 12
+        },        
+        {
+          "type": "richtext",
+          "id": "mv_text",
+          "label": "Text"
+        },
+        {
+          "type": "checkbox",
+          "id": "mv_hero",
+          "default": false,
+          "label": {
+            "en": "Hero Banner",
+            "ja": "ヒーローバナー"
+          }
+        },        
+        {
+          "type": "radio",
+          "id": "mv_text_size",
+          "options": [
+              { "value": "small", "label": "Small" },
+              { "value": "large", "label": "Large" }
+            ],
+          "default": "small",
+          "label": "Text Size"
+        }             
+      ] 
+    },
+    {
+      "type": "mv_collection",
+      "name": "MAISON VASIC Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "mv_collection",
+          "label": "Collection"
+        }
+      ] 
+    }       
+  ]
+}
+{% endschema %}

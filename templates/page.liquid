@@ -1,0 +1,36 @@
+{% if page.metafields.custom_fields["hero_banner"] != blank %}
+<section class="contents-section with-banner">
+  <div class="container container--full">
+    <div class="row">
+      <div class="col col-6 col-md-12 page__tn">
+        <picture><img src="{{page.metafields.custom_fields['hero_banner']}}" alt=""></picture>
+        <h1 class="page__title {%  if page_title == '242 Mulberry' %}hidden {% endif %}">{{ page.title }}</h1>
+      </div>
+      <div class="col col-6 col-md-12 page__content">
+        <div class="page__content-wrapper" {% if page_title == '242 Mulberry' %}style="border-top:none;"{% endif %}>
+          {{ page.content }}
+        </div>
+      </div>
+    </div>   
+  </div>
+</section>
+{% else %}
+
+<section class="contents-section">
+  <div class="container container--fluid">
+    <div class="row">
+      <div class="col col-3 col-md-12 sidebar">
+        <div class="sticky-contents">
+          <h1 class="page__title">{{ page.title }}</h1>
+        </div>
+      </div>
+      <div class="col col-9 col-md-12 content">
+        <div class="content__body">
+          {{ page.content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endif %}

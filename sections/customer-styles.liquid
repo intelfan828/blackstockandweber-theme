@@ -1,0 +1,308 @@
+<style>
+
+  .customer-styles {
+     border-top: 1px solid #ead7c1;
+    border-bottom: 1px solid #ead7c1;
+  }
+  .customer-styles .swiper-slide {
+    display:flex;
+    flex-flow:row;
+  }
+
+  .customer-styles .slide__image {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Makes it square */
+    overflow: hidden;
+  }
+  .customer-styles .slide__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .customer-styles .slide__text-wrapper {
+    width:50%;
+    padding: 2rem;
+    align-self: center;
+    justify-self:center;
+  }
+
+  .customer-styles .testimonial__container {
+    display:flex;
+    flex-flow: row;
+    width:50%;
+  }
+
+  .customer-styles .slide__text-wrapper p {
+    font-size:11px;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    line-height:150%;
+    color:#684A26;
+     margin-bottom:1rem;
+  }
+
+  .customer-styles .slide__text-wrapper a {
+    text-transform:uppercase;
+    text-decoration: underline;
+    color:#684A26;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    font-size:1.2rem;
+  }
+
+  .customer-styles .container--fluid {
+    padding: 0;
+  }
+
+  .customer-styles .swiper-pagination {
+    position: initial;
+    padding: 1.5rem;
+    border-bottom: 1px solid #ead7c1;
+  }
+
+  .customer-styles .swiper-pagination {
+    border-bottom: 1px solid #ead7c1;
+  }
+
+ .customer-styles .instagram-container {
+    position:absolute;
+    bottom: 1rem;
+    margin-left: 1rem;
+   display:flex;
+   flex-flow:row;
+   align-items:center;
+  }
+
+  .customer-styles .instagram-container svg {
+    margin-right:.5rem;
+  }
+</style>
+<section class="section {{ section.settings.section_class }} customer-styles" data-section-id="{{ section.id }}">
+  <div class="container container--fluid">
+    {% if section.settings.section_title != blank or section.settings.section_description != blank %}
+        <div class="section__title section">
+          {% if section.settings.section_title != blank %}
+            <h2 class="brand-title">{{ section.settings.section_title }}</h2>
+          {% endif %}
+          {% if section.settings.section_description != blank %}
+            <p class="brand-description">{{ section.settings.section_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    <div class="row">
+      <div class="col-12 col">
+        <div class="swiper-container swiper-fade"
+          data-autorotate="{{ section.settings.autorotate }}"
+          data-swiper-autoplay="{{ section.settings.autorotate_speed | times: 1000 }}"
+        >
+           <div class="swiper-pagination"></div>
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+               {% assign mod_result = forloop.index0 | modulo: 2 %}
+              {% if mod_result == 0 %}
+                  <div class="swiper-slide">
+               {%- endif -%}
+           
+              {%- assign has_link = false -%}
+              {%- if block.settings.slide_link != blank -%}
+                {%- assign has_link = true -%}
+              {%- endif -%}
+
+              
+                <div class="testimonial__container">
+                          
+                  <div class="slide__image box ratio-container lazyload{% unless forloop.first %} lazypreload{% endunless %} js">
+                    <a href="{{ block.settings.post_url }}">
+                      <img src="{{ block.settings.image | img_url: '2400x2400' }}" alt=" {{ block.settings.post_alt }}" height="1000px" width="1000px">
+                    </a>
+                    
+                    <div class="instagram-container">
+                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.3063 0.958008H4.84991C2.76661 0.958008 1.07812 2.6468 1.07812 4.73009V11.1859C1.07812 13.2692 2.76691 14.958 4.85021 14.958H11.306C13.3893 14.958 15.0781 13.2692 15.0781 11.1859V4.73009C15.0781 2.6468 13.3896 0.958008 11.3063 0.958008Z" stroke="{{ block.settings.text-color }}" stroke-width="0.8" stroke-miterlimit="10"/>
+                    <path d="M8.07859 11.3374C9.94497 11.3374 11.458 9.82436 11.458 7.95799C11.458 6.09161 9.94497 4.57861 8.07859 4.57861C6.21222 4.57861 4.69922 6.09161 4.69922 7.95799C4.69922 9.82436 6.21222 11.3374 8.07859 11.3374Z" stroke="{{ block.settings.text-color }}" stroke-width="0.8" stroke-miterlimit="10"/>
+                    <path d="M12.1811 4.57875C12.581 4.57875 12.9052 4.25457 12.9052 3.85468C12.9052 3.45479 12.581 3.13062 12.1811 3.13062C11.7812 3.13062 11.457 3.45479 11.457 3.85468C11.457 4.25457 11.7812 4.57875 12.1811 4.57875Z" fill="{{ block.settings.text-color }}"/>
+                    </svg>
+
+                     <p class="insta-tag" style="color:{{ block.settings.text-color }};">{{ block.settings.insta-tag }}</p>
+                  </div>
+                  </div>
+                  
+                 
+                </div>
+               
+                {% if mod_result == 1 or forloop.last %}
+                  </div> <!-- Close slide after 2 blocks -->
+                {%- endif -%}
+          
+            {%- endfor -%}
+          </div><!-- /.swiper-wrapper -->
+         
+        </div>
+      </div>
+    </div>
+  </div>
+   
+</section>  
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Customer Styles"
+  },
+  "class": "index-section index-section--flush index-section--slideshow",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": {
+        "en": "Section Class",
+        "ja": "セクションクラス"
+      }
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Testimonial Section"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "da": "Billeddias",
+        "de": "Foto-Slide",
+        "en": "Image slide",
+        "es": "Diapositiva de imagen",
+        "fi": "Kuvadia",
+        "fr": "Diapositive (image)",
+        "hi": "इमेज स्लाइड",
+        "it": "Slide immagine",
+        "ja": "画像スライド",
+        "ko": "이미지 슬라이드",
+        "ms": "Slaid imej",
+        "nb": "Lysbilde",
+        "nl": "Afbeelding dia",
+        "pt-BR": "Slide de imagem",
+        "pt-PT": "Diapositivo de imagem",
+        "sv": "Bild i bildspel",
+        "th": "สไลด์รูปภาพ",
+        "zh-CN": "图片幻灯片",
+        "zh-TW": "圖片投影片"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "da": "Billede",
+            "de": "Foto",
+            "en": "Image",
+            "es": "Imagen",
+            "fi": "Kuva",
+            "fr": "Image",
+            "hi": "इमेज",
+            "it": "Immagine",
+            "ja": "画像",
+            "ko": "이미지",
+            "ms": "Imej",
+            "nb": "Bilde",
+            "nl": "Afbeelding",
+            "pt-BR": "Imagem",
+            "pt-PT": "Imagem",
+            "sv": "Bild",
+            "th": "รูปภาพ",
+            "zh-CN": "图片",
+            "zh-TW": "圖片"
+          }
+        },
+        {
+          "type": "text",
+          "id": "insta-tag",
+          "label": "Instagram Name"
+        },
+        {
+          "type": "color",
+          "id": "text-color",
+          "label": "Text Color"
+        },
+        {
+          "type": "url",
+          "id": "post_url",
+          "label": "Link URL"
+        },
+        {
+          "type": "text",
+          "id": "post_alt",
+          "label": "Image Alt Text (Required)",
+          "default": "Add short description of text for accessibility"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Customer Styles"
+      },
+      "category": {
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "hi": "इमेज",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "ms": "Imej",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      },
+     
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+Shopify.theme.sections.register('customer-styles', {
+  onLoad: function() {
+    var newSlideShow = this.container.querySelector('.swiper-container');
+
+    if (newSlideShow) {
+      var swiperOptions = {
+        speed: 500,
+        loop: newSlideShow.dataset.swiperLoop === "true",
+        spaceBetween: 1,
+        pagination: {
+          el: newSlideShow.querySelector('.swiper-pagination'), // ✅ Scoped to this instance
+          clickable: true
+        },
+        navigation: {
+          nextEl: newSlideShow.querySelector('.swiper-button-next'),
+          prevEl: newSlideShow.querySelector('.swiper-button-prev')
+        }
+      };
+
+      new G(newSlideShow, swiperOptions); // ✅ Initialize only this instance
+    }
+  }
+});
+</script>

@@ -1,0 +1,43 @@
+{% comment %}
+<section class="page-section register-section bgc--cream">
+  <div class="container container--full">
+    <div class="row contents-row">
+      <div class="col col-6 col-md-12 hero-banner">
+        {%- if settings.sign_up_page_banner != blank -%}
+          <picture class="image-wrapper">
+            <img src="{{ settings.sign_up_page_banner | img_url: '1000x1000' }}" alt="">
+          </picture>
+        {%- endif -%}
+      </div>
+      <div class="col col-6 col-md-12 col__page-contents">
+        <div class="container">
+          <div class="form-wrapper">
+            <h1 class="page-title">{{ 'customer.activate_account.request_headline' | t }}</h1>
+            <p class="page-headline">{{ 'customer.activate_account.request_sent' | t }}</p>
+            <p class="note"><a href="/account/login">{{ 'customer.login.sign_in_headline' | t }}</a></p>
+          </div>  
+        </div>     
+      </div>
+    </div>
+  </div>
+</section>
+{% endcomment %}
+
+<section class="page-section  register-section request-section bgc--cream">
+  <div class="container container--full">
+    <div class="row row__page-wrapper">
+      <div class="col col-6 col-md-12 col--log-in bdr--right">
+        <div class="col__container">
+          <div class="account-form-wrapper login-form-wrapper">
+            <h1 class="page-title">{{ 'customer.activate_account.request_headline' | t }}</h1>
+            <p class="page-headline">{{ 'customer.activate_account.request_sent' | t }}</p>
+            <p class="page-headline"><a href="{{ routes.account_login_url }}">{{ 'customer.login.sign_in_headline' | t }}</a></p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+

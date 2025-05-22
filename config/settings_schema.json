@@ -1,0 +1,297 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Themekit template theme",
+    "theme_version": "1.0.0",
+    "theme_author": "Shopify",
+    "theme_documentation_url": "https:\/\/github.com\/Shopify\/themekit",
+    "theme_support_url": "https:\/\/github.com\/Shopify\/themekit\/issues"
+  },
+  {
+    "name": {
+      "en": "Global Settings",
+      "ja": "全般設定"
+    },
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "main_linklist",
+        "label": {
+          "en": "Site Navigation",
+          "ja": "サイトナビゲーション"
+        },
+        "default": "main-menu"
+      },
+      {
+        "type": "link_list",
+        "id": "mega_menu_linklist",
+        "label": {
+          "en": "Mega Menu",
+          "ja": "メガメニュー"
+        },
+        "default": "main-menu"
+      },  
+      {
+        "type": "link_list",
+        "id": "footer_menu_linklist",
+        "label": {
+          "en": "Footer Menu",
+          "ja": "フッターメニュー"
+        },
+        "default": "main-menu"
+      },  
+      {
+        "type": "link_list",
+        "id": "support_menu_linklist",
+        "label": {
+          "en": "Support Menu",
+          "ja": "サポートメニュー"
+        },
+        "default": "main-menu"
+      },   
+      {
+        "type": "header",
+        "content": {
+          "en": "Newsletter Signup",
+          "ja": "ニュースレター登録"
+        }
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_popup",
+        "label": {
+          "en": "Enable newsletter popup?",
+          "ja": "ニュースレターポップアップを表示する"
+        },
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "popup_image",
+        "label": {
+          "en": "Image",
+          "ja": "画像"
+        }
+      },
+      {
+        "type": "text",
+        "id": "popup_headline",
+        "label": "Headline"
+      },
+      {
+        "type": "textarea",
+        "id": "popup_text",
+        "label": {
+          "en": "Copy",
+          "ja": "コピー"
+        }
+      },
+      {
+        "type": "text",
+        "id": "popup_footnote",
+        "label": {
+          "en": "Footnote",
+          "ja": "脚注"
+        }
+      },
+      {
+        "type": "text",
+        "id": "popup_key",
+        "label": {
+          "en": "Key",
+          "ja": "キー"
+        },
+        "info": {
+          "en": "Used as a cookie's key",
+          "ja": "クッキーのキーとして使用されます"
+        }
+      },
+      {
+        "type": "text",
+        "id": "signup_form_key",
+        "label": {
+          "en": "Klaviyo Key",
+          "ja": "Kalviyo キー"
+        }
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Product",
+      "ja": "商品ページ"
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": {
+          "en": "Size and Fit Default Text",
+          "ja": "サイズ＆フィット定型文"
+        }
+      },
+      {
+        "type": "textarea",
+        "id": "size_fit_default_text",
+        "label": {
+          "en": "Text",
+          "ja": "テキスト"
+        }
+      },
+      {
+        "type": "header",
+        "content": {
+          "en": "Delivery and Returns",
+          "ja": "配送と返品について"
+        }
+      },
+      {
+        "type": "textarea",
+        "id": "delivery_returns_default_text",
+        "label": {
+          "en": "Text",
+          "ja": "テキスト"
+        }
+      },
+      {
+        "type": "header",
+        "content": {
+          "en": "Pre Order Default Description",
+          "ja": "プレオーダー定型文"
+        }
+      },
+      {
+        "type": "textarea",
+        "id": "pre_order_default_description",
+        "label": {
+          "en": "Description",
+          "ja": "テキスト"
+        }
+      }
+    ]
+  },
+  {
+    "name": {
+      "en": "Customer",
+      "ja": "カスタマーページ"
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": {
+          "en": "Sign Up Page Banner",
+          "ja": "会員登録ページバナー"
+        }
+      },
+      {
+        "type": "image_picker",
+        "id": "sign_up_page_banner",
+        "label": {
+          "en": "Image",
+          "ja": "画像"
+        }
+      },
+      {
+        "type": "select",
+        "id": "sign_up_page_text_color",
+        "label": {
+          "en": "Text Color",
+          "ja": "テキストカラー"
+        },
+        "default": "#ffffff",
+        "options": [
+          {
+            "label": {
+              "en": "White",
+              "ja": "White"
+            },
+            "value": "#ffffff"
+          },
+          {
+            "label": {
+              "en": "dark Sand",
+              "ja": "Dark Sand"
+            },
+            "value": "#694a26"
+          }
+        ]
+      }
+    ]
+  },
+  {
+  "name": "Mobile Menu Benefits",
+  "settings": [
+    {
+      "type": "text",
+      "id": "secure_checkout_text",
+      "label": "Secure Checkout Text",
+      "default": "Secure Checkout"
+    },
+    {
+      "type": "text",
+      "id": "free_shipping_text",
+      "label": "Free Shipping Text",
+      "default": "Free U.S. Shipping $150+"
+    },
+    {
+      "type": "text",
+      "id": "easy_returns_text",
+      "label": "Easy Returns Text",
+      "default": "Easy Returns & Exchanges"
+    },
+    {
+      "type": "text",
+      "id": "shipping_options_text",
+      "label": "Shipping Options Text",
+      "default": "Various Shipping Options"
+    }
+  ]
+},
+  {
+    "name": {
+      "en": "Login Page",
+      "ja": "ログインページ"
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": {
+          "en": "Login Page Banner",
+          "ja": "ログインページバナー"
+        }
+      },
+      {
+        "type": "image_picker",
+        "id": "login_page_banner",
+        "label": {
+          "en": "Image",
+          "ja": "画像"
+        }
+      },
+      {
+        "type": "select",
+        "id": "login_page_text_color",
+        "label": {
+          "en": "Text Color",
+          "ja": "テキストカラー"
+        },
+        "default": "#ffffff",
+        "options": [
+          {
+            "label": {
+              "en": "White",
+              "ja": "White"
+            },
+            "value": "#ffffff"
+          },
+          {
+            "label": {
+              "en": "dark Sand",
+              "ja": "Dark Sand"
+            },
+            "value": "#694a26"
+          }
+        ]
+      }          
+    ]
+  }
+]

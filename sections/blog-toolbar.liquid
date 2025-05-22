@@ -1,0 +1,18 @@
+
+      {% unless blog.all_tags.size == 0 %}
+      <nav class="local-nav">
+        <div class="container container--fluid">
+          <ul class="local-nav__menu">           
+
+            {% for tag in blog.all_tags %}                            
+          
+              <li>
+              <a href="{{blog.url}}/tagged/{{ tag | handleize }}" class="{% if current_tags contains tag %} selected {% endif %}" data-base-url="{{ blog.url }}/" data-tag="{{ tag | handleize }}" @click="filterMenu">{{tag}}</a>                        
+              </li>
+          
+            {% endfor %}
+
+          </ul>
+        </div>
+      </nav>
+      {% endunless %}

@@ -1,0 +1,31 @@
+
+
+
+
+        <nav class="{{ nav_class }}">
+          <ul class="{{ nav_class }}__menu">
+            {% for link in linklists[settings.footer_menu_linklist].links %}
+            <li class="{{ nav_class }}__menu-item {% if link.active %}{{ nav_class }}__menu-item--active{% endif %}">
+              <a href="{{link.url}}">{{ link.title | escape }}</a>
+              {% if link.links != blank %}
+                <ul class="{{ nav_class }}__child-menu {{ nav_class }}__child-menu--small">
+                  {% for child_link in link.links %}
+                  <li class="{{ nav_class }}__child-menu-item {% if child_link.active %}{{ nav_class }}__child-menu-item--active{% endif %}">
+                    <a href="{{child_link.url}}">{{ child_link.title | escape }}</a>
+                    {% if child_link.links != blank %}
+                    <ul class="{{ nav_class }}__grand-child-menu">
+                      {% for grand_child_link in child_link.links %}
+                      <li class="{{ nav_class }}__grand-child-menu-item {% if grand_child_link.active %}{{ nav_class }}__grand-child-menu-item--active{% endif %}">
+                        <a href="{{grand_child_link.url}}">{{ grand_child_link.title | escape }}</a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>        
+        </nav>        

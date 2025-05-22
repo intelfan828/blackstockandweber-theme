@@ -1,0 +1,38 @@
+            
+            {% comment %} {% if type == 'list-collections' %}
+            <div class="col-{{size}} col col-sm-6 card">
+            {% else %}
+            <div class="{% if size > 1 %}col-6 {% else %}col--single {% endif %} col col-sm-12 card">
+            {% endif %}
+              <div class="card__image">
+                <a href="{{ collection.url }}">
+
+                  {% if collection.metafields.custom_fields["collection_optional_image"] != blank %}
+
+                  <div class="card__image-holder" style="background-image: url({{collection.metafields.custom_fields['collection_optional_image'] }})">
+                  </div>
+                {% elsif collection.image %}
+                  <div class="card__image-holder" style="background-image: url({{collection.image |  img_url: '1200x1200' }})">
+                  </div>
+                {% endif %}
+                </a>
+              </div>
+              {% if section.settings.show_collection_title == true %}
+              <p class="card__title uppercase"><a href="{{ collection.url }}">{{ collection.title | replace: ", All", '' | replace: ", All", '' | replace: ", ALL"}}</a></p>
+              {% endif %}
+            </div> {% endcomment %}
+            {%- assign collection = collections[block.settings.collection] -%}
+            <div class="{{ classes }}">
+              <div class="collection-tn">
+                <a href="{{ collection.url }}">
+                  <picture>
+                    <img src="{{ block.settings.image | img_url: '2400x2400' }}" alt="">
+                  </picture>
+                </a>                             
+              </div>              
+              <p class="collection-title">{{collection.title}}</p>
+              {% if collection.metafields.custom_fields["subtitle"] != blank %}
+                <p class="collection-subtitle">{{ collection.metafields.custom_fields["subtitle"] }}</p>
+              {% endif %}
+              
+            </div><!-- /.product -->              

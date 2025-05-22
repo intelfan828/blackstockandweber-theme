@@ -1,0 +1,60 @@
+<section class="page-section login-section register-section request-section bgc--cream">
+  <div class="container container--full">
+    <div class="row row__page-wrapper">
+      <div class="col col-6 col-md-12 col--log-in bdr--right">
+        <div class="col__container">
+          <div class="account-form-wrapper login-form-wrapper">
+            <h2 class="col__title">{{ 'customer.activate_account.request_headline' | t }}</h2>
+
+            <div class="form-wrapper">
+
+              {%- assign formId = 'account_request' -%}
+              {% form 'create_customer', id: formId, novalidate: 'novalidate' %}
+                {% include 'form-status', form: form, form_id: formId %}
+      
+                <label for="{{ formId }}-email">{{ 'customer.activate_account.request_email' | t }}</label>
+                <input
+                  type="email"
+                  name="customer[email]"
+                  id="{{ formId }}-email"
+                  class="{% if form.errors contains 'email' %} input--error{% endif %}"
+                  {% if form.email %} value="{{ form.email }}"{% endif %}
+                  autocorrect="off"
+                  autocapitalize="off"
+                  autocomplete="email"
+                  aria-required="true"
+                  {%- if form.errors contains 'email' -%}
+                    class="input--error"
+                    aria-invalid="true"
+                    aria-describedby="{{ formId }}-email-error"
+                  {%- endif -%}
+                >
+                {%- if form.errors contains 'email' -%}
+                  <span id="{{ formId }}-email-error" class="input-error-message">
+                    <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                    {% include 'icon-error' %}
+                    <span>{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+                  </span>
+                {%- endif -%}
+      
+                <input type="hidden" name="return_to" value="/account/register?view=request-sent">
+  
+                <ul class="row action-row">                 
+                  <li class="col col-6"><a href="/account/login" class="button button--secondary">{{ 'customer.activate_account.request_cancel' | t }}</a></li>
+                  <li class="col col-6"><input type="submit" value="{{ 'customer.activate_account.request_submit' | t }}" class="button button--secondary"></li>
+                </ul>    
+  
+      
+              {% endform %}
+  
+              <p class="note"><a href="/account/login">{{ 'customer.login.sign_in_headline' | t }}</a></p>
+            </div>  
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,102 @@
+
+
+
+<!-- Link the CSS file for the mobile menu benefits section -->
+<link rel="stylesheet" href="{{ 'mobile-menu-benefits.css' | asset_url }}" type="text/css" />
+
+<style>
+ #shopify-section-{{section.id}} .site-nav--mobile.visible{
+   top:68px;
+ }
+
+ 
+  .site-nav--mobile .site-nav__menu-item {
+    align-items: normal;
+    flex-flow: column;
+  }
+</style>
+        <nav class="site-nav--mobile">
+          <ul class="site-nav__menu">
+            {% for link in linklists[settings.main_linklist].links %}
+            <li class="site-nav__menu-item {% if link.links != blank %}site-nav__menu-item--has-child-menus{% endif%}">
+              <a href="{{link.url}}" class="site-nav__menu-item__link {% if forloop.first == true %}opened{% endif %}">
+                {% if link.title == 'GENERAL STORE' %}
+                <img src="{{ 'general_store.svg' | asset_url }}" alt="GENERAL STORE">
+                {% else %}
+                {{ link.title | escape }}
+                {% endif %}
+              </a>
+              {% if link.links != blank %}
+              <ul class="site-nav__child-menu site-nav__child-menu--small  {% if forloop.first == true %}visible{% endif %}">
+                {% for child_link in link.links %}
+                <li class="site-nav__child-menu-item {% if child_link.links != blank %}site-nav__menu-item--has-grand-child-menus{% endif%}">
+                  <a href="{% if child_link.url == "/collections/shop-all" %}{{ child_link.url }}?view=all
+                    {% elsif child_link.url == "/collections/loafers" %}{{ child_link.url }}?view=all
+                    {% elsif child_link.url == "/collections/academy" %}{{ child_link.url }}?view=all
+                    {% else %}{{ child_link.url }}{% endif %}"
+                    class="site-nav__child-menu-item__link {% if forloop.first == true %}opened{% endif %}">
+                   {% if child_link.title == 'GENERAL STORE' %}
+                      <img src="{{ 'general_store.svg' | asset_url }}" alt="GENERAL STORE" height="12px">                     
+                        {% elsif child_link.title == 'ACADEMY' %}
+                        <img src="{{ 'Academy_by_BW.svg' | asset_url }}" alt="ACADEMY BY blackstock and weber" height="26px">
+                        {% elsif child_link.title == 'BLACKSTOCK & WEBER' %}
+                        <img src="{{ 'Blackstock.svg' | asset_url }}" alt="BLACKSTOCK & WEBER" height="12">
+                        {% elsif child_link.title == '242 MULBERRY' %}
+                        <img src="{{ '242-Mulberry.svg' | asset_url }}" alt="242 MULBERRY" height="12">
+                      {% elsif child_link.title == 'Sperry By Chris Echevarria' %}
+                        <img src="{{ 'SperrybyCE-brown.svg' | asset_url }}" alt="Sperry By Chris Echevarria" height="40px">
+                      {% else %}
+                      {{ child_link.title | escape }}
+                      {% endif %}
+                  </a>
+                  {% if child_link.links != blank %}
+                    <ul class="site-nav__child-menu site-nav__child-menu--small  {% if forloop.first == true %}visible{% endif %}">
+                      {% for grand_child_link in child_link.links %}
+                      <li class="site-nav__grand-child-menu-item">
+                       <a href="{% if grand_child_link.url == "/collections/loafers" %}{{ grand_child_link.url }}?view=all
+                         {% elsif grand_child_link.url == "/collections/apparel" %}{{ child_link.url }}?view=all
+                         {% else %}{{ grand_child_link.url }}{% endif %}">
+                          {{ grand_child_link.title | escape }}
+                        </a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </li>
+            {% endfor %}
+            {% if shop.customer_accounts_enabled %}
+            <li class="site-nav__menu-item">
+              {% if customer %}
+                <a href="{{ routes.account_url }}" class="site-nav__menu-item__link">ACCOUNT</a>
+              {% else %}
+                <a href="{{ routes.account_login_url }}" class="site-nav__menu-item__link">ACCOUNT</a>
+              {% endif %}
+            </li>            
+            {% endif %}  
+            <!--<li class="site-nav__menu-item site-nav__menu-item--sns site-nav__menu-item--instagram"><a href="https://www.instagram.com/blackstockandweber" target="_blank" class="site-nav__menu-item__link">INSTAGRAM</a></li>-->        
+            <!--<li class="site-nav__menu-item site-nav__menu-item--sns site-nav__menu-item--instagram"><a href="https://academybychrisechevarria.com/" target="_blank" class="site-nav__menu-item__link">ACADEMY BY CHRIS ECHEVARRIA</a></li>-->        
+                                
+          </ul>
+          <div class="mobile-menu-benefits">
+            <div class="mobile-menu-benefit">
+              <img src="{{ 'secure-checkout-icon.png' | asset_url }}" alt="">
+              <p>{{ settings.secure_checkout_text }}</p>
+            </div>
+            <div class="mobile-menu-benefit">
+              <img src="{{ 'free-shipping-icon.png' | asset_url }}" alt="">
+              <p>{{ settings.free_shipping_text }}</p>
+            </div>
+            <div class="mobile-menu-benefit">
+              <img src="{{ 'easy-exchanges-icon.png' | asset_url }}" alt="">
+              <p>{{ settings.easy_returns_text }}</p>
+            </div>
+            <div class="mobile-menu-benefit">
+              <img src="{{ 'shipping-options-icon.png' | asset_url }}" alt="">
+              <p>{{ settings.shipping_options_text }}</p>
+            </div>
+          </div>
+        </nav>         

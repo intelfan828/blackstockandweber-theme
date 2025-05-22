@@ -1,0 +1,75 @@
+
+
+
+{% liquid
+  
+  assign has_local_nav = false
+
+  for link in linklists[settings.main_linklist].links
+
+    if link.links != blank
+
+        for child_link in link.links
+
+          if child_link.links != blank
+
+            for grand_child_link in child_link.links
+
+              if grand_child_link.active 
+              
+                assign has_local_nav = true
+            
+              endif
+     
+            endfor
+       
+          endif
+    
+        endfor
+  
+    endif
+
+  endfor
+  
+%}
+
+        {% if has_local_nav == true %}
+        <nav class="{{ nav_class }}">
+          <div class="{{ nav_class }}__scroll-wrapper">
+            <ul class="{{ nav_class }}__menu">
+              {% for link in linklists[settings.main_linklist].links %}
+              <li class="{{ nav_class }}__menu-item {% if link.child_active %}{{ nav_class }}__menu-item--child-active{% endif %}">
+                <a href="{{link.url}}" class="{{ nav_class }}__menu-link">{{ link.title | escape }}</a>
+                {% if link.links != blank %}
+                  <ul class="{{ nav_class }}__child-menu {{ nav_class }}__child-menu--small">
+                    {% for child_link in link.links %}
+                    <li class="{{ nav_class }}__child-menu-item {% if child_link.child_active %}{{ nav_class }}__child-menu-item--child-active{% endif %}">
+                      <a href="{% if child_link.url == "/collections/shop-all" %}{{ child_link.url }}?view=all
+                        {% elsif child_link.url == "/collections/loafers" %}{{ child_link.url }}?view=all
+                        {% elsif child_link.url == "/collections/academy" %}{{ child_link.url }}?view=all
+                        {% else %}{{ child_link.url }}{% endif %}"
+                        class="{{ nav_class }}__child-menu-link">{{ child_link.title | escape }}</a>
+                      {% if child_link.links != blank %}
+                      <ul class="{{ nav_class }}__grand-child-menu">
+                        {% for grand_child_link in child_link.links %}
+                        <li class="{{ nav_class }}__grand-child-menu-item {% if grand_child_link.active %}{{ nav_class }}__grand-child-menu-item--active{% endif %}">
+                          <a href="{% if grand_child_link.url == "/collections/loafers" %}{{ grand_child_link.url }}?view=all
+                            {% elsif grand_child_link.url == "/collections/apparel" %}{{ child_link.url }}?view=all
+                            {% else %}{{ grand_child_link.url }}{% endif %}">
+                            {{ grand_child_link.title | escape }}
+                          </a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <button type="button" class="{{ nav_class }}__scroll-button">{% include 'icon_arrow_02' %}</button>
+        </nav>        
+        {% endif %}

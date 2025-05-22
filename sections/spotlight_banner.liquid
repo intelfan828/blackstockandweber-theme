@@ -1,0 +1,460 @@
+<style>
+  #shopify-section-{{section.id}} .spotlight-banner .hero-banner__title .logo-title-container,
+  #shopify-section-{{section.id}} .spotlight-banner .item-info * {
+    color: {{ section.settings.text_color }} ;
+  }
+  #shopify-section-{{section.id}} .spotlight-banner .hero-banner__subtitle, #shopify-section-{{section.id}} .spotlight-banner .hero-banner__subtitle ~ p {
+    color: {{ section.settings.subtitle_text_color }} ;
+  }
+   
+  #shopify-section-{{section.id}} .spotlight-banner a,
+  #shopify-section-{{section.id}} .spotlight-banner .button.button--secondary {
+    color: {{ section.settings.text_color }} ;
+    border-color: {{ section.settings.text_color }} ;
+  }
+  
+  
+  #shopify-section-{{section.id}} .spotlight-banner .spotlight-cta{
+     color:{{ section.settings.cta_color }};
+  }
+  #shopify-section-{{section.id}} .spotlight-banner a:link .hero-banner__subtitle ~ p,
+  #shopify-section-{{section.id}} .spotlight-banner a:visited .hero-banner__subtitle ~ p{
+       color:{{ section.settings.subtitle_text_color }};
+  }
+  .tmpl--index .spotlight-banner .button {
+    margin-top: 13px;
+    padding-left:8px;
+    padding-right:8px;
+  }
+   #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline,  #shopify-section-{{section.id}} .site-trunk .shopify-section .spotlight-banner .hero-banner__headline {
+    top: 14px;
+    bottom: initial;
+  }
+
+   
+     #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.solid-text-background,  #shopify-section-{{section.id}} .site-trunk .shopify-section .spotlight-banner .hero-banner__headline.solid-text-background {
+    top: 0px;
+    bottom: initial;
+  }
+
+  .spotlight-banner .hero-banner__headline picture.logo {
+    height:auto;
+    margin-right:5px;
+  }
+
+  .spotlight-banner .hero-banner__headline .logo-title-container {
+    display:flex;
+    flex-flow:row;
+    margin-bottom: 10px;
+  }
+
+  .tmpl--index .spotlight-banner .hero-banner__headline picture.logo img {
+    position:initial;
+    object-fit: contain;
+  }
+
+ .tmpl--index .spotlight-banner .hero-banner__title {
+    margin-top:10px;
+  }
+  
+  .tmpl--index .spotlight-banner .hero-banner__subtitle {
+    line-height:normal;
+  }
+
+  #shopify-section-{{section.id}} .spotlight-banner .spotlight-cta {
+      font-size: 11px;
+      text-align: start;
+    }
+  
+  .tmpl--index .spotlight-banner picture {
+    padding: 0;
+  }
+
+ #shopify-section-{{section.id}} .spotlight-banner .spotlight-cta,  .spotlight-banner .spotlight-cta:visited {
+    text-decoration: underline;
+  }
+
+  #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.solid-text-background {
+      background-color: white;
+      position:relative;
+      bottom:initial;
+      padding:20px 12px;
+    }
+
+  #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.position-bottom {
+    top:initial;
+    bottom:20px;
+  }
+  
+
+  
+  @media (max-width: 900px) { 
+    
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.solid-text-background-mobile,  #shopify-section-{{section.id}} .site-trunk .shopify-section .spotlight-banner .hero-banner__headline.solid-text-background-mobile {
+    top: 0px;
+  }
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.solid-text-background {
+      background-color: transparent;
+      position:absolute;
+      top:14px;
+      bottom:initial;
+      padding:0 12px;
+    }
+    
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.solid-text-background.solid-text-background-mobile {
+      top:0px;
+    }
+    
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline.solid-text-background-mobile {
+      background-color: white;
+      position:relative;
+      bottom:initial;
+      padding:20px;
+    }
+    
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__title .logo-title-container,
+    #shopify-section-{{section.id}} .spotlight-banner .item-info * {
+      color: {{ section.settings.text_color_sm }};
+      font-size:12px;
+    }
+    #shopify-section-{{section.id}} .spotlight-banner a:link .hero-banner__subtitle ~ p,
+    #shopify-section-{{section.id}} .spotlight-banner a:visited .hero-banner__subtitle ~ p{
+      color: {{ section.settings.subtitle_text_color_sm }} ;
+      font-size: 11px;
+    }
+   
+    #shopify-section-{{section.id}} .spotlight-banner .button.button--secondary {
+      color: {{ section.settings.text_color_sm }} ;
+      border-color: {{ section.settings.text_color_sm }} ;
+    }
+
+     #shopify-section-{{section.id}} .spotlight-banner .spotlight-cta:link,
+    #shopify-section-{{section.id}} .spotlight-banner .spotlight-cta:visited
+    {
+      color: {{ section.settings.cta_color_sm }} ;
+      border-color:{{ section.settings.cta_color_sm }} ;
+    }
+
+     #shopify-section-{{section.id}} .spotlight-banner .position-bottom .spotlight-cta:link,
+    #shopify-section-{{section.id}} .spotlight-banner .position-bottom .spotlight-cta:visited
+    {
+      text-align:end;
+    }
+
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline .hero-banner__title spotlight-cta:link,
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline .hero-banner__title spotlight-cta:visited {
+     color:{{ section.settings.cta_color_sm }} ;
+    }
+
+    #shopify-section-{{section.id}} .spotlight-banner .hero-banner__headline {
+      left:initial;
+      width:100%;
+      padding:0 12px;
+      background-color: none;
+      min-height: 68px;
+      position:absolute;
+    }
+
+    #shopify-section-{{section.id}} .spotlight-banner .hero-section__image-wrapper{
+      position: relative;
+      top: 0;
+      height: 380px;
+    }
+
+    #shopify-section-{{section.id}} .spotlight-banner .hero-section__image-wrapper img {
+      height:380px;
+    }
+
+    #shopify-section-{{section.id}} .spotlight-banner .position-bottom .hero-banner__title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+     #shopify-section-{{section.id}} .spotlight-banner .hero-banner__subtitle, #shopify-section-{{section.id}} .spotlight-banner .hero-banner__subtitle ~ p {
+    color: {{ section.settings.subtitle_text_color_sm }} ;
+  }
+    
+  }
+</style>
+
+
+<section class="hero-section spotlight-banner hero-section--single ">
+  <div class="container container--full">
+    
+     {%- if section.settings.spotlight_product != empty -%}
+        {%- assign spotlight_product = all_products[section.settings.spotlight_product] -%}
+        {%- assign spotlight_url = spotlight_product.url | append: "?variant=" | append: spotlight_product.variants.first.id -%}
+      {%- else -%}
+        {%- assign spotlight_url = section.settings.spotlight_link -%} <!-- Fallback to spotlight_link if no product is selected -->
+      {%- endif -%}
+    {% if section.settings.spotlight_product != blank or section.settings.spotlight_link != blank %}
+      <a href="{{ spotlight_url }}">
+    {% endif %}
+      <div class="row" style="background-color: {{section.settings.background_color}};">
+        <!-- {% if section.blocks.size == 1 %}
+        <div class="col col-12">
+          
+        </div>
+        {% endif %} -->
+        {%- for block in section.blocks -%}
+          <div class="col col-12 col-md-12">
+            <div class="hero-section__image-wrapper">
+              {% if block.settings.alt contains '.mp4' %}
+                <div class="video-wrapper">
+                  <video src="{{ block.settings.alt }}" loop controls poster="{{ block.settings.image | img_url: '2400x2400' }}" playsinline muted autoplay></video>
+                </div>
+              {% else %}
+                <picture>
+                  {% if block.settings.image_sm != blank %}
+                  <source srcset="{{ block.settings.image_sm | img_url: '1000x1000' }}" media="(max-width: 600px)">
+                  {% endif %}
+                  <img src="{{ block.settings.image | img_url: '2400x2400' }}" alt="{{ block.settings.alt }}">
+                </picture>
+              {% endif %}
+            </div>
+          </div>
+          {%- if forloop.index0 == 0 -%}
+          {% break %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {% if section.settings.spotlight_title != blank %}
+      <div class="hero-banner__headline{% if section.settings.solid_text_background %} solid-text-background{% endif %} {% if section.settings.solid_text_background_mobile %} solid-text-background-mobile{% endif %} {% if section.settings.text_position_bottom %} position-bottom{% endif %}">
+        {% if section.settings.spotlight_subtitle != blank %}
+        <p class="hero-banner__subtitle">
+          {{ section.settings.spotlight_subtitle }}
+        </p>
+          
+        {%- endif -%}        
+        <div class="hero-banner__title">
+          <div class="logo-title-container">
+            {% if section.settings.logo_sm != blank%}
+              <picture class="logo">
+                    <source srcset="{{ section.settings.logo_sm | img_url }}" media="(max-width: 600px)" style="height:18px">
+                    <img src="{{ section.settings.logo_sm | img_url }}" alt="{{ section.settings.logo_alt }}" style="height:18px">
+                  </picture>
+            {% endif %}
+            
+            {{ section.settings.spotlight_title }}
+          </div>
+          {% if  section.settings.spotlight_cta != blank%}
+            <a href="{{ spotlight_url }}" class="spotlight-cta" >
+             {{ section.settings.spotlight_cta }}
+            </a>
+          {% endif %}
+        </div>
+         
+      </div>
+        
+      {%- endif -%}
+    {% if section.settings.spotlight_product != blank or section.settings.spotlight_link != blank %}
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": {
+    "en": "Spotlight Banner"
+  },
+  "class": "index-section index-section--flush index-section--slideshow",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": {
+        "en": "Section Class",
+        "ja": "セクションクラス"
+      }
+    },
+    {
+      "type":"checkbox",
+      "id":"solid_text_background",
+      "label": {
+        "en":"Solid Text Background"
+      }
+    },
+    {
+      "type":"checkbox",
+      "id":"solid_text_background_mobile",
+      "label": {
+        "en":"Solid Text Background (Mobile)"
+      }
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_sm",
+      "label": {
+        "en": "Logo Image"
+      }
+    },
+    {
+      "type": "text",
+      "id": "logo_alt",
+      "label": {
+        "en": "Logo Alt Text",
+      }
+    },
+     {
+      "type":"checkbox",
+      "id":"text_position_bottom",
+      "label": {
+        "en":"Text Position Bottom"
+      }
+    },
+    {
+      "type": "richtext",
+      "id": "spotlight_title",
+      "label": {
+        "en": "Title",
+        "ja": "タイトル"
+      }
+    },   
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": {
+        "en": "Text Color",
+        "ja": "テキストカラー"
+      },
+      "default": "#000000"
+    }, 
+    {
+      "type": "color",
+      "id": "text_color_sm",
+      "label": {
+        "en": "Text Color (Mobile)",
+        "ja": "テキストカラー (モバイル）"
+      },
+      "default": "#000000"
+    },    
+    {
+      "type": "richtext",
+      "id": "spotlight_subtitle",
+      "label": {
+        "en": "Sub Title",
+        "ja": "サブタイトル"
+      }
+    },
+    {
+      "type": "color",
+      "id": "subtitle_text_color",
+      "label": {
+        "en": "Subtitle Text Color",
+        "ja": "サブタイトルテキストカラー"
+      },
+      "default": "#000000"
+    }, 
+    {
+      "type": "color",
+      "id": "subtitle_text_color_sm",
+      "label": {
+        "en": "Subtitle Text Color (Mobile)",
+        "ja": "サブタイトルテキストカラー (モバイル）"
+      },
+      "default": "#000000"
+    },
+     {
+      "type": "text",
+      "id": "spotlight_cta",
+      "label": {
+        "en": "Spotlight CTA"
+      }
+    },
+    {
+      "type": "color",
+      "id": "cta_color",
+      "label": {
+        "en": "CTA Color"
+      },
+      "default": "#ffffff"
+    }, 
+    {
+      "type": "color",
+      "id": "cta_color_sm",
+      "label": {
+        "en": "CTA Color (Mobile)"
+      },
+      "default": "#ffffff"
+    },
+    {
+      "type": "product",
+      "id": "spotlight_product",
+      "label": {
+        "en": "Select Product"
+      }
+    },
+    {
+      "type": "url",
+      "id": "spotlight_link",
+      "label": {
+        "en": "Link",
+        "ja": "リンク"
+      }
+    },   
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": {
+        "en": "Background Color",
+        "ja": "背景色"
+      },
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "en": "Image slide",
+        "ja": "画像スライド"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image",
+            "ja": "画像"
+          },
+        },
+        {
+          "type": "image_picker",
+          "id": "image_sm",
+          "label": {
+            "en": "Image (SP)",
+            "ja": "画像 (SP)"
+          }
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": {
+            "en": "Alt Text or mp4 file",
+          }
+        },
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Spotlight Banner",
+        "ja": "ヒーローバナー"
+      },
+      "category": {
+        "en": "Image",
+        "ja": "画像"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

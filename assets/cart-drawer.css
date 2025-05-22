@@ -1,0 +1,42 @@
+.cart-drawer, .cart-drawer .cart-drawer__item button, .cart-drawer a, .cart-drawer input {
+  color: rgb(105, 74, 38);
+}
+
+#cart-checout-button img {
+  vertical-align: text-bottom;
+  margin: 0 8px;
+}
+
+.cart-drawer__actions p {
+  font-size:11px;
+  text-align:center;
+  margin-top:8px;
+  margin-bottom: 8px;
+}
+
+#cart-checout-button {
+  min-height:50px;
+}
+.props-contianer {
+  width:100%;
+}
+
+.cart-drawer__item__props {
+  background:#FCF5EB;
+  padding:12px;
+  width:100%;
+  text-align:center;
+}
+.cart-drawer .cart-drawer__item__title, .cart-drawer .cart-drawer__item__variant, .cart-drawer__item__price p {
+  font-size: 12px;
+}
+
+.cart-drawer__item__price button {
+  font-size: 10px;
+}
+
+.cart-drawer .cart-drawer__note {
+  border-top: none;
+  border-bottom: 1px solid #ead7c1;
+  text-align:center;
+}

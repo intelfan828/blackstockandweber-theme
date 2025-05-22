@@ -1,0 +1,47 @@
+<div class="cart-popup" :class="{ 'cart-popup--visible': visible }">
+  <div class="container">
+    <div class="cart-popup__header">
+      <h2 class="cart-popup__heading">カートに追加しました</h2>
+      <button class="cart-popup__close" aria-label="閉じる" @click="closePopup">{%- include 'icon_cross_01' -%} </button>
+    </div> 
+    <div class="cart-popup__items">
+      <table>
+        <tbody>
+          <template v-if="item">                 
+            <tr>
+              <td class="cart-popup__item-image">
+                <a :href="item.url" v-if="item.featured_image">
+                  <img :src="item.featured_image.url" :alt="item.product_title">
+                </a>
+              </td>
+              <td class="cart-popup__item-title">
+                <a :href="item.url">${ item.product_title }
+                <span class="cart-popup__item-variant" v-if="item.variant_title"><br>${ item.variant_title }</span>
+                </a>
+              </td>
+              <td class="cart-popup__item-quantity">                
+                <span>数量:</span>
+                <span>${ quantity }</span>
+              </td>
+            </tr>
+          </template> 
+          <!-- end if -->        
+
+        </tbody>
+      </table>
+
+      <div class="cart-popup__actions">
+        <a href="/cart" class="cart-popup__cta-link button button--gray">
+          カートを見る (<span aria-label="8個のアイテム">${ cart.item_count }</span>)
+        </a>
+
+        <div class="cart-popup__dismiss">
+          <button type="button" class="cart-popup__dismiss-button" @click="closePopup">
+            買い物を続ける
+          </button>
+        </div>   
+      </div>     
+    </div>
+  </div>
+</div>  
+

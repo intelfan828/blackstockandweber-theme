@@ -1,0 +1,25 @@
+<div class="tmpl--page">
+  <section class="contents-section">
+    <div class="container container--fluid">
+  
+      <div class="row">
+        <div class="col col-3 col-md-12 sidebar">
+          <div class="sticky-contents">
+            <div class="sticky-contents">
+              {% include 'support_nav', active: 'Accessibiltiy' %}
+            </div>
+          </div>
+        </div>
+        <div class="col col-9 col-md-12 content">
+  
+          <div class="content__body">
+            <h2 class="page__title md-hidden">{{ page.title }}</h2>
+            {{ page.content }}
+          </div>
+  
+        </div>
+      </div>
+  
+    </div>
+  </section>               
+</div>

@@ -1,0 +1,148 @@
+<style>
+  .key-product-traits .traits-list {
+    display:flex;
+    background-color: #FDF4EA;
+    flex-flow: row;
+    text-align: center;
+    color: #684A26;
+    width:100%;
+    text-align:start;
+  }
+
+  .key-product-traits .trait {
+    width:25%;
+    align-content:center;
+    border:1px solid #EAD7C0;
+    border-bottom-width:2px;
+    padding:8px;
+    height:64px;
+  }
+  
+  .key-product-traits .trait::before {
+    background-image: url("{{ 'check-mark.png' | asset_url }}");
+    background-size: 10px 7px;
+    content:"";
+    margin: 8px;
+    width:10px;
+    height:7px;
+    display:inline-flex;
+  }
+
+  .key-product-traits .traits-description {
+    font-size:12px;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    line-height:150%;
+  }
+
+   .key-product-traits .traits-title {
+     margin-bottom: 1.5rem;
+   }
+  
+  @media (max-width: 900px) {
+
+    .key-product-traits .traits-list {
+      flex-wrap: wrap;
+    }
+    
+    .key-product-traits .trait {
+      width:50%;
+      height:40px;
+      font-size:12px;
+    }
+
+    .key-product-traits .trait:nth-of-type(1),.trait:nth-of-type(2)  {
+     border-bottom: none;
+    }
+
+     .key-product-traits .trait:nth-of-type(1),.trait:nth-of-type(3)  {
+     border-right: none;
+    }
+  
+  }
+
+  
+</style>
+{% if section.settings.hidden != true %}
+  <section class="key-product-traits">
+    {% if section.settings.section_title != blank or section.settings.section_description != blank %}
+        <div class="section__title section">
+          {% if section.settings.section_title != blank %}
+            <h2 class="traits-title">{{ section.settings.section_title }}</h2>
+          {% endif %}
+          {% if section.settings.section_description != blank %}
+            <div class="col-3 col-md-4 col-sm-12">
+               <p class="traits-description">{{ section.settings.section_description }}</p>
+            </div>
+           
+          {% endif %}
+        </div>
+      {% endif %}
+    <div class="traits-container">
+      <ul class="traits-list">
+        <li class="trait">{{ section.settings.trait_1 }}</li>
+        <li class="trait">{{ section.settings.trait_2 }}</li>
+        <li class="trait">{{ section.settings.trait_3 }}</li>
+        <li class="trait">{{ section.settings.trait_4 }}</li>
+      </ul>
+    </div>
+  </section>
+{% endif %}
+{% schema %}
+  {
+    "name": "Key Product Traits",
+    "settings": [
+      {
+        "type":"checkbox",
+        "id":"hidden",
+        "label":{
+          "en":"Hide Section"
+        }
+      },
+        {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title"
+    },
+    {
+      "type": "textarea",
+      "id": "section_description",
+      "label": "Section Description"
+    },
+      {
+      "type": "text",
+      "id": "trait_1",
+      "label": {
+        "en": "Trait 1"
+      }
+    },
+      {
+       "type": "text",
+      "id": "trait_2",
+      "label": {
+        "en": "Trait 2"
+      }
+    },
+      {
+       "type": "text",
+      "id": "trait_3",
+      "label": {
+        "en": "Trait 3"
+      }
+    },
+      {
+       "type": "text",
+      "id": "trait_4",
+      "label": {
+        "en": "Trait 4"
+      }
+    },
+    ],
+     "presets": [
+    {
+      "name": {
+        "en": "Key Product Traits"
+      }
+    }
+  ]  
+  }
+{% endschema %}

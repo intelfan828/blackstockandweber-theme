@@ -1,0 +1,116 @@
+<section class="page-section account-section account-section--orders bgc--cream">
+  <div class="container container--full">
+    <div class="row contents-row">
+      <div class="col col-3 col-md-12 col__page-title bdr--right">
+        <div class="sticky-contents">
+          <h1 class="page-title">{{ 'customer.account.title' | t }}</h1>
+          {% include 'customer-local-nav', active: 'orders' %}
+        </div>
+      </div>
+      <div class="col col-9 col-md-12 col__page-contents">
+        <div class="myaccount__order-history">
+
+        {% paginate customer.orders by 24 %}
+        {% if customer.orders.size != 0 %}
+
+          <div class="orders">
+            {% for order in customer.orders %}
+            <div class="order">
+              <header class="order-header">
+                <p class="order-number">{{ order.name }}</p>
+                <div class="order-summary">
+                  <p class="order-date">{{ order.created_at | date: "%m/%d/%Y" }}</p>
+                  {%- if order.cancelled -%}
+                  <div class="order--cancelled">
+                    {%- assign cancelled_at = order.cancelled_at | date: "%m/%d/%Y %H:%M" -%}
+                    <p>{{ 'customer.order.cancelled_title' | t: order.cancel_title }}</p>
+                    <p>{{ 'customer.order.cancelled_html' | t: date: cancelled_at }}</p>
+                  </div>
+                  {%- endif -%}                  
+                  <p class="order-fulfilment-status">{{ order.fulfillment_status_label }}</p>
+                  <p class="order-detail-link"><a href="{{ order.customer_url }}">{{ 'customer.orders.order_detail' | t }}</a></p>       
+                </div>         
+              </header>
+              <ul class="order-items row">
+              {%- assign total_quantity = 0 -%}
+              {%- for line_item in order.line_items -%}
+                
+                <li id="{{ line_item.key }}" class="col col-4 col-sm-6 order-item">
+
+                  <div class="order-item__image">
+                    <a href="{{line_item.product.url}}">{{ line_item.image | img_url: '750x750' | img_tag }}</a>
+                    <p class="order-item__quantity">{{ line_item.quantity }}</p>
+                  </div>
+                  <div class="order-item__info">
+                    <p class="order-item__title">
+                      <a href="{{line_item.product.url}}">
+                      {{ line_item.product.title }}
+                      </a>
+                      {% for variant in line_item.options_with_values %}
+                      {% if forloop.first == true %}
+                      <br>
+                      {% endif %}
+                        <span>{{ variant.name }}: {{ variant.value }}</span>
+                        {% if forloop.last == false %}
+                        &nbsp;/&nbsp; 
+                        {% endif %}
+                      {% endfor %}
+                    </p>
+
+                    <div class="order-item__price">
+                      {%- if line_item.original_line_price != line_item.final_line_price -%}
+                      <dl>
+                        <dt>
+                          <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                        </dt>
+                        <dd>
+                          <s>{{ line_item.original_line_price | money }}</s>
+                          {%- if shop.taxes_included -%}
+                            <span class="tax-txt">&nbsp;({{ 'products.product.include_taxes' | t }})</span>
+                          {%- endif -%}
+                        </dd>
+                        <dt>
+                          <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+                        </dt>
+                        <dd>
+                          <span class="order-discount">{{ line_item.final_line_price | money }}</span>
+                        </dd>
+                      </dl>
+                    {%- else -%}
+                      {{ line_item.original_line_price | money }}
+                      {%- if shop.taxes_included -%}
+                        <span class="tax-txt">&nbsp;({{ 'products.product.include_taxes' | t }})</span>
+                      {%- endif -%}
+                    {%- endif -%}
+                    </div>
+                  </div>
+
+                  
+
+                </li>
+                {% assign total_quantity = total_quantity | plus: line_item.quantity %}
+              {%- endfor -%}
+              </ul>
+            </div>
+            {% endfor %}
+          </div>    
+
+        {% else %}
+          <div class="container">
+            <p class="order-empty-text">{{ 'customer.orders.none' | t }}</p>
+          </div>
+
+        {% endif %}
+        {%- if paginate.pages > 1 -%}
+          {% include 'pagination', paginate: paginate %}
+        {%- endif -%}
+        {% endpaginate %}
+
+        </div>
+      </div>             
+    </div>
+  </div>
+</section>
+
+
+

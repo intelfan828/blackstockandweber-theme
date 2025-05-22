@@ -1,0 +1,39 @@
+<div class="newsletter-popup" data-key="{{ settings.popup_key}}">
+  <div class="container">
+    <button type="button" class="newsletter-popup__close-button">{% include 'icon_cross_02' %}</button>
+    <p class="newsletter-popup__title">{{ settings.popup_headline }}</p>
+    <div class="newsletter-popup__text">
+      <p>{{ settings.popup_text }}</p>
+    </div>
+    <div class="newsletter-popup__form">
+      {% form 'customer' %}
+      {% if form.posted_successfully? %}
+        <p class="note form-success">
+
+          {% if settings.signup_form_success_message != blank %}
+            {{ settings.signup_form_success_message }}
+          {% else %}
+            {{ 'general.newsletter_form.success' | t }}
+          {% endif %}            
+
+        </p>
+      {% else %}
+
+        <div class="newsletter-popup__field-row newsletter-box__field-row">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="hidden" name="customer[accepts_marketing]" value="true" id="marketing">
+          <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}" name="contact[email]" id="Email" class="input-group-field" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}" autocorrect="off" autocapitalize="off">
+          <button type="submit">SUBMIT</button>
+        </div>
+
+        <div class="newsletter-popup__result newsletter-box__result">
+          You're already subscribed to our newstter.
+        </div>
+
+        {{ form.errors | default_errors }}
+
+      {% endif %}
+    {% endform %}
+    </div>
+  </div>
+</div>

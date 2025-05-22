@@ -1,0 +1,585 @@
+<section class="section {{ section.settings.section_class }}" data-section-id="{{ section.id }}">
+  <div class="container container--fluid">
+    <div class="row">
+      <div class="col-12 col">
+        <div class="swiper-container swiper-fade"
+          data-autorotate="{{ section.settings.autorotate }}"
+          data-swiper-autoplay="{{ section.settings.autorotate_speed | times: 1000 }}"
+        >
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+            <div class="swiper-slide">
+              {%- assign has_link = false -%}
+              {%- if block.settings.slide_link != blank -%}
+                {%- assign has_link = true -%}
+              {%- endif -%}
+
+              {%- if has_link -%}
+                <a href="{{ block.settings.slide_link }}" class="slide__link">
+              {%- endif -%}              
+                <div class="slide__image box ratio-container lazyload{% unless forloop.first %} lazypreload{% endunless %} js"
+                    data-srcset="{% include 'bgset', image: block.settings.image %}"
+                    data-bgset="{% include 'bgset', image: block.settings.image %}"
+                    data-sizes="auto"
+                    data-parent-fit="contain"
+                    data-bg="{{ block.settings.image | img_url: '2400x2400' }}"
+                    style="background-position: {{ block.settings.alignment }};
+                            background-image: url('{{ block.settings.image | img_url: '2400x2400' }}');">
+                  {% if block.settings.image.alt contains '.mp4' %}
+            
+                    <video poster="{{block.settings.image | img_url: '2400x2400' }}" autoplay muted loop playsinline>
+                      <source src="{{block.settings.image.alt}}" type="video/mp4" />
+                    </video>
+            
+                  {% endif %}
+                  
+                </div>
+                <div class="slide__text-wrapper">
+                  {% unless block.settings.slide_title == blank and block.settings.subheading == blank %}
+
+                    {%- unless block.settings.slide_title == blank -%}
+                      <h2 class="slide__title{% if section.settings.text_size == 'large' %} mega-title--large{% endif %}" style="color: {{ block.settings.slide_text_color }}">
+                        {{ block.settings.slide_title | escape }}
+                      </h2>
+                    {%- endunless -%}
+                    {%- unless block.settings.slide_subtitle == blank -%}                      
+                      <p class="slide__subtitle" style="color: {{ block.settings.slide_text_color }}">{{ block.settings.slide_subtitle | escape }}</p>                  
+                    {%- endunless -%}
+
+                    {%- unless block.settings.slide_text == blank -%}                      
+                      <p class="slide__text" style="color: {{ block.settings.slide_text_color }}">{{ block.settings.slide_text | escape }}</p>                  
+                    {%- endunless -%}
+            
+                  {% endunless %}
+
+                </div>    
+              {%- if has_link -%}
+                </a>
+              {%- endif -%}                          
+            </div><!-- /.swiper-slide -->
+            {%- endfor -%}
+          </div><!-- /.swiper-wrapper -->
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>  
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Landing Slideshow"
+  },
+  "class": "index-section index-section--flush index-section--slideshow",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": {
+        "en": "Section Class",
+        "ja": "セクションクラス"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "autorotate",
+      "label": {
+        "da": "Roter automatisk slides",
+        "de": "Auto-rotieren der Slides",
+        "en": "Auto-rotate slides",
+        "es": "Rotar las diapositivas automáticamente",
+        "fi": "Käännä diat automaattisesti",
+        "fr": "Rotation automatique des diapositives",
+        "hi": "ऑटो-रोटेट स्लाइड",
+        "it": "Ruota slide automaticamente",
+        "ja": "スライドの自動切り替え",
+        "ko": "슬라이드 자동 회전",
+        "ms": "Slaid auto putar",
+        "nb": "Autoroter lysbildene",
+        "nl": "Dia's automatisch draaien",
+        "pt-BR": "Rodar os slides automaticamente",
+        "pt-PT": "Rodar os diapositivos automaticamente",
+        "sv": "Auto-rotera bilder",
+        "th": "หมุนสไลด์อัตโนมัติ",
+        "zh-CN": "自动旋转幻灯片",
+        "zh-TW": "自動旋轉投影片"
+      },
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autorotate_speed",
+      "label": {
+        "da": "Skift slide hver",
+        "de": "Slides überall ändern",
+        "en": "Change slides every",
+        "es": "Cambiar diapositivas cada",
+        "fi": "Vaihda diat joka",
+        "fr": "Changer de diapositive toutes les",
+        "hi": "प्रत्येक स्लाइड बदलें",
+        "it": "Cambia slide ogni",
+        "ja": "スライドを変更する間隔",
+        "ko": "슬라이드를 매번 변경",
+        "ms": "Ubah slaid setiap",
+        "nb": "Endre lysbilde hvert",
+        "nl": "Wijzig dia's elke",
+        "pt-BR": "Mudar os slides a cada",
+        "pt-PT": "Alterar o diapositivo a cada",
+        "sv": "Byt bilder varje",
+        "th": "เปลี่ยนสไลด์ทุก",
+        "zh-CN": "幻灯片更改时间间隔",
+        "zh-TW": "每過以下時間即變更投影片"
+      },
+      "max": 9,
+      "min": 3,
+      "step": 2,
+      "unit": {
+        "da": " s",
+        "de": " s",
+        "en": " s",
+        "es": " s",
+        "fi": " s",
+        "fr": " s",
+        "hi": " s",
+        "it": " s",
+        "ja": " s",
+        "ko": " s",
+        "ms": " s",
+        "nb": " s",
+        "nl": " s",
+        "pt-BR": " s",
+        "pt-PT": " s",
+        "sv": " s",
+        "th": " s",
+        "zh-CN": " s",
+        "zh-TW": " s"
+      },
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "da": "Billeddias",
+        "de": "Foto-Slide",
+        "en": "Image slide",
+        "es": "Diapositiva de imagen",
+        "fi": "Kuvadia",
+        "fr": "Diapositive (image)",
+        "hi": "इमेज स्लाइड",
+        "it": "Slide immagine",
+        "ja": "画像スライド",
+        "ko": "이미지 슬라이드",
+        "ms": "Slaid imej",
+        "nb": "Lysbilde",
+        "nl": "Afbeelding dia",
+        "pt-BR": "Slide de imagem",
+        "pt-PT": "Diapositivo de imagem",
+        "sv": "Bild i bildspel",
+        "th": "สไลด์รูปภาพ",
+        "zh-CN": "图片幻灯片",
+        "zh-TW": "圖片投影片"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "da": "Billede",
+            "de": "Foto",
+            "en": "Image",
+            "es": "Imagen",
+            "fi": "Kuva",
+            "fr": "Image",
+            "hi": "इमेज",
+            "it": "Immagine",
+            "ja": "画像",
+            "ko": "이미지",
+            "ms": "Imej",
+            "nb": "Bilde",
+            "nl": "Afbeelding",
+            "pt-BR": "Imagem",
+            "pt-PT": "Imagem",
+            "sv": "Bild",
+            "th": "รูปภาพ",
+            "zh-CN": "图片",
+            "zh-TW": "圖片"
+          }
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": {
+            "da": "Placering af billede",
+            "de": "Foto-Position",
+            "en": "Image position",
+            "es": "Alineación de imagen",
+            "fi": "Kuvan sijainti",
+            "fr": "Position de l'image",
+            "hi": "इमेज स्थिति",
+            "it": "Allineamento immagine",
+            "ja": "画像アラインメント",
+            "ko": "이미지 위치",
+            "ms": "Kedudukan imej",
+            "nb": "Bildeposisjon",
+            "nl": "Afbeeldingspositie",
+            "pt-BR": "Alinhamento da imagem",
+            "pt-PT": "Posição da imagem",
+            "sv": "Bildposition",
+            "th": "ตำแหน่งรูปภาพ",
+            "zh-CN": "图片位置",
+            "zh-TW": "圖片位置"
+          },
+          "default": "center center",
+          "options": [
+            {
+              "label": {
+                "da": "Øverst til venstre",
+                "de": "Oben links",
+                "en": "Top left",
+                "es": "Superior izquierda",
+                "fi": "Ylhäällä vasemmalla",
+                "fr": "En haut à gauche",
+                "hi": "शीर्ष पर बाईं ओर",
+                "it": "In alto a sinistra",
+                "ja": "左上",
+                "ko": "왼쪽 상단",
+                "ms": "Kiri atas",
+                "nb": "Øverst til venstre",
+                "nl": "Linksboven",
+                "pt-BR": "Superior esquerdo",
+                "pt-PT": "Canto superior esquerdo",
+                "sv": "Överst till vänster",
+                "th": "ซ้ายบน",
+                "zh-CN": "左上方",
+                "zh-TW": "左上角"
+              },
+              "value": "left top"
+            },
+            {
+              "label": {
+                "da": "Øverst i midten",
+                "de": "Oben Mitte",
+                "en": "Top center",
+                "es": "Superior centrada",
+                "fi": "Keskellä ylhäällä",
+                "fr": "En haut au centre",
+                "hi": "शीर्ष केंद्र",
+                "it": "In alto al centro",
+                "ja": "中央上",
+                "ko": "맨 위 중간",
+                "ms": "Tengah-tengah atas",
+                "nb": "Toppsentrert",
+                "nl": "Midden boven",
+                "pt-BR": "Superior centro",
+                "pt-PT": "Superior centro",
+                "sv": "Längst upp i mitten",
+                "th": "กลางบน",
+                "zh-CN": "顶部居中",
+                "zh-TW": "中央上方"
+              },
+              "value": "center top"
+            },
+            {
+              "label": {
+                "da": "Øverst til højre",
+                "de": "Oben rechts",
+                "en": "Top right",
+                "es": "Superior derecha",
+                "fi": "Ylhäällä oikealla",
+                "fr": "En haut à droite",
+                "hi": "शीर्ष पर दाईं ओर",
+                "it": "In alto a destra",
+                "ja": "右上",
+                "ko": "오른쪽 상단",
+                "ms": "Kanan atas",
+                "nb": "Øverst til høyre",
+                "nl": "Rechtsboven",
+                "pt-BR": "Superior direito",
+                "pt-PT": "Canto superior direito",
+                "sv": "Överst till höger",
+                "th": "ขวาบน",
+                "zh-CN": "右上方",
+                "zh-TW": "右上角"
+              },
+              "value": "right top"
+            },
+            {
+              "label": {
+                "da": "Midt på til venstre",
+                "de": "Mitte links",
+                "en": "Middle left",
+                "es": "Al medio a la izquierda",
+                "fi": "Keskellä vasemmalla",
+                "fr": "Au milieu à gauche",
+                "hi": "मध्य में बाईं ओर",
+                "it": "Nel mezzo a sinistra",
+                "ja": "中央左",
+                "ko": "왼쪽 중간",
+                "ms": "Kiri tengah",
+                "nb": "Midt til venstre",
+                "nl": "Midden links",
+                "pt-BR": "Meio esquerdo",
+                "pt-PT": "Intermédio à esquerda",
+                "sv": "Mitten till vänster",
+                "th": "ซ้ายกลาง",
+                "zh-CN": "中间居左",
+                "zh-TW": "中央左方"
+              },
+              "value": "left center"
+            },
+            {
+              "label": {
+                "da": "Midt på centreret",
+                "de": "Mitte mittig",
+                "en": "Middle center",
+                "es": "Al medio centrada",
+                "fi": "Keskellä keskellä",
+                "fr": "Centrée au milieu",
+                "hi": "मध्य केंद्र",
+                "it": "In mezzo",
+                "ja": "中央中",
+                "ko": "가운데 중간",
+                "ms": "Tengah-tengah",
+                "nb": "Midt i senter",
+                "nl": "Midden centrum",
+                "pt-BR": "Meio centro",
+                "pt-PT": "Intermédio ao centro",
+                "sv": "Mitten centrerat",
+                "th": "กึ่งกลาง",
+                "zh-CN": "中间居中",
+                "zh-TW": "正中央"
+              },
+              "value": "center center"
+            },
+            {
+              "label": {
+                "da": "Midt på til højre",
+                "de": "Mitte rechts",
+                "en": "Middle right",
+                "es": "Al medio a la derecha",
+                "fi": "Keskellä oikealla",
+                "fr": "Au milieu à droite",
+                "hi": "मध्य में दाईं ओर",
+                "it": "Nel mezzo a destra",
+                "ja": "中央右",
+                "ko": "오른쪽 중간",
+                "ms": "Kanan tengah",
+                "nb": "Midt til høyre",
+                "nl": "Midden rechts",
+                "pt-BR": "Meio direito",
+                "pt-PT": "Intermédio à direita",
+                "sv": "Mitten till höger",
+                "th": "ขวากลาง",
+                "zh-CN": "中间居右",
+                "zh-TW": "中央右方"
+              },
+              "value": "right center"
+            },
+            {
+              "label": {
+                "da": "Nederst til venstre",
+                "de": "Unten links",
+                "en": "Bottom left",
+                "es": "Inferior izquierda",
+                "fi": "Alhaalla vasemmalla",
+                "fr": "En bas à gauche",
+                "hi": "सबसे नीचे बाईं ओर",
+                "it": "In basso a sinistra",
+                "ja": "左下",
+                "ko": "왼쪽 하단",
+                "ms": "Kiri bawah",
+                "nb": "Nederst til venstre",
+                "nl": "Linksonder",
+                "pt-BR": "Inferior esquerdo",
+                "pt-PT": "Canto inferior esquerdo",
+                "sv": "Nere till vänster",
+                "th": "ซ้ายล่าง",
+                "zh-CN": "左下方",
+                "zh-TW": "左下角"
+              },
+              "value": "left bottom"
+            },
+            {
+              "label": {
+                "da": "Nederst i midten",
+                "de": "Unten mittig",
+                "en": "Bottom center",
+                "es": "Inferior centrada",
+                "fi": "Keskellä alhaalla",
+                "fr": "En bas au centre",
+                "hi": "निचला केंद्र",
+                "it": "In basso al centro",
+                "ja": "中央下",
+                "ko": "맨아래 중간",
+                "ms": "Tengah bawah",
+                "nb": "Bunnsentrert",
+                "nl": "Midden onder",
+                "pt-BR": "Inferior centro",
+                "pt-PT": "Inferior centro",
+                "sv": "Längst ner i mitten",
+                "th": "กลางล่าง",
+                "zh-CN": "底部居中",
+                "zh-TW": "中央下方"
+              },
+              "value": "center bottom"
+            },
+            {
+              "label": {
+                "da": "Nederst til højre",
+                "de": "Unten rechts",
+                "en": "Bottom right",
+                "es": "Inferior derecha",
+                "fi": "Alhaalla oikealla",
+                "fr": "En bas à droite",
+                "hi": "सबसे नीचे दाईं ओर",
+                "it": "In basso a destra",
+                "ja": "右下",
+                "ko": "오른쪽 아래",
+                "ms": "Kanan bawah",
+                "nb": "Nederst til høyre",
+                "nl": "Rechtsonder",
+                "pt-BR": "Inferior direito",
+                "pt-PT": "Canto inferior direito",
+                "sv": "Nere till höger",
+                "th": "ขวาล่าง",
+                "zh-CN": "右下方",
+                "zh-TW": "右下角"
+              },
+              "value": "right bottom"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "slide_title",
+          "label": {
+            "da": "Overskrift",
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fi": "Otsake",
+            "fr": "En-tête",
+            "hi": "शीर्षक",
+            "it": "Heading",
+            "ja": "見出し",
+            "ko": "제목",
+            "ms": "Tajuk",
+            "nb": "Overskrift",
+            "nl": "Kop",
+            "pt-BR": "Título",
+            "pt-PT": "Título",
+            "sv": "Rubrik",
+            "th": "ส่วนหัว",
+            "zh-CN": "标题",
+            "zh-TW": "標題"
+          },
+          "default": {
+            "da": "Billeddias",
+            "de": "Foto-Slide",
+            "en": "Image slide",
+            "es": "Diapositiva de imagen",
+            "fi": "Kuvadia",
+            "fr": "Diapositive (image)",
+            "hi": "इमेज स्लाइड",
+            "it": "Slide immagine",
+            "ja": "画像スライド",
+            "ko": "이미지 슬라이드",
+            "ms": "Slaid imej",
+            "nb": "Lysbilde",
+            "nl": "Afbeelding dia",
+            "pt-BR": "Slide de imagem",
+            "pt-PT": "Diapositivo de imagem",
+            "sv": "Bild i bildspel",
+            "th": "สไลด์รูปภาพ",
+            "zh-CN": "图片幻灯片",
+            "zh-TW": "圖片投影片"
+          }
+        },
+        {
+          "type": "text",
+          "id": "slide_subtitle",
+          "label": {
+            "en": "Subtitle",
+            "ja": "小見出し"
+          },
+          "default": {
+            "en": "Tell your brand's story through images",
+            "ja": "あなたのブランドのストーリーをビデオや画像で伝える"
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "slide_text",
+          "label": {
+            "en": "Text",
+            "ja": "テキスト"
+          }
+        },
+        {
+          "type": "url",
+          "id": "slide_link",
+          "label": {
+            "en": "Slide link",
+            "ja": "スライドリンク"
+          }
+        },
+        {
+          "type": "color",
+          "id": "slide_text_color",
+          "label": {
+            "en": "Text color",
+            "ja": "テキストカラー"
+          },
+          "default": "#5a5c5e"
+        }     
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Landing Slideshow"
+      },
+      "category": {
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "hi": "इमेज",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "ms": "Imej",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      },
+      "settings": {
+        "autorotate": false,
+        "autorotate_speed": 5
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,153 @@
+<style>
+  .ticker-section {
+  background-color: #684A26; /* Adjust to match your design */
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+.ticker-wrapper {
+  overflow: hidden; /* Hide overflowing content */
+  position: relative;
+  width: 100%; /* Ensure it matches the viewport width */
+}
+
+.ticker {
+  display: flex;
+  animation: ticker-scroll {{ section.settings.ticker_speed }}s linear infinite;
+  will-change: transform;
+  gap:15rem;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  gap:1rem;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.ticker-logo {
+  height: 20px; /* Adjust size as needed */
+  width: auto;
+}
+
+.ticker-text {
+  color: #fff; /* Adjust to match your design */
+  font-size: 12px;
+}
+  
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+ 
+  100% {
+    transform: translateX(calc(-1 * var(--ticker-width)));
+  }
+}
+
+}
+</style>
+
+<section class="ticker-section">
+  <div class="ticker-wrapper">
+  <div class="ticker">
+    {% for block in section.blocks %}
+      <div class="ticker-item">
+        {% if block.settings.logo_image %}
+          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="ticker-logo">
+        {% endif %}
+        {% if block.settings.text %}
+          <p class="ticker-text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <!-- Duplicate items for seamless animation -->
+    {% for block in section.blocks %}
+      <div class="ticker-item">
+        {% if block.settings.logo_image %}
+          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="ticker-logo">
+        {% endif %}
+        {% if block.settings.text %}
+          <p class="ticker-text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <!-- Duplicate items for seamless animation -->
+    {% for block in section.blocks %}
+      <div class="ticker-item">
+        {% if block.settings.logo_image %}
+          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="ticker-logo">
+        {% endif %}
+        {% if block.settings.text %}
+          <p class="ticker-text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+  </div>
+</div>
+</section>
+
+{% schema %}
+{
+  "name": "Ticker - Divider",
+  "settings": [
+    {
+      "type": "number",
+      "id": "ticker_speed",
+      "label": "Ticker Speed (Seconds)",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ticker_item",
+      "name": "Ticker Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo Image"
+        },
+        {
+          "type": "text",
+          "id": "logo_alt_text",
+          "label": "Logo Alt Text",
+          "default": "logo"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Ticker Text",
+          "default": "Sample text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ticker Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const ticker = document.querySelector('.ticker');
+
+  // Calculate the total width of all items in the ticker
+  const totalWidth = Array.from(ticker.children).reduce((width, item) => {
+    return width + item.offsetWidth + parseFloat(getComputedStyle(item).marginRight);
+  }, 0);
+
+  // Set the CSS variable for animation distance
+  ticker.style.setProperty('--ticker-width', `${totalWidth}px`);
+});
+
+  
+</script>
+
+

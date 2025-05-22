@@ -1,0 +1,62 @@
+<section class="page-section login-section bgc--cream">
+  <div class="container container--full">
+    <div class="row row__page-wrapper">
+      <div class="col col-6 col-md-12 col--log-in bdr--right">
+        <div class="col__container">
+          <div class="account-form-wrapper login-form-wrapper">
+            <h2 class="col__title">{{ 'customer.register.title' | t }}</h2>
+            <p class="col__headline">{{ 'customer.activate_account.subtext' | t }}</p>
+            <div class="form-wrapper">
+  
+              
+                
+              {% form 'activate_customer_password' %}
+
+                {%- if form.errors -%}
+                  <div class="form-message form-message--error">
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+
+                <dl class="dl--stack dl--form">
+                  <dt><label for="CustomerPassword" class="label--hidden">{{ 'customer.activate_account.password' | t }}</label></dt>
+                  <dd>
+                    <input type="password" value="" name="customer[password]" id="CustomerPassword" placeholder="{{ 'customer.activate_account.password' | t }}">
+                  </dd>
+                  <dt><label for="CustomerPasswordConfirmation" class="label--hidden">{{ 'customer.activate_account.password_confirm' | t }}</label></dt>
+                  <dd>
+                    <input type="password" value="" name="customer[password_confirmation]" id="CustomerPasswordConfirmation" placeholder="{{ 'customer.activate_account.password_confirm' | t }}">
+                  </dd>            
+                </dl>
+                <button type="submit" class="button button--secondary">{{ 'customer.activate_account.submit' | t }}</button>
+                <p class="cancel-activation-text">
+                  <button type="submit" name="decline">{{ 'customer.activate_account.cancel' | t }}</button>
+                </p>
+              {% endform %}   
+
+            </div> 
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

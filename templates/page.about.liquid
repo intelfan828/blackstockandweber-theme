@@ -1,0 +1,17 @@
+<section class="about-section">
+  <div class="container container--full">
+    <div class="row">
+      <div class="col col-6 col-md-12 page__tn">
+        {% if page.metafields.custom_fields["hero_banner"] != blank %}
+          <picture><img src="{{page.metafields.custom_fields['hero_banner']}}" alt=""></picture>
+        {% else %}
+          <picture><img src="https://cdn.shopify.com/s/files/1/2337/0257/files/about_hero_banner.jpg?v=1646037308" alt=""></picture>
+        {% endif %}        
+        <h1 class="page__title">{{ page.title }}</h1>
+      </div>
+      <div class="col col-6 col-md-12 page__content">
+        <div class="page__content-wrapper">{{ page.content }}</div>
+      </div>
+    </div>
+  </div>
+</section>

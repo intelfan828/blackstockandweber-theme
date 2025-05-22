@@ -1,0 +1,7 @@
+.notifications-bar--link:visited {
+  color:#694a26;
+}
+
+.notifications-bar .notifications-bar__item {
+  height: 26px;
+}

@@ -1,0 +1,167 @@
+<style>
+
+  .landing-three-brands .section__title .brand-description {
+    font-size:12px;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    line-height:150%;
+  }
+
+   .landing-three-brands .section__title {
+     border-bottom:0;
+   }
+
+  .landing-three-brands .cards {
+    border-top: 1px solid #ead7c1;
+  }
+
+
+  .landing-three-brands .card-description {
+    font-size:11px;
+    margin-top:2rem;
+    line-height:140%;
+    color:#684A26;
+  }
+
+  .landing-three-brands .cards .card {
+    padding: 1rem 2rem 2rem;
+  }
+
+  .cards .card .card__title {
+    margin-top:0;
+    margin-bottom:1rem;
+    font-family:OPTIRomanaRoman-Normal;
+    font-size:18px;
+  }
+  .landing-three-brands a .card__title {
+    color:#684A26;
+   
+  }
+
+  .landing-three-brands .posts .post picture.img-container {
+    padding: 0;
+  }
+  
+  .img-container {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Makes it square */
+    overflow: hidden;
+  }
+  .img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media screen and (max-width:600px) {
+    
+  }
+  
+</style>
+
+{% if section.settings.display_three_brands == true %}
+  
+  <section class="projects-section bgc--off-white landing-three-brands">
+    <div class="container container--full">
+      {% if section.settings.section_title != blank or section.settings.section_description != blank %}
+        <div class="section__title section">
+          {% if section.settings.section_title != blank %}
+            <h2 class="brand-title">{{ section.settings.section_title }}</h2>
+          {% endif %}
+          {% if section.settings.section_description != blank %}
+            <p class="brand-description">{{ section.settings.section_description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+      <div class="row cards posts">
+        
+        {% for block in section.blocks %}
+        <div class="col col-4 col-md-4 col-sm-12 card post">
+          <a href="{{block.settings.brand-link.url}}">
+            <div class="card-content">
+               {% if block.settings.card_title %}
+                <h3 class="card__title">{{ block.settings.card_title }}</h3>
+              {% endif %}
+              {% if block.settings.card_image %}
+                <picture class="img-container">
+                <img src="{{ block.settings.card_image | img_url: '1000x' }}" alt="{{ block.settings.card_title }}" class="card-image">
+                </picture>
+              {% endif %}
+             
+              {% if block.settings.card_description %}
+                <p class="card-description">{{ block.settings.card_description }}</p>
+              {% endif %}
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+        
+      </div>
+    </div>
+  </section>
+{% endif %} 
+
+{% schema %}
+{
+  "name": "Landing Three Brands",
+  "settings": [
+    {
+        "type": "checkbox",
+        "id": "display_three_brands",
+        "label": {
+          "en": "Display Three Brands section"
+        },
+        "default": true
+      },      
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Custom Cards Section"
+    },
+    {
+      "type": "text",
+      "id": "section_description",
+      "label": "Section Description",
+      "default": "Three Brands, One Creative Legacy"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card Image"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card Title"
+        },
+        {
+          "type": "textarea",
+          "id": "card_description",
+          "label": "Card Description"
+        },
+        {
+          "type": "collection",
+          "id": "brand-link",
+          "label": "Brand Collection (Link)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Landing Three Brands",
+      "category": "Three Brands Sections"
+    },
+    {
+      "name": "Our Styles",
+      "category": "Three Brands Sections"
+    }
+  ]
+}
+{% endschema %}

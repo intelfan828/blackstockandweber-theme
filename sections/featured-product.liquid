@@ -1,0 +1,142 @@
+		{% comment %} {%- if section.settings.hide != true -%}	
+      <section class="section featured-page-section has-border {% if section.settings.title == blank %}section--no-title{% endif %}">
+        <div class="container container--fluid">
+          {%- if section.settings.title != blank -%}
+          <h2 class="section__title">
+            {%- if section.settings.page != blank -%}
+            <a href="/pages/{{section.settings.page }}">
+            {%- endif -%}
+            {{ section.settings.title | escape }}
+            {%- if section.settings.page != blank -%}
+            </a>
+            {%- endif -%}
+          </h2>
+          {%- endif -%}
+          <div class="row row--center">
+            <div class="col col-12">
+              <div class="image-wrapper">
+                <a href="/pages/{{section.settings.page }}">
+                  <div class="image-holder image-holder--56pct" style="background-image: url({{ section.settings.image | img_url: '2400x2400'}});"></div>
+                </a>       
+                <div class="caption">
+                  {%- if section.settings.caption_1 != blank -%}
+                  <p class="caption-1">{{ section.settings.caption_1 }}</p>
+                  {%- endif -%}
+                  {%- if section.settings.caption_2 != blank -%}
+                  <p class="caption-2">{{ section.settings.caption_2 }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>        
+          </div>
+        </div>
+      </section>
+      {%- endif -%} {% endcomment %}
+
+      {%- if section.settings.hide != true -%}	
+      {%- assign block_size = section.blocks.size -%}
+      <section class="featured-products-section">
+        <div class="container container--full">
+          <div class="row cards products">
+            {% for block in section.blocks limit: section.blocks.size %}  
+              {%- assign product = all_products[block.settings.product] -%}
+              {% comment %} {% include 'product-card', class: classes, product: product %} {% endcomment %}
+              <div class="col col-6 col-sm-12 card">
+                <div class="product__tn">
+                  <a href="{{product.url}}">
+                    <picture>
+                      <img src="{{ block.settings.image | img_url: '2400x2400' }}" alt="">
+                    </picture>
+                  </a>
+                </div>
+                <div class="product__info">
+                  {%- assign brand_name = '' -%}
+                  {% for tag in product.tags %}
+                    {%- assign tag_name = tag | downcase -%}
+                    {% if tag_name contains 'brand:' %}
+                      {%- assign tag_name = tag_name | replace : "brand:", "" -%}
+                      <p class="product__brand">{{tag_name}}</p>
+                    {% endif %}                     
+                  {% endfor %}   
+                  <p class="product__title">{{product.title}}</p>
+                  
+                  {% if product.metafields.custom_fields["subtitle"] != blank %}
+                  <p class="product__subtitle"><a href="{{product.url}}">{{ product.metafields.custom_fields["subtitle"] }}</a></p>
+                  {% endif %}
+                </div>                
+
+              </div><!-- /.product -->                  
+            {% endfor %}                                          
+          </div>
+        </div>
+      </section>          
+      {%- endif -%}
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Featured Products",
+    "ja": "特集商品"
+  },
+  "class": "featured-page-section",
+  "settings": [ 
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Heading",
+        "ja": "見出し"
+      },
+      "default": {
+        "en": "Featured Products",
+        "ja": "特集商品"
+      }
+    },    
+    {
+      "type": "checkbox",
+      "id": "hide",
+      "label": {
+        "en": "Hide this section",
+        "ja": "このセクションを非表示にする"
+      },
+      "default": false
+    }          
+  ],
+  "blocks": [
+    {
+      "type": "featured_products",
+      "name": {
+        "en": "Product",
+        "ja": "商品"
+      },
+      "settings": [
+        {
+          "label": {
+            "en": "Product",
+            "ja": "商品"
+          },
+          "id": "product",
+          "type": "product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image",
+            "ja": "画像"
+          }
+        }          
+      ]
+    }   
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Featured Products",
+        "ja": "特集商品"
+      }
+    }
+  ]  
+}
+{% endschema %}

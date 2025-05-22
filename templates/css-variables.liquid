@@ -1,0 +1,52 @@
+{% style %}
+
+@font-face {
+  font-family: 'ABCDiatype';
+  src: url("{{ 'ABCDiatype-Regular.woff2' | asset_url }}") format("woff2"), url("{{ 'ABCDiatype-Regular.woff' | asset_url }}") format("woff");
+  font-weight: normal;
+  font-style: normal;  
+}
+
+  :root {
+    {% if request.locale.iso_code == 'ja' %}
+      --fz_xs: 10px;
+      --fz_s: 11px;
+      --fz_m: 12px;
+      --fz_l: 13px;
+      --fz_xl: 14px;
+      --fz_xxl: 15px;
+      --fz_xxxl: 16px;
+      --ls_h4: 0.05em;
+      {% else %}
+      --fz_xs: 11px;
+      --fz_s: 12px;
+      --fz_m: 13px;
+      --fz_l: 14px;
+      --fz_xl: 15px;
+      --fz_xxl: 16px;
+      --fz_xxxl: 17px;
+      --ls_h4: 0.04em;
+    {% endif %}
+
+
+    --icon-arrow-04: url({{ 'icon_arrow_04.svg' | asset_url }});
+    --icon-arrow-05: url({{ 'icon_arrow_05.svg' | asset_url }});
+    --icon-arrow-06: url({{ 'icon_arrow_06.svg' | asset_url }});
+    --icon-circle-01: url({{ 'icon_circle_01.svg' | asset_url }});
+    --icon-decrease-01: url({{ 'icon_decrease_01.svg' | asset_url }});
+    --icon-increase-01: url({{ 'icon_increase_01.svg' | asset_url }});
+    --icon-cart: url({{ 'icon_bag.svg' | asset_url }});
+    --icon-plus-01: url({{ 'icon_plus_01.svg' | asset_url }});
+    --icon-minus-01: url({{ 'icon_minus_01.svg' | asset_url }});
+    --icon-plus-02: url({{ 'icon_plus_02.svg' | asset_url }});
+    --icon-minus-02: url({{ 'icon_minus_02.svg' | asset_url }});
+    --button-prev-01: url({{ 'icon_prev_01.svg' | asset_url }});
+    --button-next-01: url({{ 'icon_next_01.svg' | asset_url }});
+    --button-prev-02: url({{ 'icon_prev_02.svg' | asset_url }});
+    --button-next-02: url({{ 'icon_next_02.svg' | asset_url }});
+    --loader: url({{ 'loader.gif' | asset_url }});
+  
+
+    }
+
+{% endstyle %}

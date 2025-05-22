@@ -1,0 +1,360 @@
+<style>
+  .landing-press .swiper-slide {
+    display:flex;
+    flex-flow:row;
+    flex-wrap:wrap;
+  }
+
+  .landing-press .slide__image {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Makes it square */
+    overflow: hidden;
+  }
+  .landing-press .slide__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .landing-press .slide__text-wrapper {
+    width:100%;
+    padding: 1.5rem;
+    
+  }
+
+  .landing-press .testimonial__container {
+    display:flex;
+    flex-flow: column;
+    border-right: 1px solid #ead7c1;
+  }
+
+  .landing-press .slide__text-wrapper p {
+    font-size:11px;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    line-height:150%;
+    color:#684A26;
+     margin-bottom:1.2rem;
+    margin-top:1.5rem;
+  }
+
+  .landing-press .slide__text-wrapper a {
+    text-transform:uppercase;
+    text-decoration: underline;
+    color:#684A26;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    font-size:1rem;
+  }
+
+  .landing-press .container--fluid {
+    padding: 0;
+  }
+
+  .landing-press .swiper-pagination {
+    position: initial;
+    padding: 1.5rem;
+    border-top: 1px solid #ead7c1;
+    border-bottom: 1px solid #ead7c1;
+  }
+
+  .landing-press .press-logo {
+    height: 20px;
+  }
+</style>
+<section class="section {{ section.settings.section_class }} landing-press" data-section-id="{{ section.id }}">
+  <div class="container container--fluid">
+    {% if section.settings.section_title != blank %}
+        <div class="section__title section">
+          {% if section.settings.section_title != blank %}
+            <h2 class="brand-title">{{ section.settings.section_title }}</h2>
+          {% endif %}
+        </div>
+      {% endif %}
+    <div class="row">
+      <div class="col-12 col">
+        <div class="swiper-container swiper-fade"
+          data-autorotate="{{ section.settings.autorotate }}"
+          data-swiper-autoplay="{{ section.settings.autorotate_speed | times: 1000 }}"
+        >
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+               {% assign mod_result = forloop.index0 | modulo: 4 %}
+              
+              {% if mod_result == 0 %}
+                  <div class="swiper-slide">
+               {%- endif -%}
+           
+              {%- assign has_link = false -%}
+              {%- if block.settings.slide_link != blank -%}
+                {%- assign has_link = true -%}
+              {%- endif -%}
+
+              
+                <div class="testimonial__container col-3 col-md-3 col-sm-6">
+                          
+                  <div class="slide__image box ratio-container lazyload{% unless forloop.first %} lazypreload{% endunless %} js">
+                    <img src="{{ block.settings.image | img_url: '2400x2400' }}" height="1000px" width="1000px">
+                  </div>
+                  <div class="slide__text-wrapper">
+                    {% unless block.settings.slide_title == blank and block.settings.slide_text == blank %}
+  
+                      {%- unless block.settings.slide_title == blank -%}
+                        <h2 class="slide__title{% if section.settings.text_size == 'large' %} mega-title--large{% endif %}" style="color: {{ block.settings.slide_text_color }}">
+                          {{ block.settings.slide_title | escape }}
+                        </h2>
+                      {%- endunless -%}
+                       {% if block.settings.logo_image %}
+                          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="press-logo">
+                       {% endif %}
+                      {%- unless block.settings.slide_text == blank -%}                      
+                        <span class="slide__text">{{ block.settings.slide_text }}</span>                  
+                      {%- endunless -%}
+                      {%- unless block.settings.link_text == blank -%}                      
+                        <a href="{{ block.settings.slide_link }}" class="slide__link">{{ block.settings.link_text | escape }}</a>                  
+                      {%- endunless -%}
+              
+                    {% endunless %}
+  
+                  </div>    
+              
+                </div>
+               
+                {% if mod_result == 3 or forloop.last %}
+                  </div> <!-- Close slide after 2 blocks -->
+                {%- endif -%}
+          
+            {%- endfor -%}
+          </div><!-- /.swiper-wrapper -->
+            <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</section>  
+
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Landing Press"
+  },
+  "class": "index-section index-section--flush index-section--slideshow",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": {
+        "en": "Section Class",
+        "ja": "セクションクラス"
+      }
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Testimonial Section"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "da": "Billeddias",
+        "de": "Foto-Slide",
+        "en": "Image slide",
+        "es": "Diapositiva de imagen",
+        "fi": "Kuvadia",
+        "fr": "Diapositive (image)",
+        "hi": "इमेज स्लाइड",
+        "it": "Slide immagine",
+        "ja": "画像スライド",
+        "ko": "이미지 슬라이드",
+        "ms": "Slaid imej",
+        "nb": "Lysbilde",
+        "nl": "Afbeelding dia",
+        "pt-BR": "Slide de imagem",
+        "pt-PT": "Diapositivo de imagem",
+        "sv": "Bild i bildspel",
+        "th": "สไลด์รูปภาพ",
+        "zh-CN": "图片幻灯片",
+        "zh-TW": "圖片投影片"
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "da": "Billede",
+            "de": "Foto",
+            "en": "Image",
+            "es": "Imagen",
+            "fi": "Kuva",
+            "fr": "Image",
+            "hi": "इमेज",
+            "it": "Immagine",
+            "ja": "画像",
+            "ko": "이미지",
+            "ms": "Imej",
+            "nb": "Bilde",
+            "nl": "Afbeelding",
+            "pt-BR": "Imagem",
+            "pt-PT": "Imagem",
+            "sv": "Bild",
+            "th": "รูปภาพ",
+            "zh-CN": "图片",
+            "zh-TW": "圖片"
+          }
+        },
+         {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Press Logo"
+        },
+        {
+          "type": "text",
+          "id": "slide_title",
+          "label": {
+            "da": "Overskrift",
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fi": "Otsake",
+            "fr": "En-tête",
+            "hi": "शीर्षक",
+            "it": "Heading",
+            "ja": "見出し",
+            "ko": "제목",
+            "ms": "Tajuk",
+            "nb": "Overskrift",
+            "nl": "Kop",
+            "pt-BR": "Título",
+            "pt-PT": "Título",
+            "sv": "Rubrik",
+            "th": "ส่วนหัว",
+            "zh-CN": "标题",
+            "zh-TW": "標題"
+          },
+          "default": {
+            "da": "Billeddias",
+            "de": "Foto-Slide",
+            "en": "Image slide",
+            "es": "Diapositiva de imagen",
+            "fi": "Kuvadia",
+            "fr": "Diapositive (image)",
+            "hi": "इमेज स्लाइड",
+            "it": "Slide immagine",
+            "ja": "画像スライド",
+            "ko": "이미지 슬라이드",
+            "ms": "Slaid imej",
+            "nb": "Lysbilde",
+            "nl": "Afbeelding dia",
+            "pt-BR": "Slide de imagem",
+            "pt-PT": "Diapositivo de imagem",
+            "sv": "Bild i bildspel",
+            "th": "สไลด์รูปภาพ",
+            "zh-CN": "图片幻灯片",
+            "zh-TW": "圖片投影片"
+          }
+        },
+        {
+          "type": "richtext",
+          "id": "slide_text",
+          "label": {
+            "en": "Text",
+            "ja": "テキスト"
+          }
+        },
+        {
+          "type": "url",
+          "id": "slide_link",
+          "label": {
+            "en": "Collection URL"
+          }
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": {
+            "en": "Link Text"
+          },
+          "default": {
+            "en": "READ THE FULL ARTICLE ON"
+          }
+        },
+        {
+          "type": "color",
+          "id": "slide_text_color",
+          "label": {
+            "en": "Text color",
+            "ja": "テキストカラー"
+          },
+          "default": "#5a5c5e"
+        }     
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Landing Press"
+      },
+      "category": {
+        "da": "Billede",
+        "de": "Foto",
+        "en": "Image",
+        "es": "Imagen",
+        "fi": "Kuva",
+        "fr": "Image",
+        "hi": "इमेज",
+        "it": "Immagine",
+        "ja": "画像",
+        "ko": "이미지",
+        "ms": "Imej",
+        "nb": "Bilde",
+        "nl": "Afbeelding",
+        "pt-BR": "Imagem",
+        "pt-PT": "Imagem",
+        "sv": "Bild",
+        "th": "รูปภาพ",
+        "zh-CN": "图片",
+        "zh-TW": "圖片"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  Shopify.theme.sections.register('landing-press', {
+  onLoad: function() {
+    var newSlideShow = this.container.querySelector('.swiper-container');
+
+    if (newSlideShow) {
+      var swiperOptions = {
+        speed: 500,
+        loop: newSlideShow.dataset.swiperLoop === "true",
+        spaceBetween: 1,
+        pagination: {
+          el: newSlideShow.querySelector('.swiper-pagination'), // ✅ Scoped to this instance
+          clickable: true
+        },
+        navigation: {
+          nextEl: newSlideShow.querySelector('.swiper-button-next'),
+          prevEl: newSlideShow.querySelector('.swiper-button-prev')
+        }
+      };
+
+      new G(newSlideShow, swiperOptions); // ✅ Initialize only this instance
+    }
+  }
+});
+</script>

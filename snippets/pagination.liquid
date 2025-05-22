@@ -1,0 +1,50 @@
+{%- if paginate.pages > 1 -%}
+<div class="pagination-section">
+  <div class="container">
+    <ol class="pagination">
+      {%- if paginate.previous-%}
+        <li class="pagination__item--prev">
+          <a href="{{ paginate.previous.url }}"></a>
+        </li>
+      {%- else -%}
+        <li class="disabled"><img src="{{ 'icon_arrow_02.svg' | asset_url }}" alt=""></li>
+      {%- endif -%}
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}
+          <li>
+            <a href="{{ part.url }}">
+              {{ part.title }}
+            </a>
+          </li>
+        {%- else -%}
+          {%- if part.title == paginate.current_page -%}
+            <li class="active" aria-current="page">
+              {{ part.title }}
+            </li>
+          {%- else -%}
+            <li>
+              {{ part.title }}
+            </li>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <li class="pagination__item--next">
+          <a href="{{ paginate.next.url }}"></a>
+        </li>
+      {%- else -%}
+        <li class="disabled"></li>
+      {%- endif -%}      
+      {% if template == 'collection' %}
+      <li class="pagination__item--all"><a href="{{ base_url }}?view=all" class="view-all sm-hidden" id="viewAllLink">View All</a></li>
+      {% endif %}
+    </ol> 
+    
+    {% if template == 'collection' %}
+    <a href="{{ base_url }}?view=all" class="view-all sm-visible" id="viewAllLink">View All</a>
+    {% endif %}
+    
+  </div>
+</div>
+{%- endif -%} 

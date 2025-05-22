@@ -1,0 +1,35 @@
+          {% liquid
+
+            assign page_title = 'Support'
+            for link in linklists['support-menu'].links
+              comment
+              echo link.active
+              endcomment
+              if link.active == true
+                assign page_title = link.title | escape
+              endif
+            endfor
+            
+          %}
+          
+          <h1 class="page__title"><span class="md-hidden">Support</span><span class="md-visible--inline">{{ active }}</span></h1>
+          <nav class="local-nav">
+
+            <ul class="site-nav__menu md-hidden">
+              {% for link in linklists[settings.support_menu_linklist]].links %}
+              <li>
+                <a href="{{link.url}}" class="{% if link.active %}active{% endif %}">{{ link.title | escape }}</a>
+                {% if link.links != blank %}
+                <ul>
+                  {% for child_link in link.links %}
+                  <li>
+                    <a href="{{child_link.url}}" class="{% if child_link.active %}active{% endif %}">{{ child_link.title | escape }}</a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>        
+
+          </nav>

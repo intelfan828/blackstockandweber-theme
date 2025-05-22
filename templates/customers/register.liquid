@@ -1,0 +1,32 @@
+<section class="page-section register-section bgc--cream">
+  <div class="container container--full">
+    <div class="row contents-row">
+      <div class="col col-6 col-md-12 hero-banner">
+        {%- if settings.sign_up_page_banner != blank -%}
+          <picture class="image-wrapper">
+            <img src="{{ settings.sign_up_page_banner | img_url: '1000x1000' }}" alt="">
+          </picture>
+        {%- endif -%}
+        {% assign text_color = '#fff' %}
+
+        {%- if settings.sign_up_page_text_color != blank -%}
+        {% assign text_color = settings.sign_up_page_text_color %}
+        {%- endif -%}
+        <h2 class="page-title" style="color: {{text_color}};">{{ 'customer.general.account' | t }}</h2>
+      </div>
+      <div class="col col-6 col-md-12 page-contents">
+        <div class="page-contents__wrapper">
+          <div class="form-wrapper">
+            <h2 class="page-contents__title">{{ 'customer.register.title' | t }}</h2>
+            {% render "customer-fields", form_id: "GOt83W" %}
+          </div>  
+        </div>     
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+

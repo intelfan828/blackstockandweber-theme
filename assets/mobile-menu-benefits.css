@@ -1,0 +1,46 @@
+/* Container for the mobile menu benefits */
+.mobile-menu-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-top: .5px solid #EAD7C0;
+  
+}
+
+/* Individual benefit block */
+.mobile-menu-benefit {
+  width: 50%; /* Two items per row */
+  height:46px;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: .5px solid #EAD7C0;
+  
+}
+
+/* Styling for the icon inside each benefit */
+.mobile-menu-benefit img {
+  max-width: 19px; /* Adjust icon size */
+  max-height: 19px; /* Adjust icon size */
+  margin-right: 10px;
+}
+
+/* Styling for the text inside each benefit */
+.mobile-menu-benefit p {
+  font-size: 11px;
+  color: #694a26;
+  margin: 0;
+  letter-spacing:-.04rem;
+}
+
+.site-header .site-nav--mobile.visible {
+  display:flex;
+  flex-flow:column;
+  justify-content:space-between;
+  top:72px;
+  overflow:auto;
+}
+
+.site-header .store-nav .search-bar {
+  top: initial;
+}

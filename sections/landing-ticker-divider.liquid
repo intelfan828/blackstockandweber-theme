@@ -1,0 +1,204 @@
+<style>
+  .landing-ticker .section__title {
+    border-bottom:0;
+  }
+  .landing-ticker .ticker-section {
+  background-color: #fdf5ea;
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+.landing-ticker .ticker-wrapper {
+  overflow: hidden; /* Hide overflowing content */
+  position: relative;
+  width: 100%; /* Ensure it matches the viewport width */
+  border-bottom:1px solid #ead7c1;
+}
+
+ #shopify-section-{{section.id}} .landing-ticker .ticker {
+  display: flex;
+  animation: ticker-scroll {{ section.settings.ticker_speed }}s linear infinite;
+  will-change: transform;
+  gap:8rem;
+  margin-bottom:1.5rem;
+  margin-top:1rem;
+}
+
+.landing-ticker .ticker-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  gap:1rem;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.landing-ticker .ticker-logo {
+  height: 30px; /* Adjust size as needed */
+  width: auto;
+}
+
+.landing-ticker .ticker-text {
+  color:#684A26;
+  font-size: 12px;
+}
+
+.landing-ticker .ticker-description p{
+  font-size: 12px;
+  font-family: Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+  line-height:1.3rem;
+}
+  
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+ 
+  100% {
+    transform: translateX(calc(-1 * var(--ticker-width)));
+  }
+}
+
+  @media only screen and (max-width:600px) {
+    .landing-ticker .ticker {
+      gap:5rem;
+  }
+
+}
+</style>
+
+<section class="ticker-section landing-ticker">
+  <div class="ticker-wrapper">
+    {% if section.settings.ticker_title %}
+     <div class="section__title section">
+          {% if section.settings.ticker_title != blank %}
+            <h2 class="ticker_title">{{ section.settings.ticker_title }}</h2>
+          {% endif %}
+          {% if section.settings.ticker_description != blank %}
+            <span class="ticker-description col-3 col-md-5 col-sm-12">{{ section.settings.ticker_description }}</span>
+          {% endif %}
+        </div>
+    {%  endif %}
+  <div class="ticker">
+    {% for block in section.blocks %}
+      <div class="ticker-item">
+        {% if block.settings.logo_image %}
+          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="ticker-logo">
+        {% endif %}
+        {% if block.settings.text %}
+          <p class="ticker-text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <!-- Duplicate items for seamless animation -->
+    {% for block in section.blocks %}
+      <div class="ticker-item">
+        {% if block.settings.logo_image %}
+          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="ticker-logo">
+        {% endif %}
+        {% if block.settings.text %}
+          <p class="ticker-text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <!-- Duplicate items for seamless animation -->
+    {% for block in section.blocks %}
+      <div class="ticker-item">
+        {% if block.settings.logo_image %}
+          <img src="{{ block.settings.logo_image | img_url }}" alt="{{ block.settings.logo_alt_text | escape }}" class="ticker-logo">
+        {% endif %}
+        {% if block.settings.text %}
+          <p class="ticker-text">{{ block.settings.text }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+  </div>
+</div>
+</section>
+
+{% schema %}
+{
+  "name": "Landing Ticker - Divider",
+  "settings": [
+    {
+      "type": "number",
+      "id": "ticker_speed",
+      "label": "Ticker Speed (Seconds)",
+      "default": 20
+    },
+    {
+      "type": "text",
+      "id": "ticker_title",
+      "label": "Section Title",
+      "default": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "ticker_description",
+      "label": "Section Description"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ticker_item",
+      "name": "Ticker Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo Image"
+        },
+        {
+          "type": "text",
+          "id": "logo_alt_text",
+          "label": "Logo Alt Text",
+          "default": "logo"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Ticker Text",
+          "default": "Sample text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Landing Ticker Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('.landing-ticker').forEach(ticker => {
+    // Calculate the total width of all items in this specific ticker
+    const totalWidth = Array.from(ticker.children).reduce((width, item) => {
+      return width + item.offsetWidth + parseFloat(getComputedStyle(item).marginRight);
+    }, 0);
+
+    // Set the CSS variable for animation distance for this specific ticker
+    ticker.style.setProperty('--ticker-width', `${totalWidth}px`);
+  });
+});
+
+  Shopify.theme.sections.register('landing-ticker', {
+  onLoad: function() {
+    var newTicker = this.container.querySelector('.ticker');
+
+    if (newTicker) {
+      var swiperOptions = {
+        loop: newTicker.dataset.swiperLoop === "true",
+        spaceBetween: 1,
+      };
+
+      new G(newTicker, swiperOptions); // ✅ Initialize only this instance
+    }
+  }
+});
+</script>
+
+

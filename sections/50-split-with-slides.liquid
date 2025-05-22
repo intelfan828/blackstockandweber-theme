@@ -1,0 +1,204 @@
+<style>
+  
+ .carousel-text-section {
+  display: flex;
+   flex-flow:row;
+  justify-content: center;
+  gap: 20px;
+   border-bottom:1px solid #EAD7C0;
+   border-top:1px solid #EAD7C0;
+}
+ .carousel-text-section .section__title {
+   border:none
+ }
+
+.carousel-text-section .carousel-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1; /* Makes it square */
+  overflow: hidden;
+  
+}
+
+.carousel-text-section .carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-text-section .carousel-slide {
+  min-width: 100%;
+}
+
+.carousel-text-section .carousel img {
+  width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-text-section .carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.carousel-text-section .carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-text-section .carousel-btn.next {
+  right: 10px;
+}
+
+.carousel-text-section .text-container {
+  width: 50%;
+  text-align: left;
+}
+
+.carousel-text-section .text-container p {
+  margin-bottom: 20px;
+  margin-top:2rem;
+  font-size:12px;
+  font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+  line-height:150%;
+  color:#694a26;
+}
+
+.text-container p {
+  width: 60%
+}
+
+.carousel-text-section .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.carousel-text-section .btn:hover {
+  background-color: #333;
+}
+
+  @media screen and (max-width:600px) {
+    .carousel-text-section {
+      flex-flow:column;
+    }
+
+    .carousel-text-section .text-container {
+      width:100%;
+      padding: 0 1rem;
+    }
+
+    .text-container p {
+      width: 100%
+    }
+  }
+  
+</style>
+
+<section class="section" data-section-id="{{ section.id }}">
+  <div class="section__title section col-3 col-md-4 col-sm-12" ;>
+      <h2 class="brand-title">{{ section.settings.section_title }}</h2>
+  </div>
+  <div class="carousel-text-section">
+  <div class="carousel-container col-6 col-md-12">
+    <div class="carousel">
+      {% for block in section.blocks %}
+        {% if block.type == "image" %}
+          <div class="carousel-slide">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | img_url: '1600x1600' }}" alt="{{ block.settings.image.alt }}">
+            {% else %}
+              {{ 'image' | placeholder_svg_tag }}
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <button class="carousel-btn prev">❮</button>
+    <button class="carousel-btn next">❯</button>
+  </div>
+  <div class="text-container col-6 col-md-12">
+    <span class="col-6 col-md-12">{{ section.settings.section_description }}</span>
+  </div>
+</div>
+</section>  
+
+
+
+{% schema %}
+{
+  "name": "Carousel with Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Title",
+      "default": "Our Featured Products"
+    },
+    {
+      "type": "richtext",
+      "id": "section_description",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Carousel Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Slide Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Carousel with Text",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const carousel = document.querySelector(".carousel-text-section .carousel");
+  const slides = document.querySelectorAll(".carousel-text-section .carousel-slide");
+  const prevButton = document.querySelector(".carousel-text-section .carousel-btn.prev");
+  const nextButton = document.querySelector(".carousel-text-section .carousel-btn.next");
+
+  let index = 0;
+
+  function updateCarousel() {
+    const translateValue = -index * 100 + "%";
+    carousel.style.transform = "translateX(" + translateValue + ")";
+  }
+
+  nextButton.addEventListener("click", function () {
+    index = (index + 1) % slides.length;
+    updateCarousel();
+  });
+
+  prevButton.addEventListener("click", function () {
+    index = (index - 1 + slides.length) % slides.length;
+    updateCarousel();
+  });
+});
+</script>

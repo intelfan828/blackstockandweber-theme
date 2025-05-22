@@ -1,0 +1,826 @@
+<style>
+
+ 
+  #shopify-section-{{section.id}} .landing-hero-section {
+    position:relative;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-banner__title,
+  #shopify-section-{{section.id}} .landing-hero-section .item-info * {
+    color: {{ section.settings.text_color }} !important;
+    font-size:12px;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-banner__subtitle {
+    color: {{ section.settings.subtitle_text_color }} !important;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section a:link,
+  #shopify-section-{{section.id}} .landing-hero-section a:visited,
+  #shopify-section-{{section.id}} .landing-hero-section .button.button--secondary {
+    color: {{ section.settings.text_color }} !important;
+    border-color: {{ section.settings.text_color }} !important;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .button.hero__button.solid {
+    background-color: {{ section.settings.button_color }} !important;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .button {
+    margin-top: 13px ;
+    padding-left:12px;
+    padding-right:12px;
+    width:fit-content;
+    align-self:{{ section.settings.button_alignment }};
+  }
+
+  #shopify-section-{{section.id}} .landing-hero-section .button.end-aligned {
+    margin-top:0;
+  }
+  
+  #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline, #shopify-section-{{section.id}} .site-trunk .shopify-section:first-of-type .hero-banner__headline {
+    position:absolute;
+    top: initial;
+     {% if section.settings.button_alignment == "center" %}
+        bottom:150px;
+        {% else %}
+      bottom: 20px;
+      {% endif %}
+  }
+
+   #shopify-section-{{section.id}} .hero-banner__headline.solid-text-background,  #shopify-section-{{section.id}} .site-trunk .shopify-section .hero-banner__headline.solid-text-background {
+    top: 0px;
+    bottom: initial;
+  }
+
+  #shopify-section-{{section.id}} .solid-text-background .button.button--primary {
+    width: fit-content;
+  }
+  
+ #shopify-section-{{section.id}} .hero-headline.top-left-headline{
+    position:absolute;
+    top:2rem;
+    left:1.5rem;
+  }
+  
+ #shopify-section-{{section.id}} .hero-headline.center-headline {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+ #shopify-section-{{section.id}} .hero-headline .h2.roman {
+    font-family:OPTIRomanaRoman-Normal;
+    font-size:18px;
+    color:#694a26;
+  }
+
+ #shopify-section-{{section.id}} .hero-headline .h2.grotesk {
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+    font-size:18px;
+    color:#694a26;
+  }
+  
+ #shopify-section-{{section.id}} .hero-banner__headline.solid-text-background {
+      background-color: white;
+      position:relative;
+      bottom:initial;
+      padding:20px 12px;
+    }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline {
+    width:100%;
+    display:flex;
+    flex-flow:column;
+    padding: 0 18px;
+    left:0;
+  }
+
+   #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline.solid-text-background, #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline.solid-text-background-mobile {
+    padding: 20px 18px;
+    
+  }
+
+  #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline.solid-text-background-mobile {
+   bottom:0px;
+  }
+  #shopify-section-{{section.id}} .hero-banner__subtitle, #shopify-section-{{section.id}} .hero-banner__title {
+    align-self:{{ section.settings.text_alignment }};
+  }
+
+  #shopify-section-{{section.id}} .hero-banner__title.text-align-right {
+    margin-bottom: 19px;
+  }
+
+  #shopify-section-{{section.id}} .hero-headline {
+    max-width: 25%;
+  }
+
+  #shopify-section-{{section.id}} .hero-sub-text p{
+    margin-top: 1.5rem;
+    line-height:1.3rem;
+    font-size:12px;
+    font-family:Scto-Grotesk-A-Regular, Yu Gothic Medium, Hiragino Kaku Gothic ProN, YuGothic;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-headline .h2 *{
+    color: {{section.settings.text_color}}
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-headline .hero-sub-text *{
+    color: {{section.settings.subtitle_text_color}}
+  }
+
+  @media (max-width: 900px) { 
+    
+
+    #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline {
+      left: unset;
+      bottom: 20px;
+      width: 100%;
+      padding: 0 12px;
+      
+    }
+
+    #shopify-section-{{section.id}} .landing-hero-section .hero-section__image-wrapper {
+      top:0px;
+    }
+
+    
+   #shopify-section-{{section.id}} .landing-hero-section .hero-headline.top-left-headline{
+      position:absolute;
+     top:0;
+     left:0;
+      padding:5rem 1.5rem 2rem;
+    }
+    
+   #shopify-section-{{section.id}} .landing-hero-section .hero-headline .h2 {
+      font-size:16px;
+    }
+  }
+
+   @media (max-width: 600px) {
+     #shopify-section-{{section.id}} .landing-hero-section .hero-banner__headline.center-headline {
+       bottom:20rem;
+     }
+     
+  .landing-hero-section .hero-section__image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+.landing-hero-section .container--full{
+  height:100%;
+  }
+  .landing-hero-section .container--full .row {
+  
+     height:100%;
+  }
+
+  .landing-hero-section .container--full .row > div {
+     height:100%;
+    
+  }
+  .landing-hero-section .container--full .row > div > div {
+ height:100%;
+     
+  }
+
+   .landing-hero-section .container--full .row > div > div picture {
+ height:100%;
+     
+  }
+      {% if section.settings.tall_image_mobile == false %}
+      #shopify-section-{{section.id}} .landing-hero-section {
+        height:100vw;
+      }
+      {% endif %}
+
+     #shopify-section-{{section.id}} .landing-hero-section .hero-section__image-wrapper.tall-image-mobile {
+      position: relative;
+      height: 560px;
+    }
+
+    #shopify-section-{{section.id}} .landing-hero-section .hero-section__image-wrapper.tall-image-mobile img {
+      height:560px;
+    }
+     
+     #shopify-section-{{section.id}} .solid-text-background .button.button--primary {
+    width: 100%;
+  }
+
+     #shopify-section-{{section.id}} .landing-hero-section .hero-banner__title,
+    #shopify-section-{{section.id}} .landing-hero-section .item-info * {
+      color: {{ section.settings.text_color_sm }} !important;
+      font-size:12px;
+    }
+    #shopify-section-{{section.id}} .landing-hero-section .hero-banner__subtitle {
+      color: {{ section.settings.subtitle_text_color_sm }} !important;
+      font-size: 11px;
+    }
+   
+    #shopify-section-{{section.id}} .landing-hero-section a:link,
+    #shopify-section-{{section.id}} .landing-hero-section a:visited,
+    #shopify-section-{{section.id}} .landing-hero-section .button.button--secondary {
+      color: {{ section.settings.text_color_sm }} !important;
+      border-color: {{ section.settings.text_color_sm }} !important;
+    }
+
+     #shopify-section-{{section.id}} .landing-hero-section .hero__button {
+      color: {{ section.settings.button_text_color_sm }} !important;
+      border-color:{{ section.settings.button_color_sm }} !important;
+       font-size: 11px;
+    }
+     
+     #shopify-section-{{section.id}} .hero-banner__headline.solid-text-background,  #shopify-section-{{section.id}} .site-trunk .shopify-section .hero-banner__headline.solid-text-background {
+    top: initial;
+    bottom: 20px;
+    background-color: transparent;
+    position:absolute;
+    bottom:0px;
+    padding:20px 12px;
+  }
+    #shopify-section-{{section.id}} .landing-hero-section .button {
+        width:100%;
+    }
+     
+    #shopify-section-{{section.id}} .landing-hero-section .button.end-aligned {
+        margin-top:13px;
+    }     
+
+    #shopify-section-{{section.id}} .hero-banner__subtitle, #shopify-section-{{section.id}} .hero-banner__title {
+      align-self:{{ section.settings.text_alignment_mobile }};
+    }
+     
+     #shopify-section-{{section.id}} .hero-banner__title.text-align-right {
+    margin-bottom: 6px;
+  }
+     
+  #shopify-section-{{section.id}} .hero-banner__headline.solid-text-background-mobile,  #shopify-section-{{section.id}} .site-trunk .shopify-section .hero-banner__headline.solid-text-background-mobile {
+    top: 0px;
+    bottom: initial;
+  }
+     #shopify-section-{{section.id}} .hero-banner__headline.solid-text-background.solid-text-background-mobile,  #shopify-section-{{section.id}} .site-trunk .shopify-section .hero-banner__headline.solid-text-background.solid-text-background-mobile {
+    top: 0px;
+    bottom: initial;
+  }
+
+  #shopify-section-{{section.id}} .hero-banner__headline.solid-text-background-mobile {
+      background-color: white;
+      position:relative;
+      bottom:initial;
+      padding:20px 12px;
+  }
+
+  #shopify-section-{{section.id}} .landing-hero-section .hero-headline {
+    max-width: 100%;
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-headline.mobile-center-headline{
+    max-width: max-content;
+    width: 100%;
+    padding:0 1.5rem 12rem;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+     #shopify-section-{{section.id}} .landing-hero-section picture {
+       display: inline;
+     }
+
+     #shopify-section-{{section.id}} .landing-hero-section .container--full .row > div > div {
+       height: auto;
+     }
+      #shopify-section-{{section.id}} .landing-hero-section .hero-headline .h2 *{
+    color: {{section.settings.text_color_sm}}
+  }
+  #shopify-section-{{section.id}} .landing-hero-section .hero-headline .hero-sub-text *{
+    color: {{section.settings.subtitle_text_color_sm}}
+  }
+}
+</style>
+
+
+<section class="landing-hero-section  {% if section.settings.number_of_columns == "1" %}hero-section--single{% endif %}">
+  <div class="container container--full">
+   
+      {%- if section.settings.hero_product != empty -%}
+        {%- assign hero_product = all_products[section.settings.hero_product] -%}
+        {%- assign hero_url = hero_product.url | append: "?variant=" | append: hero_product.variants.first.id -%}
+      {%- else -%}
+        {%- assign hero_url = section.settings.hero_link -%} <!-- Fallback to hero_link if no product is selected -->
+      {%- endif -%}
+    {% if section.settings.hero_product != blank or section.settings.hero_link != blank %}
+      <a href="{{ hero_url }}">
+    {% endif %}
+      <div class="row" style="background-color: {{section.settings.background_color}};">
+        <!-- {% if section.blocks.size == 1 %}
+        <div class="col col-12">
+          
+        </div>
+        {% endif %} -->
+        {%- for block in section.blocks -%}
+          <div class="col {% if section.settings.number_of_columns == "2" %}col-6 col--right{% else %}col-12{% endif %} col-md-12">
+            <div class="hero-section__image-wrapper {% if section.settings.tall_image_mobile %}tall-image-mobile{% endif %}">
+              {% if block.settings.alt contains '.mp4' %}
+                <div class="video-wrapper">
+                  <video src="{{ block.settings.alt }}" loop controls poster="{{ block.settings.image | img_url: '2400x2400' }}" playsinline muted autoplay></video>
+                </div>
+              {% else %}
+                <picture>
+                  {% if block.settings.image_sm != blank %}
+                  <source srcset="{{ block.settings.image_sm | img_url: '1000x1000' }}" media="(max-width: 600px)">
+                  {% endif %}
+                  <img src="{{ block.settings.image | img_url: '2400x2400' }}" alt="{{ block.settings.alt }}">
+                </picture>
+              {% endif %}
+            </div>
+            {% if block.settings.headline %}
+              <div class="hero-headline {% if block.settings.headline_position == "top-left" %}top-left-headline
+                {% elsif block.settings.headline_position == "center" %} center-headline{% endif %}
+                {% if block.settings.headline_position_mobile == "center" %} mobile-center-headline{% endif %}">
+                 <span class="h2 {% if block.settings.headline_font == "roman" %}roman{% elsif block.settings.headline_font == "grotesk"%}grotesk {% endif %}" style="color:{{ block.settings.text_color }};">{{ block.settings.headline }}</span>
+                  <span class="hero-sub-text" style="color:{{ block.settings.subtitle_text_color }};">{{ block.settings.sub-text }}</span>
+              </div>
+             
+              {% endif %}
+          </div>
+          {%- if section.settings.number_of_columns == "1" and forloop.index0 == 0 -%}
+          {% break %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="hero-banner__headline{% if section.settings.solid_text_background %} solid-text-background{% endif %}
+        {% if section.settings.solid_text_background_mobile %} solid-text-background-mobile{% endif %}
+        {% if section.settings.button_alignment_mobile == "center" %} center-headline{% endif %}" style="color: {{ section.settings.text_color }}">
+        
+
+          {% if section.settings.hero_subtitle != blank %}
+            <p class="hero-banner__subtitle {% if section.settings.text_alignment == "end" %}text-align-right{% endif %}">
+              {{ section.settings.hero_subtitle }}
+            </p>
+          {% endif %}
+
+          {% if section.settings.hero_title != blank %}
+            <div class="hero-banner__title {% if section.settings.text_alignment == "end" %}text-align-right{% endif %}">
+              {{ section.settings.hero_title }}
+            </div>
+          {% endif %}
+
+          {% if  section.settings.hero_button != blank%}
+            <button class="button button--primary hero__button 
+                {% if section.settings.solid_button %} solid {% endif %}
+                {% if section.settings.button_alignment == 'end' %}end-aligned{% endif %}
+              " 
+              style="color: {{ section.settings.button_text_color }}; border-color:{{ section.settings.button_color }}">
+            {{ section.settings.hero_button }}
+            </button>
+          {% endif %}
+        
+      </div>
+    {% if section.settings.hero_product != blank or section.settings.hero_link != blank %}
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": {
+    "en": "Landing Hero Banner"
+  },
+  
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_class",
+      "label": {
+        "en": "Section Class",
+        "ja": "セクションクラス"
+      }
+    },
+    {
+      "type":"checkbox",
+      "id":"solid_text_background",
+      "label": {
+        "en":"Solid Text Background"
+      }
+    },
+    {
+      "type":"checkbox",
+      "id":"solid_text_background_mobile",
+      "label": {
+        "en":"Solid Text Background (Mobile)"
+      }
+    },
+     {
+      "type": "select",
+      "id": "text_alignment",
+      "label": {
+        "en": "Text Position",
+        "ja": "テキスト位置"
+      },
+      "default": "start",
+      "options": [
+        {
+          "label": {
+            "en": "Left"
+          },
+          "value": "start"
+        },
+         {
+          "label": {
+            "en": "Center"
+          },
+          "value": "center"
+        },
+        {
+          "label": {
+            "en": "Right"
+          },
+          "value": "end"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment_mobile",
+      "label": {
+        "en": "Text Position (Mobile)"
+      },
+      "default": "start",
+      "options": [
+        {
+          "label": {
+            "en": "Left"
+          },
+          "value": "start"
+        },
+         {
+          "label": {
+            "en": "Center"
+          },
+          "value": "center"
+        },
+        {
+          "label": {
+            "en": "Right"
+          },
+          "value": "end"
+        }
+      ]
+    },    
+    {
+      "type":"checkbox",
+      "id":"tall_image_mobile",
+      "label": {
+        "en":"Tall Image on Mobile"
+      }
+    },
+    {
+      "type": "richtext",
+      "id": "hero_title",
+      "label": {
+        "en": "Title",
+        "ja": "タイトル"
+      }
+    },   
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": {
+        "en": "Text Color",
+        "ja": "テキストカラー"
+      },
+      "default": "#000000"
+    }, 
+    {
+      "type": "color",
+      "id": "text_color_sm",
+      "label": {
+        "en": "Text Color (Mobile)",
+        "ja": "テキストカラー (モバイル）"
+      },
+      "default": "#000000"
+    },    
+    {
+      "type": "text",
+      "id": "hero_subtitle",
+      "label": {
+        "en": "Sub Title",
+        "ja": "サブタイトル"
+      }
+    },
+    {
+      "type": "color",
+      "id": "subtitle_text_color",
+      "label": {
+        "en": "Subtitle Text Color",
+        "ja": "サブタイトルテキストカラー"
+      },
+      "default": "#000000"
+    }, 
+    {
+      "type": "color",
+      "id": "subtitle_text_color_sm",
+      "label": {
+        "en": "Subtitle Text Color (Mobile)",
+        "ja": "サブタイトルテキストカラー (モバイル）"
+      },
+      "default": "#000000"
+    },
+     {
+      "type": "text",
+      "id": "hero_button",
+      "label": {
+        "en": "Hero Button"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "solid_button",
+      "label": {
+        "en": "Solid button"
+      }
+    },
+    {
+      "type": "select",
+      "id": "button_alignment",
+      "label": {
+        "en": "Button Position"
+      },
+      "default": "start",
+      "options": [
+        {
+          "label": {
+            "en": "Left"
+          },
+          "value": "start"
+        },
+        {
+          "label": {
+            "en": "Center"
+          },
+          "value": "center"
+        },
+        {
+          "label": {
+            "en": "Right"
+          },
+          "value": "end"
+        }
+      ]
+    },
+     {
+      "type": "select",
+      "id": "button_alignment_mobile",
+      "label": {
+        "en": "Button Position (Mobile)"
+      },
+      "default": "bottom",
+      "options": [
+        {
+          "label": {
+            "en": "Bottom"
+          },
+          "value": "bottom"
+        },
+         {
+          "label": {
+            "en": "Center"
+          },
+          "value": "center"
+        }
+      ]
+    },    
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": {
+        "en": "Button Text Color"
+      },
+      "default": "#ffffff"
+    },
+     {
+      "type": "color",
+      "id": "button_text_color_sm",
+      "label": {
+        "en": "Button Text Color (Mobile)"
+      },
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": {
+        "en": "Button Color"
+      },
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_color_sm",
+      "label": {
+        "en": "Button Color (Mobile)"
+      },
+      "default": "#ffffff"
+    },
+    {
+      "type": "product",
+      "id": "hero_product",
+      "label": {
+        "en": "Select Product"
+      }
+    },
+    {
+      "type": "url",
+      "id": "hero_link",
+      "label": {
+        "en": "Link",
+        "ja": "リンク"
+      }
+    },   
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": {
+        "en": "Background Color",
+        "ja": "背景色"
+      },
+      "default": "#ffffff"
+    },      
+    {
+      "type": "select",
+      "id": "number_of_columns",
+      "label": {
+        "en": "Number of Columns",
+        "ja": "カラム数"
+      },
+      "default": "1",
+      "options": [
+        {
+          "label": {
+            "en": "1",
+            "ja": "1"
+          },
+          "value": "1"
+        },
+        {
+          "label": {
+            "en": "2",
+            "ja": "2"
+          },
+          "value": "2"
+        }
+      ]
+    }    
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": {
+        "en": "Image slide",
+        "ja": "画像スライド"
+      },
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "headline",
+          "label": {
+            "en": "Headline",
+          }
+        },
+        {
+          "type": "richtext",
+          "id": "sub-text",
+          "label": {
+            "en": "Sub-Text",
+          }
+        }, 
+        {
+      "type": "select",
+      "id": "headline_font",
+      "label": {
+        "en": "Headline Font"
+      },
+      "default": "grotesk",
+      "options": [
+        {
+          "label": {
+            "en": "Grotesk"
+          },
+          "value": "grotesk"
+        },
+        {
+          "label": {
+            "en": "Roman"
+          },
+          "value": "roman"
+        }
+      ]
+    },
+        {
+      "type": "select",
+      "id": "headline_position",
+      "label": {
+        "en": "Headline Position"
+      },
+      "default": "top-left",
+      "options": [
+        {
+          "label": {
+            "en": "Top Left"
+          },
+          "value": "top-left"
+        },
+        {
+          "label": {
+            "en": "Center",
+            "ja": "センター"
+          },
+          "value": "center"
+        }
+      ]
+    },
+         {
+      "type": "select",
+      "id": "headline_position_mobile",
+      "label": {
+        "en": "Headline Position (Mobile)"
+      },
+      "default": "left",
+      "options": [
+        {
+          "label": {
+            "en": "Left"
+          },
+          "value": "left"
+        },
+        {
+          "label": {
+            "en": "Center",
+            "ja": "センター"
+          },
+          "value": "center"
+        }
+      ]
+    },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image",
+            "ja": "画像"
+          },
+        },
+        {
+          "type": "image_picker",
+          "id": "image_sm",
+          "label": {
+            "en": "Image (SP)",
+            "ja": "画像 (SP)"
+          }
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": {
+            "en": "Alt Text or mp4 file",
+          }
+        },
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Landing Hero Banner",
+        "ja": "ヒーローバナー"
+      },
+      "category": {
+        "en": "Image",
+        "ja": "画像"
+      },
+      "blocks": [
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+  // Select the button with the text "BID NOW"
+  const buttons = document.querySelectorAll(".hero__button");
+
+  buttons.forEach(function (button) {
+    if (button.textContent.trim() === "BID NOW") {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        // Define the URL you want to open
+        const url = "https://bringatrailer.com/listing/1986-porsche-944-115/#comments-anchor"; // Replace with your desired link
+        window.open(url, "_blank"); // Open in a new tab
+      });
+    }
+  });
+});
+</script>

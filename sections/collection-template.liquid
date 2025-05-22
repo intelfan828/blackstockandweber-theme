@@ -1,0 +1,157 @@
+<style>
+  .tmpl--collection .page-header .col--collection-nav {
+    width: 100%;
+    display:flex;
+    justify-content: space-between;
+    border-top: 1px solid #ead7c1;
+     border-bottom: 1px solid #ead7c1;
+  }
+   .col--collection-nav .collection-item-count-desktop {
+       display: none;
+    }
+  .collection-item-count-desktop {
+    font-size: 11px;
+    color:#684A26;
+    padding: 10px 16px;
+}
+
+  .tmpl--collection .page-header .collection__local-nav {
+    border-top: none;
+    border-bottom: none;
+  }
+  
+  @media (min-width: 900px) {
+    .col--collection-nav .collection-item-count-desktop {
+       display:block;
+    }
+    
+  }
+</style>
+
+<header class="page-header page-header--has-hero-banner">
+  <div class="container container--fluid">
+    <div class="row page-header__content">
+      <div class="col col-9 col-md-12 col--title">
+        <h1 class="page-title">
+          {% if collection.title == 'General Store' or collection.title == 'Eyewear' or collection.title == 'General Store Vintage' or collection.title == 'Books' or collection.title == 'Magazines'%}
+          <img src="{{ 'general_store.svg' | asset_url }}" alt="GENERAL STORE">
+          {% elsif collection.title == 'Shop All' or collection.title == 'Loafers' or collection.title == 'Collaborations' %}
+          <img src="{{ 'Blackstock.svg' | asset_url }}" alt="Blackstock & Weber" height="10px">
+            {% elsif collection.title == 'ACADEMY' or collection.title == 'Tops' or collection.title == 'Bottoms' or collection.title == 'Outerwear' or collection.title == 'Accessories'%}
+          <img src="{{ 'Academy_by_BW.svg' | asset_url }}" alt="Academy by Blackstock and Weber" height="26px">
+             {% elsif collection.title == 'Sperry By Chris Echevarria' %}
+          <img src="{{ 'SperrybyCE-brown.svg' | asset_url }}" alt="Sperry By Chris Echevarria" height="40px">
+          {% else %}
+          {{collection.title}}
+          {% endif %}
+        </h1>
+      </div>
+
+      {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+      <!--{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+      <scipt src="{{ 'facets.js' | asset_url }}" defer="defer"></script>-->
+
+        {% render 'facets', results: collection, enable_filtering: section.settings.enable_filtering %}
+
+      {%- endif -%}
+
+      <div class="col col-12 col--collection-nav">
+        {%- include 'collection_nav' nav_class: 'collection__local-nav' -%}
+        {% if collection %}
+          <div class="collection-item-count-desktop">
+            <p>{{ collection.products_count }} Products</p>
+          </div>
+        {% else %}
+          <div class="collection-item-count">
+            <p>No collection found</p>
+          </div>
+        {% endif %}
+
+      </div>
+      
+    </div>
+    
+  </div>
+</header>   
+
+{% liquid
+  
+  assign offset = 24
+
+  if template.suffix == 'all' 
+  assign offset = 1000
+  endif
+
+%}
+
+{% paginate collection.products by offset %}   
+
+<section class="">
+  <div class="container container--full">
+    <div class="row cards products">
+      {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}            
+      {% if products.size > 0 %}
+        {% for product in products %}
+          {% include 'product-card', class: 'col col-3 col-md-4 col-sm-6 card product', product: product, show_vendor: section.settings.show_vendor %}
+        {% endfor %}　
+      {% else %}
+        <div class="no-match col col-12 card">
+          <p>{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      {% endif %}                                               
+    </div>
+    
+  </div>
+</section>
+{% include 'pagination', base_url:collection.url %}
+{% assign sp_paginate_by = paginate.page_size %}{% endpaginate %}
+
+
+{% if sp_paginate_by %}{% render 'spurit_po2_collection_template_snippet', paginate_by: sp_paginate_by %}{% endif %}{% schema %}
+  {
+    "name": "Collection pages",
+    "class": "collection-template",
+    "settings": [
+      {
+         "type": "select",
+         "id": "color_scheme",
+         "label": "Color scheme",
+         "options": [
+            { "value": "primary", "label": "Primary"},
+            { "value": "secondary ", "label": "Secondary"},
+            { "value": "tertiary", "label": "Tertiary"}
+         ]
+      },
+      {
+         "type":      "range",
+         "id":        "no_posts",
+         "min":       2,
+         "max":        24,
+         "step":       2,
+         "label":     "No of products per page",
+         "default":   12
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "label": "Show collection image"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_filtering",
+        "default": true,
+        "label": "Enable FIltering"
+      },
+      {
+        "type": "checkbox",
+        "id": "capitalize_tags",
+        "label": "Capitalize tags"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sort_filter",
+        "label": "Enable collection sorting"
+      }
+    ]
+  }
+{% endschema %}

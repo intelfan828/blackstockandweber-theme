@@ -1,0 +1,108 @@
+    {%- if section.settings.hide != true -%}	
+    <section class="link-section bgc--light-gray">
+      <div class="container container--full">
+        <div class="row cards">
+          <div class="col col-6 col-md-12 card col--image">
+            <div class="section__image">
+              <a href="{{ section.settings.page.url }}">
+                <picture>
+                  <img src="{{ section.settings.image | img_url: '2400x2400'}}" alt="">
+                </picture>
+              </a>
+            </div>
+          </div><!-- /.product -->                
+          <div class="col col-6 col-md-12 card col--contents">
+            <div class="">
+              <p class="section-title">{{ section.settings.title }}</p>
+              
+              {%- if section.settings.headline != blank or section.settings.headline_en != blank -%}
+                {% if request.locale.iso_code == 'en' %}
+                <p class="section-headline">{{ section.settings.headline_en }}</p>          
+                {% else %}
+                <p class="section-headline">{{ section.settings.headline }}</p>
+                {% endif %}
+              {% endif %}
+              <a href="{{ section.settings.page.url }}" class="button button--secondary">Read More</a>
+            </div>
+          </div><!-- /.product -->                                           
+        </div>
+      </div>
+    </section> 
+    {%- endif -%}
+
+{% schema %}
+{
+  "name": {
+    "en": "Featured Page",
+    "ja": "特集ページ"
+  },
+  "class": "featured-page-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Title",
+        "ja": "タイトル"
+      },
+      "default": {
+        "en": "Featured Page",
+        "ja": "特集ページ"
+      }
+    },
+    {
+      "type": "page",
+      "id": "page",
+      "label": {
+        "en": "Page",
+        "ja": "ページ"
+      }
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": {
+        "en": "Image",
+        "ja": "画像"
+      }
+    },
+    {
+      "type": "html",
+      "id": "headline",
+      "label": {
+        "en": "Heading",
+        "ja": "見出し"
+      }
+    },  
+    {
+      "type": "html",
+      "id": "headline_en",
+      "label": {
+        "en": "Heading (en)",
+        "ja": "見出し（en)"
+      }
+    },       
+    {
+      "type": "checkbox",
+      "id": "hide",
+      "label": {
+        "en": "Hide this section",
+        "ja": "このセクションを非表示にする"
+      },
+      "default": false
+    }          
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Featured Page",
+        "ja": "特集ページ"
+      },
+      "category": {
+        "en": "Page",
+        "ja": "ページ"
+      }
+    }
+  ]  
+}
+{% endschema %}

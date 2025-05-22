@@ -1,0 +1,10 @@
+<div class="{{ class }}">
+  <a href="{{ article.url }}">
+    <div class="card__tn">
+      <picture>
+        <img src="{{ article.image.src | img_url: '1000x' }}">
+      </picture>
+    </div>
+    <p class="card__title">{{ article.title }}</p>
+  </a>
+</div> 

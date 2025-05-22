@@ -1,0 +1,119 @@
+		{%- if section.settings.hide != true -%}
+    	{% comment %} <section class="section has-border {% if section.settings.title == blank %}section--no-title{% endif %}">
+        <div class="container">
+          {%- if section.settings.title != blank -%}
+          <h2 class="section__title">
+            {%- if section.settings.title_link != blank -%}
+            <a href="/collections/{{section.settings.title_link}}">
+            {%- endif -%}
+              {{ section.settings.title | escape }}
+            {%- if section.settings.title_link != blank -%}
+            </a>
+            {%- endif -%}
+          </h2>
+          {%- endif -%}
+          {%- assign block_size = section.blocks.size -%}
+          <div class="row row--center">
+            {% for block in section.blocks limit: section.blocks.size %}
+            {%- assign collection = collections[block.settings.collection] -%}
+            {% include 'collection-item', section: section, size: block_size %}  
+            {% endfor %}     
+          </div>
+        </div>
+      </section>  {% endcomment %}
+
+      <section class="collection-list">
+        <div class="container container--full">
+          {%- assign block_size = section.blocks.size -%}
+          <div class="row cards collections {% if block_size == 3 %} row--odd-cols{% endif %}">
+            {% assign col_num = 12 | divided_by: block_size %}
+            {% for block in section.blocks limit: section.blocks.size %} 
+            {% if col_num == 6 %}
+              {% assign classes = 'col col-' | append: col_num | append: ' col-md-12 card collection' %} 
+            {% else %}
+              {% assign classes = 'col col-' | append: col_num | append: ' col-md-6 card collection' %} 
+            {% endif %}
+            
+            {% if forloop.first == true and block_size == 3 %}
+              {% assign classes = 'col col-' | append: col_num | append: ' col-md-12 card collection' %} 
+            {% endif %}
+            {% include 'collection-item', section: section, size: block_size, block: block, classes: classes %}  
+            {% endfor %}     
+          </div>                         
+        </div>
+      </section> 
+
+    {%- endif -%}
+
+
+{% schema %}
+{
+  "name": {
+    "en": "Collection list",
+    "ja": "コレクションリスト"
+  },
+  "class": "collection-list-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide",
+      "label": {
+        "en": "Hide this section",
+        "ja": "このセクションを非表示にする"
+      },
+      "default": false
+    }      
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": {
+        "en": "Collection",
+        "ja": "コレクション"
+      },
+      "settings": [
+        {
+          "label": {
+            "en": "Collection",
+            "ja": "コレクション"
+          },
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+            "en": "Image",
+            "ja": "画像"
+          }
+        }          
+      ]
+    }   
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Collection list",
+        "ja": "コレクションリスト"
+      },
+      "category": {
+        "en": "Collection",
+        "ja": "コレクション"
+      },
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

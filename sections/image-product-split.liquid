@@ -1,0 +1,158 @@
+    {%- if section.settings.hide != true -%}	
+    <section class="image-collection-split bgc--light-gray">
+      <div class="container container--full">
+        <div class="row cards">
+          {% if section.settings.image_alignment == 'left' %}
+          <div class="col col-6 col-md-12 col--image">
+            <div class="section__image">
+                <picture>
+                  <img src="{{ section.settings.image | img_url: '2400x2400'}}" alt="">
+                </picture>
+            </div>
+          </div>
+          {% endif %}
+            <!-- /.product -->                
+          <div class="col col-6 col-md-12 col--contents">
+            <div class="collection-split full-height">
+              
+              {%- if section.settings.headline != blank or section.settings.headline_en != blank -%}
+                {% if request.locale.iso_code == 'en' %}
+                <p class="section-headline">{{ section.settings.headline_en }}</p>          
+                {% else %}
+                <p class="section-headline">{{ section.settings.headline }}</p>
+                {% endif %}
+              {% endif %}
+
+            {% include 'spurit_po2_section_snippet', product: null, products: collections[section.settings.collection].products %}
+    
+              {%- assign collection = collections[section.settings.collection] -%}
+              <section class="collection-section full-height">
+                <div class="container container--full full-height">
+                  <div class="row cards products full-height">
+                    {% liquid
+                      assign grid = section.settings.grid | plus: 0
+                      assign lg_index = grid | minus: 0
+                    %}
+                    {% for product in collection.products limit: grid %}
+                      {%- assign class = 'col col-3 col-md-6 card product' -%}
+                      {%- if forloop.index0 < lg_index -%}
+                        {%- assign class = 'col col-6 col-md-6 card product' -%}
+                      {%- endif -%}
+                      {% include 'product-card', class: class, product: product, col_num: col_num %}
+                    {% endfor %}    
+                  </div>
+                </div>
+              </section>
+
+              
+            </div>
+          </div>
+          {% if section.settings.image_alignment == 'right' %}
+             <div class="col col-6 col-md-12 col--image">
+                <div class="section__image">
+                    <picture>
+                      <img src="{{ section.settings.image | img_url: '2400x2400'}}" alt="">
+                    </picture>
+                </div>
+              </div>
+          {% endif %}
+          <!-- /.product -->                                           
+        </div>
+      </div>
+    </section> 
+    {%- endif -%}
+
+{% schema %}
+{
+  "name": {
+    "en": "Image Collection Split",
+    "ja": "特集ページ"
+  },
+  "class": "image-collection-split",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Title",
+        "ja": "タイトル"
+      },
+      "default": {
+        "en": "Image Collection Split",
+        "ja": "特集ページ"
+      }
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": {
+        "en": "Image",
+        "ja": "画像"
+      }
+    },
+     {
+      "type": "select",
+      "id": "image_alignment",
+      "label": {
+        "en": "Image Position"
+      },
+      "default": "left",
+      "options": [
+        {
+          "label": {
+            "en": "left",
+            "ja": "左"
+          },
+          "value": "left"
+        },
+        {
+          "label": {
+            "en": "Right"
+          },
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": {
+        "en": "Collection",
+        "ja": "コレクション"
+      }
+    },
+    {
+      "type": "radio",
+      "id": "grid",
+      "label": {
+        "en": "Products to Display",
+        "ja": "表示する商品数"
+      },
+      "options": [
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide",
+      "label": {
+        "en": "Hide this section",
+        "ja": "このセクションを非表示にする"
+      },
+      "default": false
+    }          
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Image Collection Split"
+      },
+      "category": {
+        "en": "Collection",
+        "ja": "コレクション"
+      }
+    }
+  ]  
+}
+{% endschema %}

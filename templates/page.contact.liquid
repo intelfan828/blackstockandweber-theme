@@ -1,0 +1,93 @@
+
+
+              <div class="tmpl--page">
+                <section class="contents-section">
+                  <div class="container container--fluid">
+                
+                    <div class="row">
+                      <div class="col col-3 col-md-12 sidebar">
+                        <div class="sticky-contents">
+                          {% include 'support_nav', active: 'Contact' %}
+                        </div>
+                      </div>
+                      <div class="col col-9 col-md-12 content">
+              
+                        <h2 class="block__title block__title--bdr md-hidden">Contact</h2>
+
+                        <p class="headline">Please use the form below to get in touch with our customer service team.  For press enquiries, please email <a href="mailto:press@blackstockandweber.com" target="_blank">press@blackstockandweber.com</a>.</p>
+                        
+                        <div class="form-wrapper">
+            
+                          {%- assign formId = 'ContactForm' -%}
+
+                          {% form 'contact', id: formId %}
+                  
+
+                          {% include 'form-status', form: form, form_id: formId %}
+                
+                          {% unless form.posted_successfully? %}
+                
+                            <div class="field-row">
+                              <label for="">Select Reason*</label>
+                              <div class="select-wrapper">
+                                <select name="contact[title]" required>                                  
+                                  <option value="My Account">My Account</option>
+                                  <option value="Orders">Orders</option>
+                                  <option value="Returns and Exchanges">Returns and Exchanges</option>
+                                  <option value="Shipping">Shipping</option>
+                                  <option value="Press">Press</option>
+                                  </option>
+                                </select>
+                              </div>
+                              <p class="error" data-error="contact[title]"></p>
+                            </div>
+
+                            <div class="field-row">
+                              <label for="">Name*</label>
+                              <input type="text" id="ContactFormName" name="contact[name]" required>
+                              <p class="error" data-error="contact[name]"></p>
+                            </div>                
+                            
+                            <div class="field-row">
+                              <label for="">Email*</label>
+                              <input type="email" id="ContactFormEmail" name="contact[email]" required>
+                              <p class="error" data-error="contact[email]"></p>
+                            </div> 
+                            
+                            <div class="field-row">
+                              <label for="">Phone Number</label>
+                              <input type="text" id="ContactFormPhoneNumber" name="contact[phone_number]">
+                              <p class="error" data-error="contact[phone_number]"></p>
+                            </div> 
+                            
+                            
+                            <div class="field-row">
+                              <label for="">Order Number</label>
+                              <input type="text" id="ContactFormOrderNumber" name="contact[order_number]">
+                              <p class="error" data-error="contact[order_number]"></p>
+                            </div> 
+                            
+                            <div class="field-row">
+                              <label for="">Message*</label>
+                              <textarea rows="10" maxlength="3000" id="ContactFormMessage" name="contact[body]" required></textarea>
+                              <p class="error" data-error="contact[body]"></p>
+                            </div>        
+                            
+                            <p class="note">* Required Field</p>
+ 
+                            <div class="actions">
+                              <button id="contactFormSubmit" class="button button--primary button--primary--dark-sand" type="submit">SUBMIT</button>
+                            </div>
+                
+                          {% endunless %} 
+                        {% endform %}                          
+
+                        </div>                        
+              
+                
+                      </div>
+                    </div>
+                
+                  </div>
+                </section>               
+              </div>              

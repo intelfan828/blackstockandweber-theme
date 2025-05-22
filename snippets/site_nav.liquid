@@ -1,0 +1,112 @@
+
+<style>
+  li.collection__local-nav__grand-child-menu-item.collection__local-nav__grand-child-menu-item--active a::before {
+   content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%224%22%20height%3D%224%22%3E%3Ccircle%20cx%3D%222%22%20cy%3D%222%22%20r%3D%222%22%20fill%3D%22%23694a26%22/%3E%3C/svg%3E');
+  background-size: contain;
+  margin-right: 8px;
+  }
+  .tmpl--collection .page-header .collection__local-nav .collection__local-nav__child-menu-item--child-active li a {
+    display:flex;
+    align-items:center;
+  }
+
+   .collection__local-nav__grand-child-menu {
+    flex-wrap: wrap;
+  }
+</style>
+
+
+       <nav class="{{ nav_class }}">
+          <ul class="{{ nav_class }}__menu">
+            {% for link in linklists[settings.main_linklist].links %}
+            <li class="{{ nav_class }}__menu-item {% if link.active %}{{ nav_class }}__menu-item--active{% endif %}">
+              <a href="{{link.url}}">
+                {% if link.title == 'GENERAL STORE' %}
+                <img src="{{ 'general_store.svg' | asset_url }}" alt="GENERAL STORE">
+                {% else %}
+                {{ link.title | escape }}
+                {% endif %}
+              </a>
+              {% if link.links.size > 0 %}
+                <span class="nav-children-icon"></span>
+              {% endif %}
+              {% if link.links != blank %}
+              <div class="{{ nav_class }}__child-menus">
+                <ul class="{{ nav_class }}__child-menu {{ nav_class }}__child-menu--small">
+                  {% for child_link in link.links %}
+                  <li class="{{ nav_class }}__child-menu-item {% if child_link.active %}{{ nav_class }}__child-menu-item--active{% endif %}">
+                    <a href="{% if child_link.url == "/collections/shop-all" %}{{ child_link.url }}?view=all
+                      {% elsif child_link.url == "/collections/loafers" %}{{ child_link.url }}?view=all
+                      {% elsif child_link.url == "/collections/academy" %}{{ child_link.url }}?view=all
+                      {% else %}{{ child_link.url }}{% endif %}">
+                      {% if child_link.title == 'GENERAL STORE' %}
+                      <img src="{{ 'general_store.svg' | asset_url }}" alt="GENERAL STORE">                     
+                        {% elsif child_link.title == 'ACADEMY' %}
+                        <img src="{{ 'Academy_by_BW.svg' | asset_url }}" alt="ACADEMY BY blackstock and weber">
+                        {% elsif child_link.title == 'BLACKSTOCK & WEBER' %}
+                        <img src="{{ 'Blackstock.svg' | asset_url }}" alt="BLACKSTOCK & WEBER" height="10">
+                        {% elsif child_link.title == '242 MULBERRY' %}
+                        <img src="{{ '242-Mulberry.svg' | asset_url }}" alt="242 MULBERRY" height="10">
+                         {% elsif child_link.title == 'Sperry By Chris Echevarria' %}
+                        <img src="{{ 'SperrybyCE-brown.svg' | asset_url }}" alt="Sperry By Chris Echevarria" height="40px">
+                      {% else %}
+                      {{ child_link.title | escape }}
+                      {% endif %}
+                    </a>
+                    {% if child_link.links != blank %}
+                    <ul class="{{ nav_class }}__grand-child-menu">
+                      {% for grand_child_link in child_link.links %}
+                      <li class="{{ nav_class }}__grand-child-menu-item {% if grand_child_link.active %}{{ nav_class }}__grand-child-menu-item--active{% endif %}">
+                        <a href="{% if grand_child_link.url == "/collections/loafers" %}{{ grand_child_link.url }}?view=all
+                          {% elsif grand_child_link.url == "/collections/apparel" %}{{ child_link.url }}?view=all
+                          {% else %}{{ grand_child_link.url }}{% endif %}">
+                          {{ grand_child_link.title | escape }}
+                        </a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+                {%- if forloop.index0 == 0 and linklists[settings.mega_menu_linklist].links.size > 0 -%}
+                <ul class="{{ nav_class }}__child-menu--mega row">
+                  {%- assign mega_menu_links = linklists[settings.mega_menu_linklist].links -%}
+                  {%- assign number_of_columns = 12 | divided_by: mega_menu_links.size -%}
+                  {% for mega_menu_link in mega_menu_links %}
+                 
+                  {%- if mega_menu_link.object.images.size > 0 -%}
+                    {% assign tn = mega_menu_link.object.images[0] | img_url: '750x750' %}
+                  {%- else -%}
+                    {% assign tn = mega_menu_link.object.image | img_url: '750x750' %}
+                  {% endif %}
+
+                  <li class="{{ nav_class }}__child-menu-item col-{{ number_of_columns }}">
+                    <a href="{{ mega_menu_link.url }}">
+                      <div class="{{ nav_class }}__child-menu-item__tn">
+                        {%- if tn != blank -%}
+                        <picture><img src="{{tn}}" alt=""></picture>
+                        {% endif %}
+                      </div>
+                      <p class="{{ nav_class }}__child-menu-item__title">{{mega_menu_link.title | escape}}</p>
+                      {% for collection in mega_menu_link.object.collections %}
+                        {% if collection.handle == 'new-drop' %}
+                        <p class="{{ nav_class }}__child-menu-item__category">NEW DROP</p>
+                        {% break %}
+                        {% endif %}
+                      {% endfor %}
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>        
+        </nav>        

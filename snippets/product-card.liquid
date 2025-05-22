@@ -1,0 +1,454 @@
+
+{%- liquid
+
+  assign is_sale = false
+  assign coming_soon = false
+
+  for variant in product.variants
+    assign compare_at_price = variant.compare_at_price
+    assign price = variant.price
+    assign available = variant.available
+    if available and compare_at_price > price
+      assign is_sale = true
+      break
+    endif
+  endfor
+
+  assign is_available = false
+
+  for variant in product.variants
+    if variant.available
+      assign is_available = true
+      break
+    endif
+  endfor                 
+
+  assign is_price_vary = false
+  unless product.has_only_default_variant        
+    assign temp_price = product.variants.first.price
+    for variant in product.variants  
+      if temp_price != variant.price
+        assign is_price_vary = true
+        break
+      endif    
+    endfor
+
+    assign lowest_price = temp_price
+    for variant in product.variants  
+      if temp_price > variant.price
+        assign lowest_price = variant.price
+      endif    
+    endfor
+
+  endunless
+
+  assign product_color = ''
+  assign product_colors = ''
+  assign product_color_count = 0
+  assign contains_color_name = false
+  assign sold_out = false
+
+  for tag in product.tags
+    assign tag_name = tag | downcase
+
+    if tag contains 'variant_material_color:' or tag contains 'this_material_color:'
+      assign variant_material_color_name = tag | replace : "variant_material_color:", "" | replace : "this_material_color:", ""
+      assign variant_material_color_name = variant_material_color_name | lstrip | strip_newlines | strip
+      assign product_colors = product_colors | append: variant_material_color_name | append: ','
+      assign product_color_count = product_color_count | plus: 1
+    endif   
+
+    if tag_name contains 'tag_coming soon'
+      assign coming_soon = true
+    endif 
+
+    if tag_name contains 'tag_sold out'
+      assign sold_out = true
+    endif 
+    
+    if tag_name contains 'this_material_color:'
+      assign tag_name = tag_name | replace : "this_material_color:", "" | lstrip | strip_newlines | strip
+      assign product_color = tag_name
+      assign contains_color_name = true
+    endif   
+    
+  endfor   
+
+
+  if product_colors != blank
+    assign size = product_colors | size | minus: 1
+    assign product_colors = product_colors | slice: 0, size
+    assign product_colors = product_colors | split: ','
+  endif
+
+  assign title_str_ary = product.title | split: ','
+
+  assign last_index = title_str_ary | size | minus: 1
+  assign last_str = title_str_ary[last_index] | downcase | lstrip | strip_newlines | strip
+
+  assign col_size = 4
+  if col_num != blank
+    assign col_size = col_num
+  endif
+
+-%}
+
+            <div class="{{class}} {% unless product.avainulable %} product--sold-out{% endunless %} {% if product.has_only_default_variant %} product--single{% endif %}">
+              
+              {%- assign available_variant = null -%}
+              {%- for variant in product.variants -%}
+                {%- if variant.available -%}
+                  {%- assign available_variant = variant -%}
+                  {%- break -%} <!-- Stop the loop as soon as we find the first available variant -->
+                {%- endif -%}
+              {%- endfor -%}
+              
+              {%- if available_variant -%}
+                 <form action="/cart/add" method="post" enctype="multipart/form-data" class="add-to-cart__form" @submit.prevent="addToCart" data-url="{{ product.url }}?variant={{ available_variant.id }}" data-handle="{{ product.handle }}">
+              {%- else -%}
+                <form action="/cart/add" method="post" enctype="multipart/form-data" class="add-to-cart__form" @submit.prevent="addToCart" data-url="{{ product.url }}?variant={{ product.variants.first.id }}" data-handle="{{ product.handle }}">
+              {% endif %}
+                <div class="product__tn">
+
+                  
+                      <a class="product__link" href="{{ product.url | within: collection }}" :href="current_color_url">
+                   
+                        
+                      {% if product.images.size > 0 %} 
+
+                        {%- assign image_count = 0 -%}
+                        {% for image in product.images %}
+                          {%- assign image_alt = image.alt | downcase -%}
+                          
+                          {%- if image_count < 2 -%}
+                          {% capture wrapper_id %}product__image-{{ section.id }}-{{ product.id }}{% endcapture %}
+
+                          {%- assign image_color_name = '' -%}
+                          {%- if image_alt contains 'color:'-%}
+                            {%- assign image_color_name = image_alt | replace: "color:", ""  | split: "/" -%}
+                            {%- assign image_color_name = image_color_name[0] -%}
+                          {%- endif -%}
+
+                          {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                          {%- assign temp_img_url = image | img_url: '1x1' -%}
+                          <picture id="{{ wrapper_id }}" class="product__image{% if image_count == 0 %} product__image--main{% else %} product__image--sub {% endif %} {% if product.images.size == 1 %} no-sub-image{% endif %}" :class="{'product__image--selected': current_color_handle === '{{ product.handle }}'}" data-handle="{{ product.handle }}" style="background-image: url({{ image | img_url: '750x750' }})" data-color="{{image_color_name}}">
+                            <img id="{{ img_id }}"                            
+                                alt="{{ image.alt | escape }}"
+                                data-src="{{ img_url }}"
+                                data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                                data-aspectratio="{{ preview_image.aspect_ratio }}"
+                                data-sizes="auto"                  
+                                data-image
+                                src="{{ image | img_url: '750x750' }}"
+                              >          
+                          </picture>
+                          {%- endif -%}
+                          
+                          {% assign image_count = image_count | plus: 1 %}
+                        {% endfor %}             
+                      {% endif %}
+
+                      <template v-if="product_colors && product_colors.length">    
+                        <template v-for="color in product_colors">
+                          <template v-if="color.handle != '{{ product.handle }}'" v-for="(image, index) in color.images.slice(0,2)">
+                          <picture class="product__image" :class="{ 'product__image--main': index === 0, 'product__image--sub': index != 0, 'product__image--sub': index != 0, 'product__image--selected': current_color_handle === color.handle }" :style="{ backgroundImage: 'url(' + image + ')' }" :data-handle="color.handle">
+                            <img :src="image">
+                          </picture>
+                          </template>
+                        </template>
+                      </template>
+
+                        </a>
+                           
+                    <ul class="product__tags" :class="{'product__tags--selected': current_color_handle === '{{product.handle}}'}" data-handle="{{product.handle}}">
+                      {% unless is_available %}
+                        <li class="uppercase">{{ 'products.product.sold_out' | t }}</li>
+                      {% endunless %} 
+                      {% if is_sale == true %}
+                      <li class="product--sale uppercase"><span>SALE</span></li>
+                      {% endif %}     
+                      <template v-for="tag in product_tags">
+                      <li><span v-text="tag"></span></li>
+                      </template>     
+                    </ul>   
+                    
+                    <template v-if="product_colors && product_colors.length">    
+                      <template v-if="color.handle != '{{ product.handle }}'" v-for="color in product_colors">
+                        <ul class="product__tags" :class="{'product__tags--selected': current_color_handle === color.handle}" :data-handle="color.handle">
+                          <li v-if="color.is_available == false">{{ 'products.product.sold_out' | t }}</li>
+                          <li v-if="color.is_sale == true">SALE</li>
+                        <template v-for="(tag) in color.product_tags">                                      
+                          <li v-text="tag"></li>                              
+                        </template>
+                        </ul>
+                      </template>
+                    </template>                        
+
+                </div>
+                <div class="product__info">
+
+                    <div class="product__option">
+                      {% unless product.has_only_default_variant %}
+                        
+                          {% for option in product.options_with_values %}
+                            <div class="product__select-wrapper product__option-wrapper">
+                              <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                                {{ option.name }}
+                              </label>
+
+                              {%- assign option_name = 'other' -%}
+
+                              {%- if option.name == 'カラー' or option.name == '色' or option_name == 'Color' -%}
+                              {%- assign option_name = 'color' -%}
+                              {%- endif -%}
+
+                              <select class="product__select product__select--{{option_name}}"
+                                data-index="option{{ forloop.index }}"
+                                v-model="option[{{forloop.index0}}]"
+                                @change="updateVariant"
+                              >
+                                {% for value in option.values %}
+                                  <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          {% endfor %}                  
+                      {% endunless %}
+
+                      <div class="product__option-wrapper">
+                        <select name="id" class="product__select-variants" v-model="id">
+                          {% for variant in product.variants %}
+                            <option value="{{ variant.id }}"
+                              {%- if variant == current_variant %} selected="selected" {%- endif -%}
+                            >
+                              {{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                            </option>
+                          {% endfor %}
+                        </select>
+                      </div>
+
+                      <input type="number"
+                        name="quantity" value="1" min="1" pattern="[0-9]*"
+                        class="product__form__input product__form__input--quantity"
+                        data-quantity-input
+                        v-model="quantity"
+                      >
+
+                      <input type="hidden" name="form_type" value="product">
+                      <input type="hidden" name="utf8" value="✓">
+                    </div>
+
+                  {%- assign brand_name = '' -%}
+                  {% for tag in product.tags %}
+                    {%- assign tag_name = tag | downcase -%}
+                    {% if tag_name contains 'brand:' %}
+                      {%- assign tag_name = tag_name | replace : "brand:", "" -%}
+                      <p class="product__brand">{{tag_name}}</p>
+                    {% endif %}                     
+                  {% endfor %}   
+                  
+                  <p class="product__title">
+                    <a href="{{ product.url | within: collection }}">
+
+                      {%- if contains_color_name == true -%}
+
+                        {{ title_str_ary[0] }}<span class="product__title__color-name" v-if="current_color_name" v-text="current_color_name">, {{title_str_ary[1]}}</span>{% if title_str_ary[2] != blank %}, {{title_str_ary[2]}}{% endif %}
+                      {%- else -%}
+                        {{ product.title }}
+                      {%- endif -%}
+
+
+                    </a>
+                  </p>
+
+                  <p data-handle="{{product.handle}}" class="product__price" v-bind:class="{ 'product__price--sale': is_sale, 'product__price--selected': current_color_handle === '{{product.handle}}'}" v-if="regular_price">
+                    <span class="price--regular money" v-text="regular_price"></span><br v-if="sale_price">
+                    <span class="price--sale money" v-if="sale_price" v-text="sale_price" style="color: #BB5D4C; font-weight: bold;"></span>
+                  </p>
+                  
+
+                  <template v-if="product_colors && product_colors.length">    
+                    <template v-if="color.handle != '{{ product.handle }}'" v-for="color in product_colors">
+                      <p :data-handle="color.handle" class="product__price" :class="{ 'product__price--sale': color.is_sale, 'product__price--selected': current_color_handle === color.handle}">
+                      <span class="price--regular money" v-text="color.regular_price"></span><br v-if="sale_price">
+                      <span class="price--sale money" v-if="color.sale_price" v-text="color.sale_price" style="color: #BB5D4C; font-weight: bold;"></span>
+                      </p>
+                    </template>
+                  </template>                   
+
+                {%- assign in_coming_soon = false -%}
+                {%- for collection in product.collections -%}
+                
+                  {%- if collection.handle == 'coming-soon' -%}
+                  {%- assign in_coming_soon = true -%}
+                  {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                
+                {% comment %}
+                {%- if in_coming_soon == true -%}                
+                <ul class="product__tags" :class="{'product__tags--selected': current_color_handle === '{{product.handle}}'}" data-handle="{{product.handle}}">
+                  <li>COMING SOON</li>
+                </ul>
+                {%- else -%}
+                <ul class="product__tags" :class="{'product__tags--selected': current_color_handle === '{{product.handle}}'}" data-handle="{{product.handle}}">
+                  {%- if in_coming_soon == true -%}
+                    <li>COMING SOON</li>
+                  {%- endif -%}
+                  {%- for tag in product.tags-%} 
+                    {%- assign tag_in_downcase = tag | downcase -%}
+                    {%- if tag_in_downcase contains 'tag_' -%}
+                      <li>{{ tag_in_downcase | replace : "tag_", "" | replace : "_", " " }}</li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+                {%- endif -%}
+                
+
+
+                  <template v-if="product_colors && product_colors.length">    
+                    <template v-if="color.handle != '{{ product.handle }}'" v-for="color in product_colors">
+                      <ul class="product__tags" :class="{'product__tags--selected': current_color_handle === color.handle}" :data-handle="color.handle">
+                        <li v-if="color.is_coming_soon == true">COMING SOON</li>
+                      <template v-for="(tag) in color.product_tags">                                      
+                        <li v-text="tag"></li>                              
+                      </template>
+                      </ul>
+                    </template>
+                  </template>   
+                  {% endcomment %} 
+
+                  {%- assign active_count = 0 -%}
+                  {% if product_color_count > 0 %}
+                  <div class="product__colors">
+                    {% if product_colors.size > 1 %}
+                      <p class="product__colors-txt">{{product_colors.size}} Colors Available</p>
+                    {% endif %}
+                    <div class="color-swatch">
+                      <div class="color-swatch__scroller">
+                        <div class="color-swatch__scroller-container">
+                          <div class="color-swatch__scroller-wrapper">
+                            <ul class="color-swatch__items product__color-swatch">
+                              {%- assign i = 0 -%}
+                              {%- assign product_colors = product_colors | sort -%}
+                              {%- for color in product_colors -%}
+                              {%- liquid
+                                assign color_name = color
+                                assign color_display_name = color_name
+                                assign handleized_color_name = color_name | handleize
+                                assign handleized_product_color = product_color | handleize
+                                assign product_title_ary = product.title | split: ','
+                          
+                            
+                                assign color_handle = product_title_ary[0] | handleize 
+                                
+
+                                if product_title_ary[1] != blank 
+                                assign product_title_2 = handleized_color_name | strip | handleize
+                                assign color_handle = color_handle | append: '-' | append: product_title_2
+                                endif
+
+                                if product_title_ary[2] != blank 
+                                assign product_title_3 = product_title_ary[2] | strip | handleize
+                                assign color_handle = color_handle | append: '-' | append: product_title_3
+                                endif
+
+             
+                                assign color_url = product.url | replace: product.handle, color_handle
+
+                                assign image_url = color_name | handleize
+                                assign color_tag = image_url | prepend: 'color_'
+                                assign image_url = 'color_swatch_' | append: image_url | append: '.png'
+                                assign lc_color_name = color_name | downcase
+                              -%}
+                                
+
+                               {% comment %} Check if all_products is available {% endcomment %}
+                                {% if color_handle and all_products %}
+                                
+                                  {% comment %} Access the specific product using color_handle {% endcomment %}
+                                  {% assign color_product = all_products[color_handle] %}
+                                  {% assign color_variant_id = '' %}
+                                
+                                  {% comment %} Loop through variants to find the first available one {% endcomment %}
+                                  {% for variant in color_product.variants %}
+                                    {% if variant.available %}
+                                      {% assign color_variant_id = variant.id %}
+                                      {% break %}
+                                    {% endif %}
+                                  {% endfor %}
+                                
+                                {% endif %}
+                                {% assign color_product = all_products[color_handle] %}
+
+                                
+                              <li class="color-swatch__item">
+                               
+                                <button type="button" 
+                                      class="color-swatch__select-button product__color-swatch__image {% if product_color == lc_color_name %}selected{% endif %}" 
+                                      data-color-name="{{ color_name }}" 
+                                      data-url="{{ color_url }}" 
+                                      data-handle="{{ color_handle }}" 
+                                      data-variant-id="{{ color_variant_id }}" 
+                                      @click="changeColor">
+                                
+                                      <span class="color-swatch__color-icon" style="background-image:url({{ image_url | file_url }})"></span>
+                                      <span class="color-swatch__color-name">{{ color_display_name }}</span>
+                                  </button>
+
+
+                                {% comment %} <span class="product__color-swatch__title">
+                                  {{ color_display_name }}
+                                </span> {% endcomment %}
+                              </li>
+                              {% assign i = i | plus: 1 %}
+                            {% endfor %}
+                            </ul>
+                            
+                          </div>
+                        </div> 
+                        <button type="button" class="color-swatch__scroller-button color-swatch__scroller-button--prev">{%include 'icon_next_01' %}</button>    
+                        <button type="button" class="color-swatch__scroller-button color-swatch__scroller-button--next">{%include 'icon_next_01' %}</button>               
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}  
+                </div>
+
+                {% unless product == empty %}
+                <script type="application/json" id="product__json-{{product.id}}" class="product__json">
+                  {{ product | json }}
+                </script>
+                {% endunless %}    
+              {%- if available_variant -%}
+              </form>
+              {% else %}
+              </form>
+               {% endif %} 
+                
+
+            </div><!-- /.product -->  
+
+     <script type="application/json" id="product__json-{{product.id}}" class="product__json">
+                  {{ product | json }}
+                </script>
+
+        <script>
+  // Select all color swatch buttons
+document.querySelectorAll('.color-swatch__select-button').forEach(button => {
+  button.addEventListener('click', () => {
+    // Wait a short time to ensure the minified function runs first
+    setTimeout(() => {
+      const productLink = document.querySelector('.product__link');
+      const variantId = button.getAttribute('data-variant-id');
+
+      // Modify the URL to include the variant ID
+      if (productLink && variantId) {
+        const url = new URL(productLink.href);
+        url.searchParams.set('variant', variantId);
+        productLink.href = url.toString();
+      }
+    }, 100); // Adjust delay if needed
+  });
+});
+        </script>

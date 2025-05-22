@@ -1,0 +1,42 @@
+<div class="tmpl--page">
+  <section class="contents-section">
+    <div class="container container--fluid">
+  
+      <div class="row">
+        <div class="col col-3 col-md-12 sidebar">
+          <div class="sticky-contents">
+            {% include 'support_nav', active: 'FAQs' %}
+          </div>
+        </div>
+        <div class="col col-9 col-md-12 content">
+
+          {% if page.metafields["custom_fields"]["faq_accordion"] != blank %}
+            {% assign data_attr = shop.metafields._cf_pages["faq_accordion"].data_attr %}
+
+            {% for section in page.metafields["custom_fields"]["faq_accordion"] %}
+              <h2 class="block__title">{{ section.title }}</h2>
+              <div class="faq-section">
+              {% for question in section.group_two %}
+                <dl class="accordion">
+                
+                  <dt class="accordion__title">
+                    <button type="button" class="accordion__toggle-content-button">{{ question.faq_title }}</button>
+                  </dt>
+                  
+                  <dd class="accordion__content">
+                    {{ question.faq_text }}
+                  </dd>   
+  
+                </dl>
+              {% endfor %}
+              </div>
+              
+            {% endfor %}
+          {% endif %}
+  
+        </div>
+      </div>
+  
+    </div>
+  </section>               
+</div>

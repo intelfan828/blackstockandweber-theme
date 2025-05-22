@@ -1,0 +1,541 @@
+{% render 'preorder-now-collection-item', product: product %}
+        
+
+
+      {%- liquid
+        assign current_variant = product.selected_or_first_available_variant
+        assign featured_image = current_variant.featured_image | default: product.featured_image
+        
+        assign product_colors = ''
+        assign product_color = ''
+        assign product_color_count = 0
+        assign is_pre_order = false
+        assign coming_soon = false
+        assign sold_out = false
+
+        for tag in product.tags
+          assign tag_name = tag | downcase
+
+          if tag_name == 'pre-order'
+            assign is_pre_order = true
+          endif
+
+          if tag_name == 'tag_sold out'
+          assign sold_out = true
+        endif
+
+          if tag_name == 'tag_coming soon'
+            assign coming_soon = true
+          endif
+
+          if tag_name contains 'variant_material_color:' or tag_name contains 'this_material_color:'
+            assign tag_name = tag | replace : "variant_material_color:", "" | replace : "this_material_color:", "" 
+            assign tag_name = tag_name | lstrip | strip_newlines | strip 
+            assign product_colors = product_colors | append: tag_name | append: ','
+            assign product_color_count = product_color_count | plus: 1
+          endif   
+          
+          assign tag_name = tag | downcase
+          
+          if tag_name contains 'this_material_color:'
+            assign tag_name = tag_name | replace : "this_material_color:", ""
+            assign str = tag_name | split: "/"
+            assign product_color = tag_name
+          endif  
+
+        endfor        
+
+
+        if product_colors != blank
+          assign size = product_colors | size | minus: 1
+          assign product_colors = product_colors | slice: 0, size
+          assign product_colors = product_colors | split: ','
+        endif
+
+      -%}
+      
+      <section class="section__content">
+        <div class="container container--full">
+          <div class="row product__row">
+            <div class="col col-8 col-md-12 product__images">
+              <div class="sticky-contents">
+
+                <div class="product__images-wrapper">
+                    {% for image in product.images %}              
+                    <div class="product__image product__image--others">
+                      <picture>
+                        <source srcset="{{ image.src | img_url: '1000x1000' }}" media="(max-width: 600px)">
+                        <img src="{{ image.src | img_url: '3000x3000' }}" alt="{{ image.alt | escape }}">
+                      </picture>                    
+                      <button type="button" class="open-modal-button"></button>
+                    </div>
+                  {% endfor %}
+                  {% unless product.has_only_default_variant %}              
+                    {% for variant in product.variants %}
+                      {% if variant.image %}
+                      <div class="product__image product__image--variant" data-id="{{ variant.id }}">                      
+                        <picture>
+                          <source srcset="{{ variant.image | img_url: '1000x1000' }}" media="(max-width: 600px)">
+                          <img src="{{ variant.image | img_url: '3000x3000' }}" alt="{{variant.image.alt}}">
+                        </picture>   
+                        <button type="button" class="open-modal-button"></button>
+                      </div>
+                      {% endif %}
+    
+                    {% endfor %} 
+                  {% endunless %}
+                </div>
+ 
+              </div>
+            </div>
+            <div class="col col-4 col-md-12 product__details">
+              <div class="custom-scroll">
+                <div class="custom-scroll__inner">
+
+                  <ul class="product__tags">
+                    <li class="product__tags__item product__tags__item--sale" v-bind:class="{ 'product__tags__item--visible': is_sale }" v-if="regular_price">
+                      SALE
+                    </li>
+                  {% for tag in product.tags %}
+                    {%- assign tag_name = tag | downcase -%}
+                    {% if tag_name contains 'tag_' %}
+                      {%- assign tag_name = tag_name | replace : "tag_", "" | replace : "_", " " -%}
+                      <li class="product__tags__item">{{tag_name}}</li>
+                    {% endif %}                     
+                  {% endfor %}   
+                  </ul>
+
+                  <p class="product__title">{{product.title}}</p>
+
+                 
+                  <form action="/cart/add" method="post" enctype="multipart/form-data" @submit.prevent="addToCart">
+
+                      <p class="product__price" v-bind:class="{ 'product__price--sale': is_sale }" v-if="regular_price">
+                        <span class="price--regular money" v-text="regular_price"></span>
+                        <span class="price--sale money" v-if="sale_price" v-text="sale_price"></span>
+                        {% comment %}
+                        <span class="price--tax-note">                         
+                          {%- if cart.taxes_included -%}
+                            ({{ 'products.product.include_taxes' | t }})
+                          {%- endif -%}
+                        </span>      
+                        {% endcomment %}  
+          
+                      </p>
+
+                      {%- assign is_sale = false -%}
+
+                      {% for variant in product.variants %}
+                        {%- assign compare_at_price = variant.compare_at_price -%}
+                        {%- assign price = variant.price -%}
+                        {%- assign available = variant.available -%}
+                        {% if available and compare_at_price > price %}
+                          {%- assign is_sale = true -%}
+                          {% break %}
+                        {% endif %}
+                      {% endfor %}   
+                      
+                      {%- if is_pre_order == true -%}
+                  
+                      {% assign pre_order_text = 'PRE-ORDER' %}
+                      {% if product.metafields.custom_fields["pre_order_text"] != blank %}
+                        {% assign pre_order_text = product.metafields.custom_fields["pre_order_text"] %}
+                      {% endif %}
+
+                      <input type="hidden" name="properties[preorder]" value="{{ pre_order_text }}">
+                      
+    
+                      {%- endif -%}                      
+
+                      <div ref="colors_json" class="product__colors-json"> 
+                        {%- capture json_str -%}    
+                        {%- for tag in product.tags -%}
+                          {%- if tag contains 'variant_material_color' -%}
+                            {%- assign str = tag | replace: "variant_material_color:", "" | downcase | split: "/" -%}
+                            "{{str[0] | strip}}": "{{str[1] | strip}}", 
+                          {%- endif -%}                     
+                        {%- endfor -%}
+                        {%- endcapture -%}
+                        
+                        {%- assign size = json_str | size | minus: 1 -%}
+                        {%- assign json_str = json_str | slice: 0, size -%}
+                        {%- assign json_str = json_str | prepend: "{" | append: "}" -%}
+
+                        {{json_str | lstrip | strip_newlines | strip | json}}
+                      </div>
+
+                      {% if product.has_only_default_variant %}
+                      <select name="id" id="productSelect" v-model="id">
+                        {% for variant in product.variants %}
+                          {% if variant.available %}
+                            <option value="{{ variant.id }}" selected>
+                              {{ variant.title }} - {{ variant.price | money_with_currency }}
+                            </option>
+                          {% else %}
+                            <option value="{{ variant.id }}" selected>
+                              {{ variant.title }} - sold out
+                            </option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                      {% else %}
+                      <select name="id" id="productSelect" v-model="id">
+                        <option value="">Please Select</option>
+                        {% for variant in product.variants %}
+                          {% if variant.available %}
+                            <option value="{{ variant.id }}">
+                              {{ variant.title }} - {{ variant.price | money_with_currency }}
+                            </option>
+                          {% else %}
+                            <option value="{{ variant.id }}">
+                              {{ variant.title }} - sold out
+                            </option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                      {% endif %}
+
+                      {% unless product.has_only_default_variant %}
+                        
+                          {% for option in product.options_with_values %}
+
+                            {%- assign option_name = 'other' -%}
+                            {% if option.name == 'カラー' or option.name == '色' or option_name == 'Color' %}
+                              {%- assign option_name = 'color' -%}
+                            {% endif %}
+
+                            <div class="product__select-wrapper product__option-wrapper">
+                              <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                                {{ option.name }}
+                              </label>
+                              <select class="product__select product__select--{{ option_name }}"
+                                id="product__select--{{ forloop.index0 }}"
+                                data-index="option{{ forloop.index }}"
+                                v-model="option[{{forloop.index0}}]"
+                                @change="updateVariant"
+                                ref="product_select_{{ option_name }}"
+                                data-option-name="{{ option.name | capitalize }}"
+                              >
+                                <option value="">Please Select Your {{ option.name }}</option>
+                                {% for value in option.values %}
+                                  {% comment %}
+                                  <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                                  {% endcomment %}
+                                  <option value="{{ value | escape }}">{{ value }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          {% endfor %}  
+                                          
+                      {% endunless %}                   
+                      
+                      <div class="product__variants">
+
+                      {% unless product.has_only_default_variant %}
+                        {% for option in product.options_with_values %}
+                          {%- assign optionIndex = forloop.index0 -%}
+                          {% if option.name == 'カラー' or option.name == '色' or option_name == 'Color' %}
+                          <dl class="product__variant product__option">
+                            <dt class="product__variant-title">{{option.name}}: <span class="product__options--selected-value" v-text="current_color_name"></span></dt>
+                            <dd class="product__variant-content">
+                              <div class="color-swatch">
+                              <ul class="color-swatch__items product__option-items product__color-option">
+                                {% for value in option.values %}
+                                
+                                {%- assign variant_color_name = value | downcase -%}
+                                {%- assign color_name = '' -%}
+                                {%- for tag in product.tags -%}
+                                  {%- if tag contains 'Color:' -%}
+                                    {%- assign str = tag | replace: "Color:", "" | downcase -%}                                                    
+                                    {%- assign color_name = str | lstrip | strip_newlines | strip -%}
+
+                                    {%- if variant_color_name == color_name -%}
+                                      {%- assign color_name = lstrip | strip_newlines | strip -%}
+                                      {% break %}
+                                    {%- endif -%} 
+                                  {%- endif -%}
+                                {%- endfor -%}                    
+
+                                {%- assign image_url = color_name | downcase | replace: ' ', '_' | handleize -%}
+                                {%- assign color_tag = image_url | prepend: 'color_' -%}
+
+                                {%- assign image_url = 'color_swatch_' | append: image_url | append: '.png' -%}
+
+                                <li class="color-swatch__item">                
+                                  <button type="button" class="color-swatch__select-button product__color-swatch__image {% if current_tags contains color_tag and active_count == 0 %}active {% assign active_count = active_count | plus: 1 %}{% endif %} {% if forloop.first == true %} selected{% endif %}" data-color-name="{{value}}" style="background-image:url({{ image_url | file_url }})" @click="changeVariant($event, {{optionIndex}},'{{value}}');"><span class="color-swatch__color-icon"></span><span class="color-swatch__color-name">{{color_name}}</span></button></button>
+                                </li>
+                                {% endfor %}
+                              </ul>
+                            </dd>
+                          </dl>
+                          {% else %}
+                          <dl class="product__variant product__variant--other product__option">
+                            <dt class="product__variant-title">Select {{option.name}}:</dt>
+                            <dd class="product__variant-content">
+                              <div class="size-select">
+                                <ul class="size-select__items product__option-items product__other-option">
+                                  {% for value in option.values %}
+                                  <li class="size-select__item">                
+                                    <button type="button" class="size-select__select-button product__dummy-select {% if current_tags contains color_tag and active_count == 0 and sold_out != true %}active {% assign active_count = active_count | plus: 1 %}{% endif %} {% if sold_out == true%}disabled{% endif %}" @click="changeVariant($event, {{optionIndex}}, '{{value}}')">{{value}}</button>
+                                  </li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                            </dd>
+                          </dl>                        
+                          {% endif %}
+                        {% endfor %}  
+
+                      {% endunless %}   
+                      
+                      {%- if product_colors.size > 0 -%}
+                      <dl class="product__variant product__variant--color product__option">
+                        <dt class="product__variant-title">Select Color: <span class="product__options--selected-value">
+                          {{product_color}}
+                        </span></dt>
+                        <dd class="product__variant-content">
+                          <div class="color-swatch">     
+                            <ul class="color-swatch__items product__color-option">
+                            {% assign product_colors = product_colors | sort %}
+                            {%- for color in product_colors -%}
+                            {%- liquid
+                              
+                              assign color_name = ''
+                              assign str = color | split: "/"
+                              
+                              assign color_name = color
+                              assign color_display_name = color_name
+                              
+                              assign product_title_ary = product.title | split: ','
+                             
+                              
+                              if product_title_ary.size > 2
+                                assign handleized_material_name = product_title_ary[2] | handleize
+                                assign color_url_to_replace = color_name | handleize | append: '-' | append: handleized_material_name
+                                assign str_to_replace = product_color | handleize | append: "-" | append: handleized_material_name | append: '$'
+                              else
+                                assign color_url_to_replace = color_name | handleize
+                                assign str_to_replace = product_color | handleize | append: '$'
+                              endif
+                              
+                              assign tmp_color_url = product.url | append: '$'
+  
+                              if tmp_color_url contains str_to_replace
+                                assign color_url = tmp_color_url | replace: str_to_replace, color_url_to_replace
+                              else
+                                assign color_url = product.url
+                              endif
+  
+                              assign image_url = color_name | handleize 
+                              assign color_tag = image_url | prepend: 'color_'
+
+                              assign image_url = 'color_swatch_' | append: image_url | append: '.png'                    
+
+                              assign color_name_lc = color_name | downcase
+                            
+                            -%}
+
+                              <li class="color-swatch__item">   
+
+                                <a href="{{color_url}}" class="color-swatch__select-button product__color-swatch__image {% if product_color == color_name_lc %}selected {% assign active_count = active_count | plus: 1 %}{% endif %} " data-color-name="{{color_name}}">     
+                                <span class="color-swatch__color-icon" style="background-image:url({{ image_url | file_url }})"></span><span class="color-swatch__color-name product__color-swatch__title">{{ color_display_name }}</span>              
+                                </a>  
+                              </li>
+                            {% endfor %}  
+                            </ul>
+                          </div>    
+                        </dd>
+                      </dl>
+                      {%- endif -%}                      
+
+                    </div>
+
+                    <div class="product__cta add-to-cart-container mt3 hide-pay-buttons  cta-content--pay-buttons" data-add-to-cart-container="">
+                      <input type="number" id="Quantity" name="quantity" value="1" min="1" v-model="quantity">
+                      <input type="hidden" name="form_type" value="product">
+                      <input type="hidden" name="handle" value="{{product.handle}}">
+                      <input type="hidden" name="utf8" value="✓">
+
+                      {%- if coming_soon == true -%}
+                        <button 
+                          type="button"
+                          class="add-to-cart__button button button--primary button--primary--dark-sand button--add-to-cart"
+                          disabled
+                        ><span class="label">COMING SOON</span></button>
+                        {%- elsif sold_out == true -%}
+                        <button 
+                          type="button"
+                          class="add-to-cart__button button button--primary button--primary--dark-sand button--add-to-cart"
+                          disabled
+                        ><span class="label">SOLD OUT</span></button>
+                      {%- else -%}
+                        <button 
+                          type="submit"
+                          name="add"
+                          class="add-to-cart__button button button--primary button--primary--dark-sand button--add-to-cart"
+                          :class="{ 'button--loading': loading }"
+                          @click.prevent="addToCart"
+                          v-bind:disabled="is_disabled"
+                        ><span class="label" v-text="add_to_cart_button_text" data-label="{{ 'products.product.add_to_cart' | t }}" data-label-sold-out="
+                        {%- if coming_soon == true -%}
+                        Coming Soon
+                        {%- else -%}
+                        {{ 'products.product.sold_out' | t }}
+                        {%- endif -%}
+                        "></span></button>
+                      {%- endif -%}
+                      
+                            
+                    </div>
+                    <p v-if="result" v-text="result" class="product__actions__result"></p>
+                    <div class="shopify-payment-terms">
+                    
+                    {{ form | payment_terms }}
+                  </div>
+                  {% unless product == empty %}
+                      <script type="application/json" id="product__json-{{product.id}}" class="product__json">
+                        {{ product | json }}
+                      </script>
+                    {% endunless %} 
+                    
+                  </form>
+                    
+              
+                  <div class="product__description">
+                    {{ product.description }}
+                  </div>
+
+                  {% if product.metafields.custom_fields["product_details"] != blank or product.metafields.custom_fields["hide_size_and_fit"] != 1 %}
+                  <dl class="accordion">
+                    {% assign size_description = false %}
+                    {% if product.metafields.custom_fields["product_details"] != blank %}
+                      {% for item in product.metafields.custom_fields["product_details"] %}
+                                              
+                        {% liquid
+                          assign accordion_title = item.title | downcase 
+                          assign accordion_body = item.body
+                          if accordion_title contains 'size'
+                          assign size_description = true
+                          endif
+                        %}
+                        
+                        {% if accordion_body != blank %}
+                          <dt class="accordion__title"><button class="accordion__toggle-content-button">{{ item.title }}</button></dt>
+                          <dd class="accordion__content">
+                            {{ accordion_body }}
+                          </dd>
+                        {% endif %}
+    
+                      {% endfor %}
+                    {% endif %}
+
+                    {% if size_description == false and product.metafields.custom_fields["hide_size_and_fit"] != 1 %}
+                      <dt class="accordion__title"><button class="accordion__toggle-content-button">{{ 'products.product.size_and_fit' | t }}</button></dt>
+                      <dd class="accordion__content">
+                        {{ settings.size_fit_default_text | newline_to_br }}
+
+                        <div id="product__size-chart"></div>
+
+                      </dd>
+                    {% endif %}
+                    <dt class="accordion__title"><button class="accordion__toggle-content-button">{{ 'products.product.delivery_and_returns' | t }}</button></dt>
+                    <dd class="accordion__content">
+                      {{ settings.delivery_returns_default_text | newline_to_br }}
+                    </dd>
+
+                  </dl>
+                  {% endif %}
+                  
+
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          
+        </div>
+      </section>   
+      {% if product.metafields.custom_fields["gallery"] != blank %}
+      <section class="info-section">
+        <div class="container container--full">
+
+        
+
+          {% for item in product.metafields.custom_fields["gallery"] %}
+              
+            <div class="big-banner">
+              {% if item["link"] != blank %}
+              <a href="{{item["link"]}}">
+              {% endif %}
+                {% if item["image"] != blank %}
+                <div class="row">
+                  {% for repeater_item in item["image"] limit:2 %}
+                  <div class="col {% if item["image"].size > 1 %}col-6{% else %}col-12{% endif %} col-sm-12">
+                    <img src="{{ repeater_item["image"] }}" alt="">
+                  </div>
+                {% endfor %}                    
+                </div>
+                {% endif %}
+
+                {% if item["title"] != blank %}
+                  <div class="big-banner__title" {% if item["text_color"] != blank %}style="color: {{ item["text_color"] }};"{% endif %}>
+                    {{ item["title"] | newline_to_br}}
+                  </div>
+                  {% endif %}                  
+              {% if item["link"] != blank %}
+              </a>
+              {% endif %}
+            </div>
+          {% endfor %}
+        
+
+        </div>
+      </section>
+      {% endif %}
+
+
+      {% section 'product-recommendations' %}
+
+
+
+      <div class="hidden">
+
+        <div class="product__modal">
+              
+          <ul class="product__modal__images">
+            {% for image in product.images %}
+              <li class="product__image product__image--others">                
+                <picture>
+                  <source srcset="{{ image.src | img_url: '1000x1000' }}" media="(max-width: 600px)">
+                  <img src="{{ image.src | img_url: '3000x3000' }}" alt="{{ image.alt | escape }}">
+                </picture>                   
+              </li>
+            {% endfor %}
+      
+            {% unless product.has_only_default_variant %}              
+              {% for variant in product.variants %}
+                {% if variant.image %}
+                <li class="product__image product__image--variant" data-id="{{ variant.id }}">
+                    <picture>
+                      <source srcset="{{ variant | img_url: '1000x1000' }}" media="(max-width: 600px)">
+                      <img id="{{ variant.id }}"                      
+                      alt="{{ variant.image.alt }}"
+                      src="{{ variant | img_url: '3000x3000' }}"
+                      data-image> 
+                    </picture>  
+                </li>
+                {% endif %}
+      
+              {% endfor %} 
+            {% endunless %}
+      
+          </ul>
+      
+          <button type="button" class="product__modal__close-button close-modal-button">
+            {%- include 'icon_cross_01' -%}
+          </button>
+      
+        </div>
+      
+      </div>      

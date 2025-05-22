@@ -1,0 +1,131 @@
+<link rel="stylesheet" href="{{ 'cart-drawer.css' | asset_url }}" type="text/css" />
+
+        <div class="cart-drawer cart__wrapper {% if customer %}cart-drawer--loggedin{% endif %}" :class="{ 'cart-drawer--visible': cartState.visible }">
+          <div class="container">
+            <form action="/cart?locale={{request.locale.iso_code}}" method="post" novalidate class="cart__form">
+              <header class="cart-drawer__header">
+                <h2 class="cart-drawer__title">{{ 'layout.drawer_cart.title' | t }}</h2>
+                <button type="button" class="cart-drawer-close" @click="toggleDrawerCart"><img src="{{ 'icon_close_01.svg' | asset_url }}" alt="" width="13" height="13"></button>
+              </header>            
+              <template v-if="cart.items">
+                <template v-if="cart.items.length">            
+                  <div id="cart-drawer__scroll-contents" class="{% if customer %}cart-drawer__scroll-contents--loggedin{% endif %}">
+                    <div class="cart-drawer__scroll-contents__inner">
+                      <div class="cart-drawer__items">
+                        <template v-for="item in cart.items">                          
+                          <div class="cart-drawer__item cart__item row">
+                            <div class="col cart-drawer__item__image">
+                              <a :href="item.url">
+                                <img :src="item.featured_image.url" :alt="item.featured_image.alt">
+                              </a>
+                            </div>                      
+                            <div class="col cart-drawer__item__info">
+                              <!-- <p class="cart-drawer__item__brand">MARKA</p> -->
+                              <p class="cart-drawer__item__title"><a :href="item.url">${ item.product_title }</a></p>
+                              
+                              <p class="cart-drawer__item__variant">
+                                <template v-for="variant in item.options_with_values"> 
+                                <span v-if="variant.name != 'Title'">${ variant.name }: ${ variant.value }</span>
+                                </template> 
+                              </p>
+                              <div class="cart-drawer__item__quantity item__quantity">
+                                <p class="cart__action-result"></p>
+                                <div class="cart-drawer__quantity-control">
+                                  <button type="button" class="button--quantity button--decrease" @click="decrease(item, $event)"><img src="{{ 'icon_minus_01.svg' | asset_url }}" alt="-"></button>
+                                  <input
+                                    type="number"
+                                    name="updates[]"
+                                    :id="'updates_'+item.key"
+                                    :value="item.quantity"
+                                    min="0"
+                                    class="cart-drawer__item__input--quantity"
+                                    min="1"
+                                    pattern="[0-9]*"
+                                    @change="updateCart(item, $event)"
+                                  >
+                                  <button type="button" class="button--quantity button--increase" @click="increase(item, $event)"><img src="{{ 'icon_plus_01.svg' | asset_url }}" alt="+"></button>
+                                  <input type="hidden" name="handle" :value="item.handle">
+                                </div>                                    
+                              </div>                                  
+                            </div>
+                            <div class="col cart-drawer__item__price">
+                              <p>
+                                {% comment %}
+                                {% if item.original_line_price != item.line_price %}<span class="money"><div class="pn-total-line-item" data-id="{{ item.key }}">{{ item.original_line_price | money }}</div></span>{% endif %}     
+                                {% endcomment %}               
+                                ${ item.line_price | format_currency }
+                                {% comment %}
+                                {%- if shop.taxes_included -%}
+                                  <span class="tax-txt">&nbsp;({{ 'products.product.include_taxes' | t }})</span>
+                                {%- endif -%}
+                                {% endcomment %}
+                                {% for discount in item.discounts %}{{ discount.title }}{% endfor %}
+
+                                <button type="button" class="cart-drawer__item__remove-button" @click.prevent="deleteItem(item, $event)">{{ 'cart.general.remove' | t }}</button>
+                              </p>                                
+                            </div>
+                            <div class="props-contianer">
+                              {% comment %}
+                              <p class="cart-drawer__item__props" v-if="item.properties && item.properties['Pre-Purchase']">${ item.properties['Pre-Purchase'] }</p>
+                              <p class="cart-drawer__item__props" v-for="(value, key) in item.properties" v-if="item.properties && key != 'Pre-Purchase'">${ value }</p>
+                              {% endcomment %}
+                            </div>
+                          </div>                                            
+                        </template> 
+                        <!-- end for loop -->                          
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="cart-drawer__footer">
+                    <div class="cart-drawer__sub-total">
+                      <span class="cart-drawer__sub-total--label">{{ 'cart.label.subtotal' | t }}</span>
+                      <span
+                        class="cart-drawer__sub-total--number"
+                        data-loyal-target="total_price"
+                        data-loyal-total-price="{{ cart.total_price }}"
+                      >
+                        ${ cart.total_price | format_currency }
+                      </span>
+                      {%- if shop.taxes_included -%}
+                        <span class="tax-txt">&nbsp;{{ 'products.product.include_taxes' | t }}</span>
+                      {%- endif -%}
+                    </div>
+                    <div class="cart-drawer__note">
+                      <p>{{ 'cart.general.handling_note' | t }}</p>
+                    </div>
+                    <div class="cart-drawer__actions">
+                      <button type="submit" name="checkout" id="cart-checout-button"class="button button--primary button--primary--dark-sand">
+                        <img src="{{ 'lock.png' | asset_url }}" alt="" width="11px" height="14px">{{ 'cart.general.checkout' | t }}
+                      </button>
+                      <p>Easy Exchanges</p>
+                      <!-- use for On-store -->
+                      <loop-onstore/>
+
+                      <template v-if="showMixedCartMessage && preorderMixedCart == true">
+                        <div class="cart-drawer__mixed-cart-warning">
+                          <p class="cart-drawer__mixed-cart-warning-title" v-if="window.pn.shop.mixed_cart_warning_title">${ window.pn.shop.mixed_cart_warning_title }</p>
+                          <p class="cart-drawer__mixed-cart-warning-text" v-if="window.pn.shop.mixed_cart_warning_text">${ window.pn.shop.mixed_cart_warning_text }</p>
+                        </div>
+                      </template>
+                    </div>
+                    
+                  </div>
+                </template>
+                <template v-else>
+                  <div id="cart-drawer__scroll-contents">
+                    <div class="cart-drawer__scroll-contents__inner">
+                      <p class="cart-drawer__message">{{ 'cart.general.cart_empty' | t }}</p>
+                      <div class="cart-drawer__actions">
+                        <button type="button" class="button button--primary button--primary--dark-sand" @click="toggleDrawerCart">
+                          {{ 'cart.general.continue_shopping' | t }}
+                        </button>             
+                      </div> 
+                    </div>
+                  </div>       
+                </template>              
+              </template>       
+              <!-- end if -->   
+            </form>       
+          </div>
+        </div>  

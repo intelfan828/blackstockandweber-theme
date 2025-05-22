@@ -1,0 +1,189 @@
+{%liquid 
+  assign bg_color = '#fbf9f6'
+
+  if article.metafields.custom_fields["background_color"] == 'B+w Gray'
+    assign bg_color = '#ececec'
+  elsif article.metafields.custom_fields["background_color"] == 'B+W Sand'
+    assign bg_color = '#dcc5aa'
+  elsif article.metafields.custom_fields["background_color"] == 'Dark Sand'
+    assign bg_color = '#694a26'
+    assign txt_color = '#fff'
+  endif
+
+%}
+
+{%if txt_color != blank %}
+  <style>
+    
+    .tmpl--article .page__title,
+    .tmpl--article .contents-section,
+    .tmpl--article .contents-section .section__description,
+    .tmpl--article .contents-section .section__description * {
+      color: {{txt_color}};
+    }
+
+  </style>
+{% endif %}
+
+{% if article.metafields.custom_fields["section"] != blank %}
+
+      {% for item in article.metafields.custom_fields["section"] %}
+        
+        {% assign item_index = forloop.index0 %}
+
+        <section id="section-{{item_index | plus: 1}}" class="{% if item_index == 0 %}hero-section {% endif %}contents-section" style="background-color: {{bg_color}};">
+          <div class="container container--full">
+          {% if item["slider_arrows_color"] != blank %}
+          <style>
+            #section-{{item_index | plus: 1}} .swiper-button-prev::before,
+            #section-{{item_index | plus: 1}} .swiper-button-next::before {
+              border-color: {{ item["slider_arrows_color"] }} !important;
+            }
+            {% if item["slider_arrows_color_mobile"] != blank %}
+            @media (max-width: 600px) {
+              #section-{{item_index | plus: 1}} .swiper-button-prev::before,
+              #section-{{item_index | plus: 1}} .swiper-button-next::before {
+                border-color: {{ item["slider_arrows_color_mobile"] }} !important;
+              }
+            }
+            {% endif %}
+          </style>
+          {% endif %}
+          {% if item["images"] != blank %}
+
+            {% if item["slider"] == "1" or item["slider"] == 1%}
+              <div class="row row--center">
+                <div class="col {% if item["image_width"] != blank %}col-{{ item["image_width"] }}{% else %} col-12 {% endif %} col-sm-12">
+                  <div class="slider-container">
+                    <div class="section__images swiper-container" data-swiper-navigation="true">
+                      <div class="swiper-wrapper">
+                        {% for images_item in item["images"] %}
+                        <div class="swiper-slide section__image">
+                          {% if images_item["video"] != blank %}
+                            <div class="video-wrapper">
+                              <video src="{{ images_item["video"] }}" {% if images_item["image"] != blank %} poster="{{ images_item["image"] }}"{% endif %} playsinline autoplay muted></video>
+                            </div>
+                          {% else %}
+                            {% if images_item["image"] != blank %}
+                              <picture>
+                                {% if images_item["image_sm"] != blank %}
+                                <source srcset="{{ images_item["image_sm"] }}" media="(max-width: 900px)">
+                                {% endif %}
+                                <img src="{{ images_item["image"] }}" alt="">
+                              </picture>
+                            {% endif %}
+                          {% endif %}
+                          {% if images_item["caption"] != blank %}
+                            <div class="section__image-caption" {% if images_item["caption_text_color"] != blank %}style="color: {{ caption_text_color }}"{% endif %}>
+                              {{ images_item["caption"] }}
+                            </div>
+                          {% endif %}
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="swiper-navigation">
+                      <button class="swiper-button swiper-button-prev"></button>
+                      <button class="swiper-button swiper-button-next"></button>
+                      <span class="swiper-button--dammy swiper-button-prev--dammy"></span>
+                      <span class="swiper-button--dammy swiper-button-next--dammy"></span>
+                    </div>
+                  </div>
+                  {% if item["description"] != blank and item_idex != 0 %}
+                    <div class="section__description">
+                      {{ item["description"] }}
+                    </div>
+                  {% endif %}                     
+                </div>
+              </div>
+            {% else %}
+              <div class="section__images">
+                <div class="row {% if item["alignment"] == 'Center' %}row--center{% endif %} {% if item["alignment"] == 'Right' %}row--right{% endif %} section__images-wrapper">
+                  {% for images_item in item["images"] limit:2 %}
+                  <div class="col {% if item["image_width"] != blank %}col-{{ item["image_width"] }}{% else %} col-12 {% endif %} col-sm-12 section__image">
+                    {% if images_item["video"] != blank %}
+                      <div class="video-wrapper">
+                        <video src="{{ images_item["video"] }}" {% if images_item["image"] != blank %} poster="{{ images_item["image"] }}"{% endif %} playsinline autoplay muted></video>
+                      </div>
+                    {% else %}
+                      {% if images_item["image"] != blank %}
+                        <picture>
+                          {% if images_item["image"] != blank %}
+                          <source srcset="{{ images_item["image_sm"] }}" media="(max-width: 900px)">
+                          {% endif %}
+                          <img src="{{ images_item["image"] }}" alt="">
+                        </picture>
+                      {% endif %}
+                    {% endif %}
+                    {% if images_item["caption"] != blank %}
+                      <div class="section__image-caption" {% if images_item["caption_text_color"] != blank %}style="color: {{ images_item["caption_text_color"] }}"{% endif %}>
+                        {{ images_item["caption"] }}
+                      </div>
+                    {% endif %}
+
+                    {% if forloop.first == true %}
+                      {% if item["description"] != blank and item_index != 0 %}
+                        <div class="section__description">
+                          {{ item["description"] }}
+                        </div>
+                      {% endif %}   
+                    {% endif %}
+
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+            
+          {% if item_index == 0 %}
+            <h1 class="page__title">{{ article.title }}</h1>
+            <div class="page__headline">
+              {{ article.content }}
+            </div>
+          {% endif %}
+
+         </div>
+        </section>
+       {% endfor %}
+
+{% endif %}
+
+
+{% liquid 
+  
+  if article.metafields.custom_fields["related_items"] != blank
+
+    assign product_refs = article.metafields.custom_fields["related_items"] | split: "|"
+    assign post_available = false;
+
+    for product_handle in product_refs limit:24
+      assign product_ref = all_products[product_handle]
+      if product_ref.title != blank
+        assign post_available = true
+        break
+      endif
+    endfor
+
+  endif
+
+%}
+
+{% if post_available == true %}
+  <section class="related-items-section">
+    
+    <div class="container container--full">  
+    <h2 class="section__title">{{ 'blogs.article.related_products' | t }}</h2>
+      {% assign product_refs = article.metafields.custom_fields["related_items"] | split: "|" %}
+      <div class="row cards products">
+        {% for product_handle in product_refs limit:24  %}
+          {% assign product_ref = all_products[product_handle] %}
+          {% if product_ref.title != blank %}
+          {% include 'product-card', class: 'col col-3 col-md-4 col-sm-6 card product', product: product_ref, show_vendor: section.settings.show_vendor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
